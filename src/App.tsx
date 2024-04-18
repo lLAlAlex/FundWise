@@ -1,27 +1,21 @@
+import React from 'react';
 import './App.css';
-import motokoLogo from './assets/motoko_moving.png';
-import motokoShadowLogo from './assets/motoko_shadow.png';
-import reactLogo from './assets/react.svg';
-import viteLogo from './assets/vite.svg';
-import { useQueryCall, useUpdateCall } from '@ic-reactor/react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from './Login';
+import Home from './Home';
 
 function App() {
-  const { data: count, call: refetchCount } = useQueryCall({
-    functionName: 'get',
-  });
-
-  const { call: increment, loading } = useUpdateCall({
-    functionName: 'inc',
-    onSuccess: () => {
-      refetchCount();
-    },
-  });
-
   return (
     <div>
-      
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path="/register" element={<Register/>} /> */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
 
-export default App;
+export default App
