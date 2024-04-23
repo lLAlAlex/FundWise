@@ -8,7 +8,6 @@ import Blob "mo:base/Blob";
 import Order "mo:base/Order";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
-import Int "mo:base/Int";
 
 actor Database {
 
@@ -33,7 +32,7 @@ actor Database {
 
     let companies = TrieMap.TrieMap<Text, Company>(Text.equal, Text.hash);
 
-    public shared (msg) func registerCompany(newCompany : CompanyInputSchema) : async Result.Result<Company, Text> {
+    public shared (msg) func createCompany(newCompany : CompanyInputSchema) : async Result.Result<Company, Text> {
         let _timestamp = Time.now();
         let uuid = await Utils.generateUUID();
         let imageBlob = Blob.fromArray([0]);
@@ -64,6 +63,64 @@ actor Database {
         // });
 
         return #ok(result);
+    };
+
+    public query func getCompanyById(id : Text) : async Result.Result<Company, Text> {
+        let result = companies.get(id);
+
+        switch (result) {
+            case null {
+                return #err("Not Found!");
+            };
+            case (?c) {
+                return #ok(c);
+            };
+        };
+    };
+
+    public shared (msg) func deleteCompanyById(id : Text) : async Result.Result<Text, Text> {
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err("Not Authorized!");
+        };
+
+        let company = companies.get(id);
+
+        if (company == null) {
+            return #err("Not Found!");
+        } else {
+            ignore companies.remove(id);
+            return #ok("Company Deleted Successfully!");
+        };
+    };
+
+    public shared (msg) func updateCompanyById(id : Text, updatedCompany : CompanyInputSchema) : async Result.Result<Company, Text> {
+        if (Principal.isAnonymous(msg.caller)) {
+            return #err("Not Authorized!");
+        };
+
+        switch (companies.get(id)) {
+            case null {
+                return #err("Not Found!");
+            };
+            case (?existingCompany) {
+                let updatedTimestamp = Time.now();
+
+                let updatedCompanyData : Company = {
+                    id = id;
+                    name = updatedCompany.name;
+                    profile_description = updatedCompany.profile_description;
+                    category = updatedCompany.category;
+                    location = updatedCompany.location;
+                    image = existingCompany.image;  
+                    company_contact_ids = existingCompany.company_contact_ids; 
+                    reviews_ids = existingCompany.reviews_ids;
+                    timestamp = updatedTimestamp;
+                };
+
+                companies.put(id, updatedCompanyData);
+                return #ok(updatedCompanyData);
+            };
+        };
     };
 
 };
