@@ -1,15 +1,30 @@
 {
   "canisters": {
-    "backend": {
+    "user_backend": {
       "type": "motoko",
       "main": "backend/user_backend/main.mo",
       "declarations": {
         "node_compatibility": true
       }
     },
+    "utils_backend": {
+      "type": "motoko",
+      "main": "backend/utils_backend/main.mo"
+    },
+    "company_backend": {
+      "type": "motoko",
+      "main": "backend/company_backend/main.mo",
+      "dependencies": [
+        "utils_backend"
+      ],
+      "declarations": {
+        "node_compatibility": true
+      }
+    },
     "frontend": {
       "dependencies": [
-        "backend"
+        "user_backend",
+        "company_backend"
       ],
       "type": "assets",
       "source": [

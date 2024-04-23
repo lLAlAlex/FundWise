@@ -1,7 +1,6 @@
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Time "mo:base/Time";
-import HashMap "mo:base/HashMap";
 import TrieMap "mo:base/TrieMap";
 import Result "mo:base/Result";
 
