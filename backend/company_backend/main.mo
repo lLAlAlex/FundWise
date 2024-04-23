@@ -5,6 +5,10 @@ import Time "mo:base/Time";
 import TrieMap "mo:base/TrieMap";
 import Result "mo:base/Result";
 import Blob "mo:base/Blob";
+import Order "mo:base/Order";
+import Array "mo:base/Array";
+import Iter "mo:base/Iter";
+import Int "mo:base/Int";
 
 actor Database {
 
@@ -49,6 +53,17 @@ actor Database {
 
         companies.put(company.id, company);
         return #ok(company);
+    };
+
+    public shared query func getAllCompany() : async Result.Result<[Company], Text> {
+        let result : [Company] = Iter.toArray(companies.vals());
+
+        // Sorted By Company Name
+        // let sorted_companies = Array.sort(result, func (a : Company, b : Company) : Order.Order {
+        //     Text.compare(a.name, b.name);
+        // });
+
+        return #ok(result);
     };
 
 };
