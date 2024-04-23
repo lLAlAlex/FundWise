@@ -2,10 +2,11 @@
   "canisters": {
     "user_backend": {
       "type": "motoko",
-      "main": "backend/user_backend/main.mo",
-      "declarations": {
-        "node_compatibility": true
-      }
+      "main": "backend/backend/main.mo"
+    },
+    "startup_backend": {
+      "type": "motoko",
+      "main": "backend/startup_backend/main.mo"
     },
     "utils_backend": {
       "type": "motoko",
@@ -32,8 +33,14 @@
       ]
     },
     "internet_identity": {
-      "type": "pull",
-      "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+      "type": "custom",
+      "candid": "https://github.com/dfinity/internet-identity/releases/download/release-2024-02-26/internet_identity.did",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/download/release-2024-02-26/internet_identity_dev.wasm.gz",
+      "remote": {
+        "id": {
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+        }
+      }
     }
   },
   "defaults": {

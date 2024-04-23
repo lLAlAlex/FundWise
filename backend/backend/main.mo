@@ -3,6 +3,7 @@ import Text "mo:base/Text";
 import Time "mo:base/Time";
 import TrieMap "mo:base/TrieMap";
 import Result "mo:base/Result";
+import Vector "mo:vector/Class";
 
 // Actor for user
 actor Database {
@@ -21,6 +22,31 @@ actor Database {
 
   public query func getUser(p : Principal) : async ?User {
     return users.get(p);
+  };
+
+  public query func getAllUsers() : async Result.Result<[User], Text> {
+    var allUsers = Vector.Vector<User>();
+
+    for (user in users.vals()) {
+      allUsers.add(user);
+    };
+
+    return #ok(Vector.toArray(allUsers));
+  };
+
+  public query func getAllUserPrincipals() : async Result.Result<[Text], Text> {
+    var allPrincipals = Vector.Vector<Text>();
+
+    for (user in users.vals()) {
+      let principalString = Principal.toText(user.internet_identity);
+      allPrincipals.add(principalString);
+    };
+
+    return #ok(Vector.toArray(allPrincipals));
+  };
+
+  public shared (msg) func getCurrentUser() : async Principal {
+    return msg.caller;
   };
 
   public shared func updateUser(p : Principal, u : User) : async () {

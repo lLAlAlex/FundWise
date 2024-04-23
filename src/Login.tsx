@@ -4,8 +4,11 @@ import { AuthClient } from '@dfinity/auth-client';
 import { useNavigate } from 'react-router-dom';
 import { Boxes } from '@/components/BackgroundBoxes';
 import { Button } from '@nextui-org/button';
+import { backend, canisterId, idlFactory } from "./declarations/backend";
+import { Actor, HttpAgent } from '@dfinity/agent';
+import { _SERVICE } from './declarations/backend/backend.did';
 
-function Login() {
+function LoginPage() {
   const { data: count, call: refetchCount } = useQueryCall({
     functionName: 'get',
   });
@@ -19,6 +22,7 @@ function Login() {
 
   const [authenticated, setAuthenticated] = useState(false);
   const navigate = useNavigate();
+  let actor = backend;
 
   useEffect(() => {
     if (authenticated) {
@@ -38,13 +42,23 @@ function Login() {
   }, []);
 
   const handleLogin = async () => {
+    const authClient = await AuthClient.create();
     try {
-      const authClient = await AuthClient.create();
-      await authClient.login({
-        identityProvider: 'https://identity.ic0.app',
-        onSuccess: () => {
-          setAuthenticated(true);
-        },
+      await new Promise<void>((resolve, reject) => {
+        authClient.login({
+          identityProvider: "https://identity.ic0.app",
+          onSuccess: () => {
+            resolve();
+            setAuthenticated(true)
+          },
+          onError: reject,
+        });
+      });
+      const identity = authClient.getIdentity();
+      const agent = new HttpAgent({ identity });
+      actor = Actor.createActor<_SERVICE>(idlFactory, {
+        agent,
+        canisterId
       });
       return navigate('/');
     } catch (error) {
@@ -74,4 +88,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;
