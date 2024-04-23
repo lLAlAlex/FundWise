@@ -1,5 +1,6 @@
 import Utils "canister:utils_backend";
 import Text "mo:base/Text";
+import Principal "mo:base/Principal";
 import Time "mo:base/Time";
 import TrieMap "mo:base/TrieMap";
 import Result "mo:base/Result";
@@ -28,10 +29,11 @@ actor Database {
 
     let companies = TrieMap.TrieMap<Text, Company>(Text.equal, Text.hash);
 
-    public shared (_msg) func registerCompany(company : CompanyInputSchema) : async Result.Result<Company, Text> {
+    public shared (msg) func registerCompany(company : CompanyInputSchema) : async Result.Result<Company, Text> {
         let _timestamp = Time.now();
         let uuid = await Utils.generateUUID();
         let imageBlob = Blob.fromArray([0]);
+        let contactId = Principal.toText(msg.caller);
 
         let newCompany : Company = {
             id = uuid;
@@ -40,7 +42,7 @@ actor Database {
             category = company.category;
             location = company.location;
             image = imageBlob;
-            company_contact_ids = [];
+            company_contact_ids = [contactId];
             reviews_ids = [];
             timestamp = _timestamp;
         };
