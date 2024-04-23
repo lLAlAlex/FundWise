@@ -48,16 +48,16 @@ actor Database {
       };
 
       // Register user
-      let newUser = {
+      let user = {
         internet_identity = userID;
         name = name;
         email = email;
         dob = dob;
         timestamp = Time.now();
       };
-      users.put(newUser.internet_identity, newUser);
+      users.put(user.internet_identity, user);
 
-      return #ok(newUser);
+      return #ok(user);
     } else {
       return #err("User is already registered");
     };

@@ -29,26 +29,26 @@ actor Database {
 
     let companies = TrieMap.TrieMap<Text, Company>(Text.equal, Text.hash);
 
-    public shared (msg) func registerCompany(company : CompanyInputSchema) : async Result.Result<Company, Text> {
+    public shared (msg) func registerCompany(newCompany : CompanyInputSchema) : async Result.Result<Company, Text> {
         let _timestamp = Time.now();
         let uuid = await Utils.generateUUID();
         let imageBlob = Blob.fromArray([0]);
         let contactId = Principal.toText(msg.caller);
 
-        let newCompany : Company = {
+        let company : Company = {
             id = uuid;
-            name = company.name;
-            profile_description = company.profile_description;
-            category = company.category;
-            location = company.location;
+            name = newCompany.name;
+            profile_description = newCompany.profile_description;
+            category = newCompany.category;
+            location = newCompany.location;
             image = imageBlob;
             company_contact_ids = [contactId];
             reviews_ids = [];
             timestamp = _timestamp;
         };
 
-        companies.put(newCompany.id, newCompany);
-        return #ok(newCompany);
+        companies.put(company.id, company);
+        return #ok(company);
     };
 
 };
