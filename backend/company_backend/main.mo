@@ -8,6 +8,7 @@ import Blob "mo:base/Blob";
 import Order "mo:base/Order";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
+import Option "mo:base/Option";
 
 actor Database {
 
@@ -54,15 +55,29 @@ actor Database {
         return #ok(company);
     };
 
-    public shared query func getAllCompany() : async Result.Result<[Company], Text> {
+    public shared query func getAllCompany(locationFilter : ?Text) : async Result.Result<[Company], Text> {
         let result : [Company] = Iter.toArray(companies.vals());
 
-        // Sorted By Company Name
+        // sort data
         // let sorted_companies = Array.sort(result, func (a : Company, b : Company) : Order.Order {
         //     Text.compare(a.name, b.name);
         // });
 
-        return #ok(result);
+        // filter data
+        switch(locationFilter) {
+            case null { 
+                return #ok(result); 
+            };
+            case(?l) { 
+                let filteredCompanies = Array.filter(result, func (company : Company) : Bool {
+                    let foundLocation = Array.find(company.location, func (loc : Text) : Bool {
+                        loc == l;
+                    });
+                    Option.isSome(foundLocation);
+                });
+                return #ok(filteredCompanies); 
+            };
+        };
     };
 
     public query func getCompanyById(id : Text) : async Result.Result<Company, Text> {
