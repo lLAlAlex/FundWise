@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQueryCall, useUpdateCall } from '@ic-reactor/react';
 import { AuthClient } from '@dfinity/auth-client';
 import { useNavigate } from 'react-router-dom';
-import { Boxes } from './components/BackgroundBoxes';
+import { Boxes } from '@/components/BackgroundBoxes';
 import { Button } from '@nextui-org/button';
 
 function Login() {

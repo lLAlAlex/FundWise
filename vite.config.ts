@@ -3,11 +3,16 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import environment from 'vite-plugin-environment';
 import dotenv from 'dotenv';
-
+import path from 'path';
 dotenv.config();
 
 export default defineConfig({
   root: 'src',
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   build: {
     outDir: '../dist',
     emptyOutDir: true,
