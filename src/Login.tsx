@@ -4,9 +4,9 @@ import { AuthClient } from '@dfinity/auth-client';
 import { useNavigate } from 'react-router-dom';
 import { Boxes } from '@/components/BackgroundBoxes';
 import { Button } from '@nextui-org/button';
-import { backend, canisterId, idlFactory } from "./declarations/backend";
+import { user_backend, canisterId, idlFactory } from "./declarations/user_backend";
 import { Actor, HttpAgent } from '@dfinity/agent';
-import { _SERVICE } from './declarations/backend/backend.did';
+import { _SERVICE } from './declarations/user_backend/user_backend.did';
 
 function LoginPage() {
   const { data: count, call: refetchCount } = useQueryCall({
@@ -22,7 +22,7 @@ function LoginPage() {
 
   const [authenticated, setAuthenticated] = useState(false);
   const navigate = useNavigate();
-  let actor = backend;
+  let actor = user_backend;
 
   useEffect(() => {
     if (authenticated) {

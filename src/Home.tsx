@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQueryCall, useUpdateCall } from '@ic-reactor/react';
 import { AuthClient } from "@dfinity/auth-client";
 import { useNavigate, useParams } from 'react-router-dom';
-import { backend } from './declarations/backend';
+import { user_backend } from './declarations/user_backend';
 import { Principal } from '@ic-reactor/react/dist/types';
 
 function HomePage() {
@@ -32,9 +32,9 @@ function HomePage() {
                 if (isAuthenticated) {
                     const identity = await authClient.getIdentity();
                     const principal = identity.getPrincipal();
-                    const user = await backend.getUser(principal);
+                    const user = await user_backend.getUser(principal);
 
-                    const result = await backend.getCurrentUser();
+                    const result = await user_backend.getCurrentUser();
                     setCurrentUser(result);
 
                     if (user.length < 1) {

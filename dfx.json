@@ -2,11 +2,7 @@
   "canisters": {
     "user_backend": {
       "type": "motoko",
-      "main": "backend/backend/main.mo"
-    },
-    "startup_backend": {
-      "type": "motoko",
-      "main": "backend/startup_backend/main.mo"
+      "main": "backend/user_backend/main.mo"
     },
     "utils_backend": {
       "type": "motoko",

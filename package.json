@@ -22,6 +22,7 @@
     "@nextui-org/react": "^2.3.5",
     "clsx": "^2.1.0",
     "framer-motion": "^11.1.7",
+    "mops": "^3.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",

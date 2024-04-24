@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { backend, createActor } from './declarations/backend';
+import { user_backend, createActor } from './declarations/user_backend';
 import { AuthClient } from "@dfinity/auth-client";
 import { HttpAgent } from "@dfinity/agent";
 import { useNavigate } from 'react-router-dom';
@@ -45,9 +45,9 @@ function RegisterPage() {
             return;
         }
         else {
-            await backend.register(formData.name, formData.email, '04-12-2003');
+            await user_backend.register(formData.name, formData.email, '04-12-2003');
             // console.log(await backend.getAllUsers());
-            console.log(await backend.register(formData.name, formData.email, '04-12-2003'));
+            console.log(await user_backend.register(formData.name, formData.email, '04-12-2003'));
             return navigate('/');
         }
     };
