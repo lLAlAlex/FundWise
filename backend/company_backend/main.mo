@@ -5,7 +5,7 @@ import Time "mo:base/Time";
 import TrieMap "mo:base/TrieMap";
 import Result "mo:base/Result";
 import Blob "mo:base/Blob";
-// import Order "mo:base/Order";
+import Order "mo:base/Order";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Option "mo:base/Option";
