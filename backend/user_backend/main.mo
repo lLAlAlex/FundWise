@@ -21,7 +21,11 @@ actor Database {
   let users = TrieMap.TrieMap<Principal, User>(Principal.equal, Principal.hash);
 
   public query func getUser(p : Principal) : async ?User {
-    return users.get(p);
+    let user = users.get(p);
+    if (user == null) {
+      return null;
+    };
+    return user;
   };
 
   public query func getAllUsers() : async Result.Result<[User], Text> {
@@ -61,8 +65,8 @@ actor Database {
     return users.remove(p);
   };
 
-  public shared (msg) func register(name : Text, email : Text, dob : Text) : async Result.Result<User, Text> {
-    let userID = msg.caller;
+  public shared func register(id : Principal, name : Text, email : Text, dob : Text) : async Result.Result<User, Text> {
+    let userID = id;
 
     // Unique user validation
     if (users.get(userID) == null) {

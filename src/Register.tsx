@@ -26,17 +26,8 @@ function RegisterPage() {
 
     const handleSubmit = async () => {
         const authClient = await AuthClient.create();
-
-        await new Promise((resolve) => {
-            authClient.login({
-                identityProvider:
-                    process.env.DFX_NETWORK === "ic" ? "https://identity.ic0.app"
-                        : `http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943`, onSuccess: resolve,
-            });
-        });
         const identity = await authClient.getIdentity();
         const principal = identity.getPrincipal();
-        const agent = new HttpAgent({ identity });
 
         if (!formData.name || !formData.email) {
             setErrorMsg('All fields must be filled');
@@ -45,9 +36,7 @@ function RegisterPage() {
             return;
         }
         else {
-            await user_backend.register(formData.name, formData.email, '04-12-2003');
-            // console.log(await backend.getAllUsers());
-            console.log(await user_backend.register(formData.name, formData.email, '04-12-2003'));
+            await user_backend.register(principal, formData.name, formData.email, '04-12-2003');
             return navigate('/');
         }
     };

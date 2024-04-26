@@ -60,7 +60,7 @@ function LoginPage() {
         agent,
         canisterId
       });
-      return navigate('/');
+      return navigate('/register');
     } catch (error) {
       console.error('Login error:', error);
     }

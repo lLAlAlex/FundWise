@@ -4,6 +4,9 @@ import { AuthClient } from "@dfinity/auth-client";
 import { useNavigate, useParams } from 'react-router-dom';
 import { user_backend } from './declarations/user_backend';
 import { Principal } from '@ic-reactor/react/dist/types';
+import { User } from './declarations/user_backend/user_backend.did';
+
+type UserState = User[] | [];
 
 function HomePage() {
     const navigate = useNavigate();
@@ -20,7 +23,7 @@ function HomePage() {
     });
 
     const [authenticated, setAuthenticated] = useState(false);
-    const [currentUser, setCurrentUser] = useState<Principal | null>(null);
+    const [currentUser, setCurrentUser] = useState<UserState>([]);
 
     useEffect(() => {
         const checkAuthentication = async () => {
@@ -34,8 +37,7 @@ function HomePage() {
                     const principal = identity.getPrincipal();
                     const user = await user_backend.getUser(principal);
 
-                    const result = await user_backend.getCurrentUser();
-                    setCurrentUser(result);
+                    setCurrentUser(user);
 
                     if (user.length < 1) {
                         // return navigate('/register');
@@ -78,7 +80,7 @@ function HomePage() {
         <div>
             This is home page
             <br></br>
-            {currentUser?.toString()}
+            Welcome, {currentUser.at(0)?.name.toString()}
             <br></br>
             {authenticated ? (
                 <button onClick={handleLogout}>Logout</button>
