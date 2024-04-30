@@ -6,7 +6,6 @@ import { user_backend } from './declarations/user_backend';
 import { Principal } from '@ic-reactor/react/dist/types';
 import { User } from './declarations/user_backend/user_backend.did';
 import Header from './components/ui/Header';
-import { Card } from './components/ui/card/Card';
 
 type UserState = User[] | [];
 
@@ -113,7 +112,6 @@ function HomePage() {
                     </form>
                 </div>
 
-                {/* <Card /> */}
                 <div className='flex flex-wrap justify-center max-w-[1300px] gap-5'>
                     {data.map((eachData) => (
                         <div className="max-w-[300px] border border-[#eceff133] rounded-lg shadow flex flex-col justify-center items-center cursor-pointer hover:scale-105 hover:bg-[#161616] duration-500">
