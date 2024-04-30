@@ -80,8 +80,11 @@ function HomePage() {
         <div>
             This is home page
             <br></br>
-            Welcome, {currentUser.at(0)?.name.toString()}
-            <br></br>
+            {authenticated ? (
+                <div>Welcome, {currentUser.at(0)?.name.toString()}</div>
+            ) : (
+                <div>You are not logged in yet</div>
+            )}
             {authenticated ? (
                 <button onClick={handleLogout}>Logout</button>
             ) : (

@@ -60,6 +60,10 @@ function LoginPage() {
         agent,
         canisterId
       });
+
+      if (user_backend.getUser(identity.getPrincipal()) != null) {
+        return navigate('/');
+      }
       return navigate('/register');
     } catch (error) {
       console.error('Login error:', error);
