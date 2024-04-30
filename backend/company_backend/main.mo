@@ -9,6 +9,7 @@ import Blob "mo:base/Blob";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Option "mo:base/Option";
+import Order "mo:base/Order";
 
 actor Database {
 
@@ -55,29 +56,60 @@ actor Database {
         return #ok(company);
     };
 
-    public shared query func getAllCompany(locationFilter : ?Text) : async Result.Result<[Company], Text> {
+    public shared query func getAllCompany(locationFilter : ?Text, search: ?Text, sort: ?Text) : async Result.Result<[Company], Text> {
         let result : [Company] = Iter.toArray(companies.vals());
-
+        // let data : [Company] = [];
         // sort data
-        // let sorted_companies = Array.sort(result, func (a : Company, b : Company) : Order.Order {
-        //     Text.compare(a.name, b.name);
-        // });
+        var companyData : [Company] = [];
+        switch(sort) {
+            case(?s) {
+                if (s == "name") {
+                    let data = Array.sort(result, func (a : Company, b : Company) : Order.Order {
+                        Text.compare(a.name, b.name);
+                    });
+                    companyData := data;
+                } else if (s == "date") {
+                    let data = Array.sort(result, func (a : Company, b : Company) : Order.Order {
+                        Text.compare(a.id, b.id);
+                    });
+                    companyData := data;
+                }
+            };
+            case(null) {
+                companyData := result;
+            };
+        };
 
         // filter data
         switch(locationFilter) {
-            case null { 
-                return #ok(result); 
-            };
             case(?l) { 
-                let filteredCompanies = Array.filter(result, func (company : Company) : Bool {
+                let filteredCompanies = Array.filter(companyData, func (company : Company) : Bool {
                     let foundLocation = Array.find(company.location, func (loc : Text) : Bool {
                         loc == l;
                     });
                     Option.isSome(foundLocation);
                 });
-                return #ok(filteredCompanies); 
+                companyData := filteredCompanies;
+            };
+            case(null) {
+                // HIGH AF
+                companyData := companyData
+            }
+        };
+
+        // search
+        switch(search) {
+            case(null) {
+                companyData := companyData
+            };
+            case (?s) {
+                let findCompany = Array.filter(companyData, func (company: Company) : Bool {
+                    Text.contains(company.name, #text s) 
+                });
+                companyData := findCompany;
             };
         };
+        return #ok(companyData);
     };
 
     public query func getCompanyById(id : Text) : async Result.Result<Company, Text> {
