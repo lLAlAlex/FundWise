@@ -128,6 +128,8 @@ actor Database {
 
     let company = companies.get(id);
 
+    // NANTI ATUR YANG BISA DELETE CUMAN ADMIN
+
     if (company == null) {
       return #err("Not Found!");
     } else {
@@ -140,6 +142,8 @@ actor Database {
     if (Principal.isAnonymous(msg.caller)) {
       return #err("Not Authorized!");
     };
+
+    // NANTI ATUR YANG BISA UPDATE CUMAN ADMIN
 
     switch (companies.get(id)) {
       case null {
@@ -166,7 +170,7 @@ actor Database {
     };
   };
 
-  public shared (msg) func addCompanyReviewById(id : Text, reviewid : Text) : async Result.Result<Company, Text> {
+  public shared (msg) func addCompanyReview(id : Text, reviewid : Text) : async Result.Result<Company, Text> {
     if (Principal.isAnonymous(msg.caller)) {
       return #err("Not Authorized!");
     };
@@ -193,6 +197,39 @@ actor Database {
         companies.put(id, updatedCompanyData);
         return #ok(updatedCompanyData);
       };
+    };
+  };
+
+  public shared (msg) func deleteCompanyReviewById(id : Text, reviewid : Text) : async Result.Result<Company, Text> {
+    if (Principal.isAnonymous(msg.caller)) {
+      return #err("Not Authorized!");
+    };
+
+    switch(companies.get(id)) {
+        case null {
+            return #err("Not Found!");
+        };
+        case(?existingCompany) { 
+            let updatedCompanyReviews = Array.filter<Text>(
+                existingCompany.reviews_ids,
+                func(review : Text) : Bool { review != reviewid }
+            );
+
+            let updatedCompanyData : Company = {
+                id = id;
+                name = existingCompany.name;
+                profile_description = existingCompany.profile_description;
+                category = existingCompany.category;
+                location = existingCompany.location;
+                image = existingCompany.image;
+                company_contact_ids = existingCompany.company_contact_ids;
+                reviews_ids = updatedCompanyReviews;
+                timestamp = existingCompany.timestamp;
+            };
+
+            companies.put(id, updatedCompanyData);
+            return #ok(updatedCompanyData);
+        };
     };
   };
 

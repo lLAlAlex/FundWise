@@ -6,6 +6,7 @@ import Nat "mo:base/Nat";
 import Result "mo:base/Result";
 import Time "mo:base/Time";
 import Principal "mo:base/Principal";
+import Option "mo:base/Option";
 
 actor Database {
     type Review = {
@@ -44,7 +45,28 @@ actor Database {
         };
 
         reviews.put(review.id, review);
-        ignore await Company.addCompanyReviewById(review.companyid, review.id);
+        ignore await Company.addCompanyReview(review.companyid, review.id);
         return #ok(review);
+    };
+
+    public shared (msg) func deleteReviewById(id : Text) : async Result.Result<Text, Text> {
+        if (Principal.isAnonymous(msg.caller)) {
+        return #err("Not Authorized!");
+        };
+
+        switch(reviews.get(id)) {
+            case null {
+                return #err("Not Found!");
+            };
+            case(?existingReview) { 
+                if (existingReview.userid == Principal.toText(msg.caller)) {
+                    ignore reviews.remove(id);
+                    ignore await Company.deleteCompanyReviewById(existingReview.companyid, id);
+                    return #ok("Review Deleted Successfully!");
+                };
+
+                return #err("Not Authorized!");
+            };
+        };
     };
 }
