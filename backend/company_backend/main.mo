@@ -166,4 +166,34 @@ actor Database {
     };
   };
 
+  public shared (msg) func addCompanyReviewById(id : Text, reviewid : Text) : async Result.Result<Company, Text> {
+    if (Principal.isAnonymous(msg.caller)) {
+      return #err("Not Authorized!");
+    };
+
+    switch (companies.get(id)) {
+      case null {
+        return #err("Not Found!");
+      };
+      case (?existingCompany) {
+        let updatedReviewsIds = Array.append<Text>(existingCompany.reviews_ids, [reviewid]);
+
+        let updatedCompanyData : Company = {
+          id = id;
+          name = existingCompany.name;
+          profile_description = existingCompany.profile_description;
+          category = existingCompany.category;
+          location = existingCompany.location;
+          image = existingCompany.image;
+          company_contact_ids = existingCompany.company_contact_ids;
+          reviews_ids = updatedReviewsIds;
+          timestamp = existingCompany.timestamp;
+        };
+
+        companies.put(id, updatedCompanyData);
+        return #ok(updatedCompanyData);
+      };
+    };
+  };
+
 };
