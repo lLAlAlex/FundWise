@@ -18,10 +18,15 @@
         "node_compatibility": true
       }
     },
+    "review_backend": {
+      "type": "motoko",
+      "main": "backend/review_backend/main.mo"
+    },
     "frontend": {
       "dependencies": [
         "user_backend",
-        "company_backend"
+        "company_backend",
+        "review_backend"
       ],
       "type": "assets",
       "source": [
