@@ -101,14 +101,14 @@ const Header = () => {
 
     return (
         <header className="fixed w-full opacity-75 z-50">
-            <nav className="bg-black px-4 lg:px-6 py-2.5 pt-5">
+            <nav className="bg-[#18191A] px-4 lg:px-6 py-2.5 pt-5">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <a href="/" className="flex items-center">
                         <img src="/assets/fundwise.png" className="h-6 sm:h-9" alt="FundWise Logo" />
                         <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">FundWise</span>
                     </a>
                     <div className="flex justify-around">
-                        <a href="/">
+                        <a href="/projects">
                             <span className="self-center mx-5 text-xl font-semibold whitespace-nowrap text-white">Projects</span>
                         </a>
                         <a href="/">
@@ -167,7 +167,7 @@ const Header = () => {
                                 </div>
                             </div>
                         ) : (
-                            <motion.button onClick={handleLogin} className="px-6 py-2 rounded-md relative radial-gradient flex justify-center items-center gap-2 hover:bg-[#161616]" initial={{ "--x": "100%", scale: 1 } as any} animate={{ "--x": "-100%" } as any} whileTap={{ scale: 0.97 }} transition={{ repeat: Infinity, repeatType: "loop", repeatDelay: 1, type: "spring", stiffness: 20, damping: 15, mass: 2, scale: { type: "spring", stiffness: 10, damping: 5, mass: 0.1 }, }}>
+                            <motion.button onClick={handleLogin} className="px-6 py-2 rounded-md relative radial-gradient flex justify-center items-center gap-2 hover:bg-[#3A3B3C]" initial={{ "--x": "100%", scale: 1 } as any} animate={{ "--x": "-100%" } as any} whileTap={{ scale: 0.97 }} transition={{ repeat: Infinity, repeatType: "loop", repeatDelay: 1, type: "spring", stiffness: 20, damping: 15, mass: 2, scale: { type: "spring", stiffness: 10, damping: 5, mass: 0.1 }, }}>
                                 <img src='./assets/icp.png' className="w-full h-full object-contain absolute opacity-50" alt="Login" />
                                 <span className="text-neutral-100 tracking-wide font-medium h-full w-full block relative linear-mask text-lg">
                                     Log In
