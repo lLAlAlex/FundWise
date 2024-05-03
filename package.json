@@ -20,6 +20,7 @@
     "@ic-reactor/react": "1.5.5-beta.0",
     "@nextui-org/button": "^2.0.30",
     "@nextui-org/react": "^2.3.5",
+    "cloudinary": "^2.2.0",
     "clsx": "^2.1.0",
     "framer-motion": "^11.1.7",
     "mops": "^3.0.2",

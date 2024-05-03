@@ -13,7 +13,8 @@ function RegisterPage() {
         name: '',
         email: '',
         dob: '',
-        timestamp: ''
+        timestamp: '',
+        profile: ''
     });
 
     const handleChange = (e: { target: { name: any; value: any; }; }) => {
@@ -36,7 +37,8 @@ function RegisterPage() {
             return;
         }
         else {
-            await user_backend.register(principal, formData.name, formData.email, '04-12-2003');
+            formData.profile = "https://res.cloudinary.com/dogiichep/image/upload/v1691980787/profile_xy1yuo.png"
+            await user_backend.register(principal, formData.name, formData.email, formData.profile, '04-12-2003');
             return navigate('/');
         }
     };

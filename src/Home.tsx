@@ -38,11 +38,12 @@ function HomePage() {
                     const principal = identity.getPrincipal();
                     const user = await user_backend.getUser(principal);
 
+                    if (user.length < 1) {
+                        return navigate('/register');
+                    }
                     setCurrentUser(user);
 
-                    if (user.length < 1) {
-                        // return navigate('/register');
-                    }
+                    console.log(user);
                 }
             } catch (error) {
                 console.error('Error checking authentication:', error);
@@ -62,21 +63,6 @@ function HomePage() {
         initializeAuthClient();
     }, []);
 
-    const handleLogin = async () => {
-        return navigate('/login');
-    };
-
-    const handleLogout = async () => {
-        try {
-            const authClient = await AuthClient.create();
-            await authClient.logout();
-            setAuthenticated(false);
-            return navigate('/login');
-        } catch (error) {
-            console.error("Logout error:", error);
-        }
-    };
-
     const [data, setData] = useState([
         { name: 'Apple', date: '2024-04-30' },
         { name: 'Google', date: '2024-04-29' },
@@ -91,19 +77,17 @@ function HomePage() {
         { name: 'Twitter', date: '2024-04-22' },
         { name: 'Shopify', date: '2024-04-21' }
     ]);
-      
-      
 
     return (
         <div className=''>
-            <Header/>
+            <Header />
             <main className='bg-black w-full text-white py-[110px] flex flex-col items-center'>
                 <div className='w-full mb-5'>
-                    <form className="max-w-[1200px] w-9/12 mx-auto">   
+                    <form className="max-w-[1200px] w-9/12 mx-auto">
                         <div className="relative">
                             <div className="absolute inset-y-0 start-0 flex items-center ps-5 pointer-events-none">
                                 <svg className="w-4 h-4 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                 </svg>
                             </div>
                             <input type="search" id="default-search" className="block w-full p-4 ps-12 text-sm border rounded-lg bg-[#161616] border-gray-600 placeholder-gray-400 text-white" placeholder="Search Projects, Categories..." required />
@@ -134,7 +118,7 @@ function HomePage() {
                         </div>
                     ))}
                 </div>
-                
+
                 <nav aria-label="Page navigation example">
                     <ul className="inline-flex -space-x-px text-base h-10 mt-7">
                         <li>
@@ -160,19 +144,6 @@ function HomePage() {
                         </li>
                     </ul>
                 </nav>
-
-                {/* This is home page
-                <br></br>
-                {authenticated ? (
-                    <div>Welcome, {currentUser.at(0)?.name.toString()}</div>
-                ) : (
-                    <div>You are not logged in yet</div>
-                )}
-                {authenticated ? (
-                    <button onClick={handleLogout}>Logout</button>
-                ) : (
-                    <button onClick={handleLogin}>Login</button>
-                )} */}
             </main>
         </div>
     );
