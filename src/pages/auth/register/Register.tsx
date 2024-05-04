@@ -3,9 +3,10 @@ import { user_backend, createActor } from '../../../declarations/user_backend';
 import { AuthClient } from "@dfinity/auth-client";
 import { HttpAgent } from "@dfinity/agent";
 import { useNavigate } from 'react-router-dom';
+import useAuthentication from '@/hooks/auth/get/useAuthentication';
 
 function RegisterPage() {
-    const [authenticated, setAuthenticated] = useState(false);
+    const { auth, setAuth } = useAuthentication()
     const [errorMsg, setErrorMsg] = useState('');
     const navigate = useNavigate();
 
@@ -44,17 +45,11 @@ function RegisterPage() {
     };
 
     useEffect(() => {
-        const initializeAuthClient = async () => {
-            try {
-                const authClient = await AuthClient.create();
-                const isAuthenticated = await authClient.isAuthenticated();
-                setAuthenticated(isAuthenticated);
-            } catch (error) {
-                console.error("Error initializing auth client:", error);
-            }
-        };
-        initializeAuthClient();
-    }, []);
+      if (auth) {
+        navigate("/")
+      }
+    }, [auth])
+    
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
