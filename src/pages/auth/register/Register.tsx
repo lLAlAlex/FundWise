@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { user_backend, createActor } from './declarations/user_backend';
+import { user_backend, createActor } from '../../../declarations/user_backend';
 import { AuthClient } from "@dfinity/auth-client";
 import { HttpAgent } from "@dfinity/agent";
 import { useNavigate } from 'react-router-dom';

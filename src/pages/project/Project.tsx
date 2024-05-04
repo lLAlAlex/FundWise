@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useQueryCall, useUpdateCall } from '@ic-reactor/react';
 import { AuthClient } from "@dfinity/auth-client";
 import { useNavigate } from 'react-router-dom';
-import { user_backend } from './declarations/user_backend';
-import { User } from './declarations/user_backend/user_backend.did';
-import Header from './components/ui/Header';
-import { project_backend } from './declarations/project_backend';
-import { Project } from './declarations/project_backend/project_backend.did';
+import { user_backend } from '@/declarations/user_backend';
+import { User } from '@/declarations/user_backend/user_backend.did';
+import Header from '@/components/ui/Header';
+import { project_backend } from '@/declarations/project_backend';
+import { Project } from '@/declarations/project_backend/project_backend.did';
 
 type UserState = User[] | [];
 

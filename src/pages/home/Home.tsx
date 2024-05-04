@@ -1,8 +1,8 @@
 import React from "react";
-import Header from "./components/ui/Header";
+import Header from "../../components/ui/Header";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { project_backend } from "./declarations/project_backend";
+import { project_backend } from "../../declarations/project_backend";
 
 type ProjectInputSchema = {
   name: string;
