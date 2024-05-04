@@ -10,6 +10,7 @@ import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Option "mo:base/Option";
 import Order "mo:base/Order";
+import Vector "mo:vector/Class";
 
 actor Database {
 
@@ -19,7 +20,7 @@ actor Database {
     profile_description : Text;
     category : Text;
     location : [Text];
-    image : Blob;
+    image : Text;
     company_contact_ids : [Text];
     reviews_ids : [Text];
     timestamp : Time.Time;
@@ -37,7 +38,7 @@ actor Database {
   public shared (msg) func createCompany(newCompany : CompanyInputSchema) : async Result.Result<Company, Text> {
     let _timestamp = Time.now();
     let uuid = await Utils.generateUUID();
-    let imageBlob = Blob.fromArray([0]);
+    let image = "";
     let contactId = Principal.toText(msg.caller);
 
     let company : Company = {
@@ -46,7 +47,7 @@ actor Database {
       profile_description = newCompany.profile_description;
       category = newCompany.category;
       location = newCompany.location;
-      image = imageBlob;
+      image = image;
       company_contact_ids = [contactId];
       reviews_ids = [];
       timestamp = _timestamp;
@@ -106,6 +107,16 @@ actor Database {
       );
     };
     return #ok(companyData);
+  };
+
+  public query func getAllCompanyID() : async Result.Result<[Text], Text> {
+    var ids = Vector.Vector<Text>();
+
+    for (c in companies.vals()) {
+      ids.add(c.id);
+    };
+
+    return #ok(Vector.toArray(ids));
   };
 
   public query func getCompanyById(id : Text) : async Result.Result<Company, Text> {
@@ -205,31 +216,31 @@ actor Database {
       return #err("Not Authorized!");
     };
 
-    switch(companies.get(id)) {
-        case null {
-            return #err("Not Found!");
-        };
-        case(?existingCompany) { 
-            let updatedCompanyReviews = Array.filter<Text>(
-                existingCompany.reviews_ids,
-                func(review : Text) : Bool { review != reviewid }
-            );
+    switch (companies.get(id)) {
+      case null {
+        return #err("Not Found!");
+      };
+      case (?existingCompany) {
+        let updatedCompanyReviews = Array.filter<Text>(
+          existingCompany.reviews_ids,
+          func(review : Text) : Bool { review != reviewid },
+        );
 
-            let updatedCompanyData : Company = {
-                id = id;
-                name = existingCompany.name;
-                profile_description = existingCompany.profile_description;
-                category = existingCompany.category;
-                location = existingCompany.location;
-                image = existingCompany.image;
-                company_contact_ids = existingCompany.company_contact_ids;
-                reviews_ids = updatedCompanyReviews;
-                timestamp = existingCompany.timestamp;
-            };
-
-            companies.put(id, updatedCompanyData);
-            return #ok(updatedCompanyData);
+        let updatedCompanyData : Company = {
+          id = id;
+          name = existingCompany.name;
+          profile_description = existingCompany.profile_description;
+          category = existingCompany.category;
+          location = existingCompany.location;
+          image = existingCompany.image;
+          company_contact_ids = existingCompany.company_contact_ids;
+          reviews_ids = updatedCompanyReviews;
+          timestamp = existingCompany.timestamp;
         };
+
+        companies.put(id, updatedCompanyData);
+        return #ok(updatedCompanyData);
+      };
     };
   };
 

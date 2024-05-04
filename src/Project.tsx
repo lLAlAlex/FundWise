@@ -1,28 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useQueryCall, useUpdateCall } from '@ic-reactor/react';
 import { AuthClient } from "@dfinity/auth-client";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { user_backend } from './declarations/user_backend';
-import { Principal } from '@ic-reactor/react/dist/types';
 import { User } from './declarations/user_backend/user_backend.did';
 import Header from './components/ui/Header';
+import { project_backend } from './declarations/project_backend';
+import { Project } from './declarations/project_backend/project_backend.did';
 
 type UserState = User[] | [];
 
-function HomePage() {
+function ProjectPage() {
     const navigate = useNavigate();
 
-    const { data: count, call: refetchCount } = useQueryCall({
-        functionName: 'get',
-    });
-
-    const { call: increment, loading } = useUpdateCall({
-        functionName: 'inc',
-        onSuccess: () => {
-            refetchCount();
-        },
-    });
-
+    const [projects, setProjects] = useState<Project[]>([]);
     const [authenticated, setAuthenticated] = useState(false);
     const [currentUser, setCurrentUser] = useState<UserState>([]);
 
@@ -61,22 +52,22 @@ function HomePage() {
             }
         };
         initializeAuthClient();
-    }, []);
 
-    const [data, setData] = useState([
-        { name: 'Apple', date: '2024-04-30' },
-        { name: 'Google', date: '2024-04-29' },
-        { name: 'Microsoft', date: '2024-04-28' },
-        { name: 'Amazon', date: '2024-04-27' },
-        { name: 'Facebook', date: '2024-04-26' },
-        { name: 'Tesla', date: '2024-04-25' },
-        { name: 'Netflix', date: '2024-04-24' },
-        { name: 'Intel', date: '2024-04-23' },
-        { name: 'Adobe', date: '2024-04-22' },
-        { name: 'Salesforce', date: '2024-04-21' },
-        { name: 'Twitter', date: '2024-04-22' },
-        { name: 'Shopify', date: '2024-04-21' }
-    ]);
+        async function fetchProjects() {
+            try {
+                const result = await project_backend.getAllProjects();
+
+                if ('ok' in result) {
+                    setProjects(result.ok);
+                } else {
+                    console.error("Error fetching projects:", result.err);
+                }
+            } catch (error) {
+                console.error("Error fetching projects:", error);
+            }
+        }
+        fetchProjects();
+    }, []);
 
     return (
         <div className=''>
@@ -97,18 +88,18 @@ function HomePage() {
                 </div>
 
                 <div className='flex flex-wrap justify-center max-w-[1300px] gap-5'>
-                    {data.map((eachData) => (
+                    {projects.map((p) => (
                         <div className="max-w-[300px] bg-[#242526] border border-[#eceff133] rounded-lg shadow flex flex-col justify-center items-center cursor-pointer hover:scale-105 hover:bg-[#3A3B3C] duration-500">
-                            <img className="rounded-t-lg bg-transparent max-w-[300px] pt-5" src="/assets/fundwise.png" alt="" />
+                            <img className="rounded-t-lg bg-transparent max-w-[300px] pt-5" src={p.image} alt="" />
                             <div className="p-5">
                                 <a href="#">
-                                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">{eachData.name}</h5>
+                                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">{p.name}</h5>
                                 </a>
-                                <p className="mb-3 font-normal text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+                                <p className="mb-3 font-normal text-gray-400">{p.description}</p>
                                 <div className='flex justify-between items-end'>
-                                    <div className='flex flex-col'>
-                                        <span className="font-normal text-sm text-gray-500 flex flex-wrap">20 days left</span>
-                                        <span className="font-normal text-sm text-gray-500 flex flex-wrap">100% Funded</span>
+                                    <div className='flex flex-col pr-5'>
+                                        <span className="font-normal text-sm text-gray-500 flex flex-wrap">{p.deadline.toString()} days left</span>
+                                        <span className="font-normal text-sm text-gray-500 flex flex-wrap">{p.progress.toString()}% Funded</span>
                                     </div>
                                     <a href="#" className="inline-flex items-center px-6 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-700 w-fit">
                                         Detail
@@ -149,4 +140,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default ProjectPage;

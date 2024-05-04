@@ -62,7 +62,7 @@ function LoginPage() {
       });
 
       if (user_backend.getUser(identity.getPrincipal()) != null) {
-        return navigate('/');
+        return navigate('/project');
       }
       return navigate('/register');
     } catch (error) {
