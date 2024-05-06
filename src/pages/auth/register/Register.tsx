@@ -49,11 +49,11 @@ function RegisterPage() {
     }
   };
 
-  useEffect(() => {
-    if (auth) {
-      navigate('/');
-    }
-  }, [auth]);
+  // useEffect(() => {
+  //   if (auth) {
+  //     navigate('/');
+  //   }
+  // }, [auth]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">

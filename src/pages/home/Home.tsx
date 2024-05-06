@@ -24,8 +24,9 @@ function Home() {
     const seedProjects = async () => {
       try {
         const size = await project_backend.getProjectsSize();
-        // console.log(await project_backend.getAllProjects());
+        console.log(await project_backend.getAllProjects());
 
+        console.log(size)
         if (size < 1) {
           const seedData: ProjectInputSchema[] = [
             { name: 'Startup 1', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: BigInt('10'), company_id: '1' },
@@ -66,8 +67,7 @@ function Home() {
   }, []);
 
   return (
-    <div className=''>
-      <main className='bg-[#18191A] w-full text-white py-[110px] flex flex-col items-center'>
+      <div className='bg-[#18191A] w-full text-white py-[110px] flex flex-col items-center'>
         <div className='w-3/5 my-20 mx-auto flex justify-between items-center'>
           <div className="flex flex-col">
             <h1 className="text-4xl font-serif">Home Fundwise Works</h1>
@@ -125,8 +125,7 @@ function Home() {
               ))}
             </div>
         </div>
-      </main>
-    </div>
+      </div>
   );
 };
 

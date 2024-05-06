@@ -59,14 +59,14 @@ const Header = () => {
   useEffect(() => {
     if (loginStatus === 'success') {
       setAuth(true);
-      navigate('/project');
+      navigate('/projects');
     } else if (loginStatus === 'failed') {
       // do something
     }
   }, [loginStatus]);
 
   return (
-    <header className="sticky w-full opacity-85 z-50">
+    <header className="fixed w-full opacity-85 z-50">
       <nav className="bg-[#18191A] px-4 lg:px-6 py-2.5 pt-5">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <a href="/" className="flex items-center">
@@ -79,7 +79,7 @@ const Header = () => {
               FundWise
             </span>
           </a>
-          <div className="flex justify-around">
+          <div className="flex items-center lg:order-2">
             <a href="/projects">
               <span className="self-center mx-5 text-xl font-semibold whitespace-nowrap text-white">
                 Projects
@@ -90,8 +90,6 @@ const Header = () => {
                 About
               </span>
             </a>
-          </div>
-          <div className="flex items-center lg:order-2 hover:scale-105 duration-500">
             {auth && user ? (
               <div>
                 <img
@@ -149,38 +147,40 @@ const Header = () => {
                 </div>
               </div>
             ) : (
-              <motion.button
-                onClick={login}
-                className="px-6 py-2 rounded-md relative radial-gradient flex justify-center items-center gap-2 hover:bg-[#3A3B3C]"
-                initial={{ '--x': '100%', scale: 1 } as any}
-                animate={{ '--x': '-100%' } as any}
-                whileTap={{ scale: 0.97 }}
-                transition={{
-                  repeat: Infinity,
-                  repeatType: 'loop',
-                  repeatDelay: 1,
-                  type: 'spring',
-                  stiffness: 20,
-                  damping: 15,
-                  mass: 2,
-                  scale: {
+              <div className='hover:scale-105 duration-500'>
+                <motion.button
+                  onClick={login}
+                  className="px-6 py-2 rounded-md relative radial-gradient flex justify-center items-center gap-2 hover:bg-[#3A3B3C]"
+                  initial={{ '--x': '100%', scale: 1 } as any}
+                  animate={{ '--x': '-100%' } as any}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{
+                    repeat: Infinity,
+                    repeatType: 'loop',
+                    repeatDelay: 1,
                     type: 'spring',
-                    stiffness: 10,
-                    damping: 5,
-                    mass: 0.1,
-                  },
-                }}
-              >
-                <img
-                  src="./assets/icp.png"
-                  className="w-full h-full object-contain absolute opacity-50"
-                  alt="Login"
-                />
-                <span className="text-neutral-100 tracking-wide font-medium h-full w-full block relative linear-mask text-lg">
-                  Log In
-                </span>
-                <span className="block absolute inset-0 rounded-md p-px linear-overlay" />
-              </motion.button>
+                    stiffness: 20,
+                    damping: 15,
+                    mass: 2,
+                    scale: {
+                      type: 'spring',
+                      stiffness: 10,
+                      damping: 5,
+                      mass: 0.1,
+                    },
+                  }}
+                >
+                  <img
+                    src="./assets/icp.png"
+                    className="w-full h-full object-contain absolute opacity-50"
+                    alt="Login"
+                  />
+                  <span className="text-neutral-100 tracking-wide font-medium h-full w-full block relative linear-mask text-lg">
+                    Log In
+                  </span>
+                  <span className="block absolute inset-0 rounded-md p-px linear-overlay" />
+                </motion.button>
+              </div>
             )}
             {/* <button data-collapse-toggle="mobile-menu-2" type="button" className="inline-flex items-center p-2 ml-1 text-sm text-gray-400 rounded-lg lg:hidden hover:bg-gray-700" aria-controls="mobile-menu-2" aria-expanded="false">
                         <span className="sr-only">Open main menu</span>
