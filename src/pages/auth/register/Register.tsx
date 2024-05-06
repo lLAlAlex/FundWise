@@ -14,7 +14,11 @@ function RegisterPage() {
         email: '',
         dob: '',
         timestamp: '',
-        profile: ''
+        profile: '',
+        description: '',
+        location: '',
+        contact: '',
+        status: ''
     });
 
     const handleChange = (e: { target: { name: any; value: any; }; }) => {
@@ -38,7 +42,8 @@ function RegisterPage() {
         }
         else {
             formData.profile = "https://res.cloudinary.com/dogiichep/image/upload/v1691980787/profile_xy1yuo.png"
-            await user_backend.register(principal, formData.name, formData.email, formData.profile, '04-12-2003');
+            console.log(formData);
+            await user_backend.register(principal, formData.name, formData.email, formData.profile, formData.dob, formData.location, formData.contact);
             return navigate('/');
         }
     };
@@ -110,7 +115,57 @@ function RegisterPage() {
                                     value={formData.email}
                                 />
                             </div>
-                            <div className="flex items-start">
+                            <div>
+                                <label
+                                    htmlFor="email"
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    Date of Birth
+                                </label>
+                                <input
+                                    type="date"
+                                    name="dob"
+                                    id="dob"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    onChange={handleChange}
+                                    value={formData.dob}
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor="text"
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    Location
+                                </label>
+                                <input
+                                    type="text"
+                                    name="location"
+                                    id="location"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Indonesia"
+                                    onChange={handleChange}
+                                    value={formData.location}
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor="text"
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    Contact
+                                </label>
+                                <input
+                                    type="text"
+                                    name="contact"
+                                    id="contact"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="+62xxxxxxxxxxx"
+                                    onChange={handleChange}
+                                    value={formData.contact}
+                                />
+                            </div>
+                            {/* <div className="flex items-start">
                                 <div className="flex items-center h-5">
                                     <input
                                         id="terms"
@@ -133,7 +188,7 @@ function RegisterPage() {
                                         </a>
                                     </label>
                                 </div>
-                            </div>
+                            </div> */}
                             <button
                                 type="submit"
                                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"

@@ -9,6 +9,7 @@ import { Button } from '@nextui-org/button';
 import { user_backend, canisterId, idlFactory } from "../../declarations/user_backend";
 import { Actor, HttpAgent } from '@dfinity/agent';
 import { User, _SERVICE } from '../../declarations/user_backend/user_backend.did';
+import { Principal } from "@ic-reactor/react/dist/types";
 
 type UserState = User[] | [];
 
@@ -99,6 +100,10 @@ const Header = () => {
         setIsDropdownOpen(prev => !prev);
     };
 
+    const handleProfile = (userID: string | Principal) => {
+        navigate('/profile/' + userID.toString());
+    }
+
     return (
         <header className="fixed w-full opacity-75 z-50">
             <nav className="bg-[#18191A] px-4 lg:px-6 py-2.5 pt-5">
@@ -140,12 +145,12 @@ const Header = () => {
                                         aria-labelledby="avatarButton"
                                     >
                                         <li>
-                                            <a
-                                                href="#"
-                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                            <div
+                                                onClick={() => handleProfile(currentUser[0].internet_identity)}
+                                                className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             >
                                                 Profile
-                                            </a>
+                                            </div>
                                         </li>
                                         <li>
                                             <a

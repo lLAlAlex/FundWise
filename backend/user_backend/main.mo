@@ -15,6 +15,10 @@ actor Database {
     email : Text;
     dob : Text;
     profile : Text;
+    description : Text;
+    location: Text;
+    contact: Text;
+    status : Text;
     timestamp : Time.Time;
   };
 
@@ -62,7 +66,7 @@ actor Database {
     return users.remove(p);
   };
 
-  public shared func register(id : Principal, name : Text, email : Text, profile : Text, dob : Text) : async Result.Result<User, Text> {
+  public shared func register(id : Principal, name : Text, email : Text, profile : Text, dob : Text, location : Text, contact : Text) : async Result.Result<User, Text> {
     let userID = id;
 
     // Unique user validation
@@ -81,6 +85,10 @@ actor Database {
         email = email;
         dob = dob;
         profile = profile;
+        location = location;
+        contact = contact;
+        description = "";
+        status = "Private";
         timestamp = Time.now();
       };
       users.put(user.internet_identity, user);

@@ -22,7 +22,7 @@ function Home() {
     const seedProjects = async () => {
       try {
         const size = await project_backend.getProjectsSize();
-        // console.log(await project_backend.getAllProjects());
+        console.log(await project_backend.getAllProjects());
 
         if (size < 1) {
           const seedData: ProjectInputSchema[] = [
@@ -68,7 +68,16 @@ function Home() {
       <Header />
       <main className='bg-[#18191A] w-full text-white py-[110px] flex flex-col items-center'>
         <div className='w-full mb-5'>
-          Carousel
+          Introduksi websitenya, kayak fundwise itu buat apa aja dll
+        </div>
+        <div className='w-full mb-5'>
+          Statistik udah berapa project yang berhasil di fund buat kayak testimoni, angkanya tembak dulu aja
+        </div>
+        <div className='w-full mb-5'>
+          Carousel Manual isinya top project yang bisa di fund
+        </div>
+        <div className='w-full mb-5'>
+          Footer
         </div>
       </main>
     </div>

@@ -26,7 +26,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (authenticated) {
-      return navigate('/');
+      return navigate('/project');
     }
 
     const initializeAuthClient = async () => {

@@ -12,7 +12,8 @@
       "type": "motoko",
       "main": "backend/company_backend/main.mo",
       "dependencies": [
-        "utils_backend"
+        "utils_backend",
+        "user_backend"
       ],
       "declarations": {
         "node_compatibility": true
@@ -20,17 +21,26 @@
     },
     "review_backend": {
       "type": "motoko",
-      "main": "backend/review_backend/main.mo"
+      "main": "backend/review_backend/main.mo",
+      "dependencies": [
+        "utils_backend",
+        "company_backend"
+      ]
     },
     "project_backend": {
       "type": "motoko",
-      "main": "backend/project_backend/main.mo"
+      "main": "backend/project_backend/main.mo",
+      "dependencies": [
+        "utils_backend"
+      ]
     },
     "frontend": {
       "dependencies": [
         "user_backend",
         "company_backend",
-        "review_backend"
+        "review_backend",
+        "utils_backend",
+        "project_backend"
       ],
       "type": "assets",
       "source": [
