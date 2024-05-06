@@ -7,10 +7,11 @@ import ProjectPage from './pages/project/Project';
 import HomePage from './pages/home/Home';
 import ProjectDetail from './pages/project/ProjectDetail';
 import Profile from './pages/auth/Profile';
+import MainLayout from './layouts/main/MainLayout';
 
 function App() {
   return (
-    <div>
+    <div className='min-h-screen flex flex-col'>
       <BrowserRouter>
         <Routes>
           <Route path="/register" element={<RegisterPage />} />
@@ -19,6 +20,10 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/profile/:id" element={<Profile />} />
+          <Route element={<MainLayout/>}>
+            <Route path="/projects" element={<ProjectPage />} />
+            <Route path="/" element={<HomePage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

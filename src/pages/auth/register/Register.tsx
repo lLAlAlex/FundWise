@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { user_backend, createActor } from '../../../declarations/user_backend';
-import { AuthClient } from "@dfinity/auth-client";
-import { HttpAgent } from "@dfinity/agent";
+import { user_backend, createActor } from '@/declarations/user_backend';
+import { AuthClient } from '@dfinity/auth-client';
+import { HttpAgent } from '@dfinity/agent';
 import { useNavigate } from 'react-router-dom';
+import useAuthentication from '@/hooks/auth/get/useAuthentication';
 
 function RegisterPage() {
-    const [authenticated, setAuthenticated] = useState(false);
-    const [errorMsg, setErrorMsg] = useState('');
-    const navigate = useNavigate();
+  const { auth, setAuth } = useAuthentication();
+  const [errorMsg, setErrorMsg] = useState('');
+  const navigate = useNavigate();
+
 
     const [formData, setFormData] = useState({
         name: '',
@@ -21,18 +23,20 @@ function RegisterPage() {
         status: ''
     });
 
-    const handleChange = (e: { target: { name: any; value: any; }; }) => {
-        const { name, value } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
-    };
 
-    const handleSubmit = async () => {
-        const authClient = await AuthClient.create();
-        const identity = await authClient.getIdentity();
-        const principal = identity.getPrincipal();
+  const handleChange = (e: { target: { name: any; value: any } }) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    const authClient = await AuthClient.create();
+    const identity = await authClient.getIdentity();
+    const principal = identity.getPrincipal();
+
 
         if (!formData.name || !formData.email) {
             setErrorMsg('All fields must be filled');
@@ -48,27 +52,21 @@ function RegisterPage() {
         }
     };
 
-    useEffect(() => {
-        const initializeAuthClient = async () => {
-            try {
-                const authClient = await AuthClient.create();
-                const isAuthenticated = await authClient.isAuthenticated();
-                setAuthenticated(isAuthenticated);
-            } catch (error) {
-                console.error("Error initializing auth client:", error);
-            }
-        };
-        initializeAuthClient();
-    }, []);
 
-    return (
-        <section className="bg-gray-50 dark:bg-gray-900">
-            <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                <a
-                    href="#"
-                    className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-                >
-                    {/* <img
+  useEffect(() => {
+    if (auth) {
+      navigate('/');
+    }
+  }, [auth]);
+
+  return (
+    <section className="bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <a
+          href="#"
+          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+        >
+          {/* <img
                         className="w-8 h-8 mr-2"
                         src=""
                         alt="logo"
@@ -199,9 +197,20 @@ function RegisterPage() {
                         </div>
                     </div>
                 </div>
+              </div>
+              <button
+                type="submit"
+                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                onClick={handleSubmit}
+              >
+                Create an account
+              </button>
             </div>
-        </section>
-    );
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default RegisterPage;

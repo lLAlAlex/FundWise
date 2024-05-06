@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useQueryCall, useUpdateCall } from '@ic-reactor/react';
-import { AuthClient } from '@dfinity/auth-client';
 import { useNavigate } from 'react-router-dom';
-import { Boxes } from '@/components/BackgroundBoxes';
+import { Boxes } from '@/components/background/BackgroundBoxes';
 import { Button } from '@nextui-org/button';
 import { user_backend, canisterId, idlFactory } from "@/declarations/user_backend";
-import { Actor, HttpAgent } from '@dfinity/agent';
 import { _SERVICE } from '@/declarations/user_backend/user_backend.did';
+import useAuthentication from '@/hooks/auth/get/useAuthentication';
+import useLogin from '@/hooks/auth/login/useLogin';
 
 function LoginPage() {
+
+  const {loginStatus, login} = useLogin();
+  
   const { data: count, call: refetchCount } = useQueryCall({
     functionName: 'get',
   });
@@ -19,57 +22,26 @@ function LoginPage() {
       refetchCount();
     },
   });
-
-  const [authenticated, setAuthenticated] = useState(false);
+  
+  const { auth, setAuth } = useAuthentication();
   const navigate = useNavigate();
   let actor = user_backend;
 
   useEffect(() => {
-    if (authenticated) {
-      return navigate('/project');
+    if (auth) {
+      return navigate('/');
     }
+  }, [auth]);
 
-    const initializeAuthClient = async () => {
-      try {
-        const authClient = await AuthClient.create();
-        const isAuthenticated = await authClient.isAuthenticated();
-        setAuthenticated(isAuthenticated);
-      } catch (error) {
-        console.error('Error initializing auth client:', error);
-      }
-    };
-    initializeAuthClient();
-  }, []);
-
-  const handleLogin = async () => {
-    const authClient = await AuthClient.create();
-    try {
-      await new Promise<void>((resolve, reject) => {
-        authClient.login({
-          identityProvider: "https://identity.ic0.app",
-          onSuccess: () => {
-            resolve();
-            setAuthenticated(true)
-          },
-          onError: reject,
-        });
-      });
-      const identity = authClient.getIdentity();
-      const agent = new HttpAgent({ identity });
-      actor = Actor.createActor<_SERVICE>(idlFactory, {
-        agent,
-        canisterId
-      });
-
-      if (user_backend.getUser(identity.getPrincipal()) != null) {
-        return navigate('/project');
-      }
-      return navigate('/register');
-    } catch (error) {
-      console.error('Login error:', error);
+  useEffect(() => {
+    if (loginStatus === "success") {
+      setAuth(true);
+      navigate('/project');
+    } else if (loginStatus === "failed") {
+      // do something
     }
-  };
-
+  }, [loginStatus])
+  
   return (
     <div className="min-h-screen relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
       <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
@@ -80,7 +52,7 @@ function LoginPage() {
           <h1 className="text-white text-3xl">Login Form</h1>
         </div>
         <Button
-          onClick={handleLogin}
+          onClick={login}
           color="primary"
           className="relative overflow-hidden"
         >
