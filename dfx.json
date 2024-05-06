@@ -20,7 +20,11 @@
     },
     "review_backend": {
       "type": "motoko",
-      "main": "backend/review_backend/main.mo"
+      "main": "backend/review_backend/main.mo",
+      "dependencies": [
+        "utils_backend",
+        "company_backend"
+      ]
     },
     "project_backend": {
       "type": "motoko",
@@ -30,7 +34,8 @@
       "dependencies": [
         "user_backend",
         "company_backend",
-        "review_backend"
+        "review_backend",
+        "project_backend"
       ],
       "type": "assets",
       "source": [
