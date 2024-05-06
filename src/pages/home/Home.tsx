@@ -1,5 +1,4 @@
 import React from "react";
-import Header from "../../components/ui/Header";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { project_backend } from "../../declarations/project_backend";
@@ -68,9 +67,7 @@ function Home() {
 
   return (
     <div className=''>
-      <Header />
       <main className='bg-[#18191A] w-full text-white py-[110px] flex flex-col items-center'>
-
         <div className='w-3/5 my-20 mx-auto flex justify-between items-center'>
           <div className="flex flex-col">
             <h1 className="text-4xl font-serif">Home Fundwise Works</h1>
