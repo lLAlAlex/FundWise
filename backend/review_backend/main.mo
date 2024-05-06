@@ -6,7 +6,6 @@ import Nat "mo:base/Nat";
 import Result "mo:base/Result";
 import Time "mo:base/Time";
 import Principal "mo:base/Principal";
-import Option "mo:base/Option";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 
@@ -81,7 +80,9 @@ actor Database {
         return #err("Not Authorized!");
         };
 
-        // NANTI ATUR YANG BISA UPDATE CUMAN ADMIN
+        if (updatedReview.userid != Principal.toText(msg.caller)) {
+            return #err("Not Authorized!");
+        };
 
         switch (reviews.get(id)) {
             case null {
@@ -106,9 +107,13 @@ actor Database {
         };
     };
 
-    public shared (msg) func deleteReviewById(id : Text) : async Result.Result<Text, Text> {
+    public shared (msg) func deleteReviewById(id : Text, userid : Text) : async Result.Result<Text, Text> {
         if (Principal.isAnonymous(msg.caller)) {
-        return #err("Not Authorized!");
+            return #err("Not Authorized!");
+        };
+
+        if (userid != Principal.toText(msg.caller)) {
+            return #err("Not Authorized!");
         };
 
         switch(reviews.get(id)) {
