@@ -7,6 +7,8 @@ import Result "mo:base/Result";
 import Time "mo:base/Time";
 import Principal "mo:base/Principal";
 import Option "mo:base/Option";
+import Array "mo:base/Array";
+import Iter "mo:base/Iter";
 
 actor Database {
     type Review = {
@@ -30,7 +32,7 @@ actor Database {
     let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
 
     public shared (msg) func createReview(newReview : ReviewInputSchema) : async Result.Result<Review, Text> {
-        let _timestamp = Time.now();
+        let timestamp = Time.now();
         let uuid = await Utils.generateUUID();
         let userid = Principal.toText(msg.caller);
 
@@ -41,12 +43,67 @@ actor Database {
             title = newReview.title;
             review = newReview.review;
             rating = newReview.rating;
-            timestamp = _timestamp;
+            timestamp = timestamp;
         };
 
         reviews.put(review.id, review);
         ignore await Company.addCompanyReview(review.companyid, review.id);
         return #ok(review);
+    };
+
+    public query func getAllReviewByCompanyId(companyid : Text) : async Result.Result<[Review], Text> {
+        let reviewArray = Iter.toArray<Review>(reviews.vals());
+        
+        let filteredReviews = Array.filter<Review>(
+            reviewArray, 
+            func (review : Review) : Bool { review.companyid == companyid; }
+        );
+
+        return #ok(filteredReviews);
+    };
+
+
+    public query func getReviewById(id : Text) : async Result.Result<Review, Text> {
+        let result = reviews.get(id);
+
+        switch (result) {
+            case null {
+                return #err("Not Found!");
+            };
+            case (?r) {
+                return #ok(r);
+            };
+        };
+    };
+
+    public shared (msg) func updateCompanyById(id : Text, updatedReview : ReviewInputSchema) : async Result.Result<Review, Text> {
+        if (Principal.isAnonymous(msg.caller)) {
+        return #err("Not Authorized!");
+        };
+
+        // NANTI ATUR YANG BISA UPDATE CUMAN ADMIN
+
+        switch (reviews.get(id)) {
+            case null {
+                return #err("Not Found!");
+            };
+            case (?existingReview) {
+                let updatedTimestamp = Time.now();
+
+                let updatedReviewData : Review = {
+                    id = id;
+                    userid = updatedReview.userid;
+                    companyid = updatedReview.companyid;
+                    title = updatedReview.title;
+                    review = updatedReview.review;
+                    rating = updatedReview.rating;
+                    timestamp = updatedTimestamp;
+                };
+
+                reviews.put(id, updatedReviewData);
+                return #ok(updatedReviewData);
+            };
+        };
     };
 
     public shared (msg) func deleteReviewById(id : Text) : async Result.Result<Text, Text> {
