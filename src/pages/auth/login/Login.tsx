@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useQueryCall, useUpdateCall } from '@ic-reactor/react';
-import { AuthClient } from '@dfinity/auth-client';
 import { useNavigate } from 'react-router-dom';
-import { Boxes } from '@/components/BackgroundBoxes';
+import { Boxes } from '@/components/background/BackgroundBoxes';
 import { Button } from '@nextui-org/button';
 import { user_backend, canisterId, idlFactory } from "@/declarations/user_backend";
-import { Actor, HttpAgent } from '@dfinity/agent';
 import { _SERVICE } from '@/declarations/user_backend/user_backend.did';
 import useAuthentication from '@/hooks/auth/get/useAuthentication';
 import useLogin from '@/hooks/auth/login/useLogin';

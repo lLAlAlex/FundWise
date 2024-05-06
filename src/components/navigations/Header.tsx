@@ -4,14 +4,11 @@ import { useState, useEffect } from 'react';
 import { useAuth, useQueryCall, useUpdateCall } from '@ic-reactor/react';
 import { AuthClient } from '@dfinity/auth-client';
 import { useNavigate } from 'react-router-dom';
-import { Boxes } from '@/components/BackgroundBoxes';
-import { Button } from '@nextui-org/button';
 import {
   user_backend,
   canisterId,
   idlFactory,
 } from '../../declarations/user_backend';
-import { Actor, HttpAgent } from '@dfinity/agent';
 import {
   User,
   _SERVICE,
@@ -19,7 +16,6 @@ import {
 import useLogin from '@/hooks/auth/login/useLogin';
 import useAuthentication from '@/hooks/auth/get/useAuthentication';
 
-type UserState = User[] | [];
 
 const Header = () => {
   const { data: count, call: refetchCount } = useQueryCall({
