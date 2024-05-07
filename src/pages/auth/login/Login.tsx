@@ -10,8 +10,8 @@ import useLogin from '@/hooks/auth/login/useLogin';
 
 function LoginPage() {
 
-  const {loginStatus, login} = useLogin();
-  
+  const { loginStatus, login } = useLogin();
+
   const { data: count, call: refetchCount } = useQueryCall({
     functionName: 'get',
   });
@@ -22,26 +22,26 @@ function LoginPage() {
       refetchCount();
     },
   });
-  
+
   const { auth, setAuth } = useAuthentication();
   const navigate = useNavigate();
-  let actor = user_backend;
 
   useEffect(() => {
     if (auth) {
       return navigate('/');
+    } else {
+      return navigate('/register');
     }
   }, [auth]);
 
   useEffect(() => {
     if (loginStatus === "success") {
       setAuth(true);
-      navigate('/project');
     } else if (loginStatus === "failed") {
       // do something
     }
   }, [loginStatus])
-  
+
   return (
     <div className="min-h-screen relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
       <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />

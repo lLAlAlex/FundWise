@@ -31,15 +31,15 @@ const Header = () => {
 
   const navigate = useNavigate();
   const { loginStatus, login } = useLogin();
-  const {auth, setAuth, user} = useAuthentication();
+  const { auth, setAuth, user } = useAuthentication();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   let actor = user_backend;
 
   useEffect(() => {
-    if (auth) return navigate('/');
+    // if (auth) return navigate('/');
   }, [auth])
-  
+
 
   const handleLogout = async () => {
     try {
@@ -59,7 +59,6 @@ const Header = () => {
   useEffect(() => {
     if (loginStatus === 'success') {
       setAuth(true);
-      navigate('/projects');
     } else if (loginStatus === 'failed') {
       // do something
     }
@@ -103,9 +102,8 @@ const Header = () => {
                 />
                 <div
                   id="userDropdown"
-                  className={`absolute z-10 ${
-                    isDropdownOpen ? '' : 'hidden'
-                  } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+                  className={`absolute z-10 ${isDropdownOpen ? '' : 'hidden'
+                    } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
                 >
                   <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div>

@@ -6,10 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import useAuthentication from '@/hooks/auth/get/useAuthentication';
 
 function RegisterPage() {
-  const { auth, setAuth } = useAuthentication();
+  const { user } = useAuthentication();
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
-
 
   const [formData, setFormData] = useState({
     name: '',
@@ -37,7 +36,6 @@ function RegisterPage() {
     const identity = await authClient.getIdentity();
     const principal = identity.getPrincipal();
 
-
     if (!formData.name || !formData.email) {
       setErrorMsg('All fields must be filled');
     }
@@ -53,10 +51,10 @@ function RegisterPage() {
   };
 
   useEffect(() => {
-    if (auth) {
+    if (user) {
       navigate('/');
     }
-  }, [auth]);
+  }, [user]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">

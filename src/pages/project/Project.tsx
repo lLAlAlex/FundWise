@@ -135,7 +135,7 @@ function ProjectPage() {
 
       <GridLayout>
         {projects.map((p, idx) => (
-          <ProjectCard project={p} key={idx}/>
+          <ProjectCard project={p} key={idx} />
         ))}
       </GridLayout>
       <div className="py-4">
@@ -152,4 +152,3 @@ function ProjectPage() {
 }
 
 export default ProjectPage;
-  
