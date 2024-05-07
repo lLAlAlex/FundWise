@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Project } from '@/declarations/project_backend/project_backend.did';
 import Search from '@/components/ui/search/Search';
 import { Pagination } from '@nextui-org/react';
-import useAuthentication from '@/hooks/auth/get/useAuthentication';
 import { project_backend } from '@/declarations/project_backend';
 import GridLayout from '@/components/layout/grid/GridLayout';
 import ProjectCard from '@/components/cards/projects/ProjectCard';
@@ -35,7 +34,7 @@ const dummy: Project[] = [
     timestamp: BigInt(12124124),
   },
   {
-    id: 'asd2',
+    id: 'asd1',
     name: 'asd',
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
@@ -79,7 +78,6 @@ function ProjectPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState(0);
-  const { user } = useAuthentication();
   const [projects, setProjects] = useState<Project[]>(dummy);
 
   const handleSearch = () => {
@@ -94,7 +92,7 @@ function ProjectPage() {
     async function fetchProjects() {
       try {
         const result = await project_backend.getAllProjects();
-
+        console.log(result)
         if ('ok' in result) {
           setProjects(result.ok);
         } else {

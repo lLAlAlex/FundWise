@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useAuth, useQueryCall, useUpdateCall } from '@ic-reactor/react';
 import { AuthClient } from '@dfinity/auth-client';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   user_backend,
   canisterId,
@@ -14,9 +14,9 @@ import {
   _SERVICE,
 } from '../../declarations/user_backend/user_backend.did';
 import useLogin from '@/hooks/auth/login/useLogin';
-import useAuthentication from '@/hooks/auth/get/useAuthentication';
 import { project_backend } from '@/declarations/project_backend';
 import { ProjectInputSchema } from '@/declarations/project_backend/project_backend.did';
+import { useUserStore } from '@/store/user/userStore';
 
 
 const Header = () => {
@@ -33,19 +33,20 @@ const Header = () => {
 
   const navigate = useNavigate();
   const { loginStatus, login } = useLogin();
-  const { auth, setAuth, user } = useAuthentication();
+  const userStore = useUserStore()
+  // const { auth, setAuth, user } = useAuthentication();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [projects, setProjects] = useState<ProjectInputSchema[]>([]);
 
   let actor = user_backend;
 
   useEffect(() => {
-    if (auth) {
-      if (!user) {
+    if (userStore.is_auth) {
+      if (!userStore.data) {
         return navigate('/register');
       }
     }
-  }, [user])
+  }, [userStore])
 
   const handleLogout = async () => {
     try {
@@ -68,7 +69,7 @@ const Header = () => {
 
   useEffect(() => {
     if (loginStatus === 'success') {
-      setAuth(true);
+      userStore.updateAuth(true);
     } else if (loginStatus === 'failed') {
       // do something
     }
@@ -103,14 +104,14 @@ const Header = () => {
         console.error(e)
       }
     }
-    seedProjects();
+    // seedProjects();
   }, [projects])
 
   return (
     <header className="fixed w-full opacity-85 z-50">
       <nav className="bg-[#18191A] px-4 lg:px-6 py-2.5 pt-5">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <a href="/" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img
               src="/assets/fundwise.png"
               className="h-6 sm:h-9"
@@ -119,26 +120,26 @@ const Header = () => {
             <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">
               FundWise
             </span>
-          </a>
+          </Link>
           <div className="flex items-center lg:order-2">
-            <a href="/projects">
+            <Link to="/projects">
               <span className="self-center mx-5 text-xl font-semibold whitespace-nowrap text-white">
                 Projects
               </span>
-            </a>
-            <a href="/">
+            </Link>
+            <Link to="/">
               <span className="self-center mx-5 text-xl font-semibold whitespace-nowrap text-white">
                 About
               </span>
-            </a>
-            {auth && user ? (
+            </Link>
+            {userStore.is_auth && userStore.data ? (
               <div>
                 <img
                   id="avatarButton"
                   data-dropdown-toggle="userDropdown"
                   data-dropdown-placement="bottom-start"
                   className="w-10 h-10 rounded-full cursor-pointer"
-                  src={user.length > 0 ? user[0].profile : ''}
+                  src={userStore.data.length > 0 ? userStore.data[0].profile : ''}
                   alt="User dropdown"
                   onClick={toggleDropdown}
                 />
@@ -149,10 +150,10 @@ const Header = () => {
                 >
                   <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div>
-                      {user.length > 0 ? user[0].name : 'Guest'}
+                      {userStore.data.length > 0 ? userStore.data[0].name : 'Guest'}
                     </div>
                     <div className="font-medium truncate">
-                      {user.length > 0 ? user[0].email : 'Guest'}
+                      {userStore.data.length > 0 ? userStore.data[0].email : 'Guest'}
                     </div>
                   </div>
                   <ul

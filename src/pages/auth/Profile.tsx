@@ -1,14 +1,14 @@
-import useAuthentication from "@/hooks/auth/get/useAuthentication";
+import { useUserStore } from "@/store/user/userStore";
 import { useNavigate } from "react-router-dom";
 
 function Profile() {
-    const { user } = useAuthentication();
+    const userStore  = useUserStore();
     const navigate = useNavigate();
 
     return (
         <div className="mt-10">
-            {user ? (
-                <div>Name: {user[0].name}</div>
+            {userStore.data ? (
+                <div>Name: {userStore.data[0].name}</div>
             ) : (
                 <div>Loading...</div>
             )}

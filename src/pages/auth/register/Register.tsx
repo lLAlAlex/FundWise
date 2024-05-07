@@ -3,10 +3,11 @@ import { user_backend, createActor } from '@/declarations/user_backend';
 import { AuthClient } from '@dfinity/auth-client';
 import { HttpAgent } from '@dfinity/agent';
 import { useNavigate } from 'react-router-dom';
-import useAuthentication from '@/hooks/auth/get/useAuthentication';
+import { useUserStore } from '@/store/user/userStore';
 
 function RegisterPage() {
-  const { auth, user } = useAuthentication();
+  // const { auth, user } = useAuthentication();
+  const userStore = useUserStore();
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
@@ -51,12 +52,12 @@ function RegisterPage() {
   };
 
   useEffect(() => {
-    if (auth) {
-      if (user) {
+    if (userStore.is_auth) {
+      if (userStore.data) {
         return navigate('/');
       }
     }
-  }, [user]);
+  }, [userStore]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">

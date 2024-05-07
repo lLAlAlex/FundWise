@@ -3,6 +3,12 @@ import { useEffect, useState } from 'react';
 import { User } from '@/declarations/user_backend/user_backend.did';
 import { user_backend } from '@/declarations/user_backend';
 
+
+/**
+ * GAK KEPAKE
+ * SEKARANG AUTO CHECK UDH LOGIN / BLM DI ROOT LAYOUT
+ */
+
 type UserState = User[] | undefined;
 
 type UserStatus = "fetching" | "found" | "empty"
