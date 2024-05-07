@@ -26,9 +26,9 @@ const dummy: Project[] = [
     name: 'asd',
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
-    deadline: BigInt(1231233132),
+    deadline: "05-04-2025",
     progress: BigInt(1),
-    // timestamp: new Date(),
+    goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
     image: 'https://picsum.photos/200/300',
@@ -39,9 +39,9 @@ const dummy: Project[] = [
     name: 'asd',
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
-    deadline: BigInt(1231233132),
+    deadline: "05-04-2025",
     progress: BigInt(1),
-    // timestamp: new Date(),
+    goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
     image: 'https://picsum.photos/200/300',
@@ -52,9 +52,9 @@ const dummy: Project[] = [
     name: 'asd',
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
-    deadline: BigInt(1231233132),
+    deadline: "05-04-2025",
     progress: BigInt(1),
-    // timestamp: new Date(),
+    goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
     image: 'https://picsum.photos/300/300',
@@ -65,34 +65,21 @@ const dummy: Project[] = [
     name: 'asd',
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
-    deadline: BigInt(1231233132),
+    deadline: "05-04-2025",
     progress: BigInt(1),
-    // timestamp: new Date(),
+    goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
     image: 'https://picsum.photos/400/300',
     timestamp: BigInt(12124124),
   },
-  // {
-  //   id: 'asd4',
-  //   name: 'asd',
-  //   description: 'lorem ipsum asdasdasdad',
-  //   reviews_ids: [],
-  //   deadline: BigInt(1231233132),
-  //   progress: BigInt(1),
-  //   // timestamp: new Date(),
-  //   category: 'ASdasd',
-  //   company_id: 'asdasd',
-  //   image: 'https://picsum.photos/200/300',
-  //   timestamp: BigInt(12124124),
-  // },
 ];
 
 function ProjectPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState(0);
-  const { userStatus } = useAuthentication();
+  const { user } = useAuthentication();
   const [projects, setProjects] = useState<Project[]>(dummy);
 
   const handleSearch = () => {
@@ -123,7 +110,7 @@ function ProjectPage() {
 
   return (
     <>
-      <div className="w-full mb-5">
+      <div className="w-full mb-5 mt-12">
         <div className="max-w-[1200px] w-9/12 mx-auto">
           <Search
             value={search}

@@ -9,6 +9,7 @@ import {
   Link,
 } from '@nextui-org/react';
 import { Project } from '@/declarations/project_backend/project_backend.did';
+import { redirect } from 'react-router-dom';
 
 interface Props extends React.AllHTMLAttributes<HTMLDivElement> {
   project: Project;
@@ -18,6 +19,11 @@ interface Props extends React.AllHTMLAttributes<HTMLDivElement> {
 
 export default function ProjectCard(props: Props) {
   const { project } = props;
+
+  const handleRedirect = (projectID: string) => {
+    return redirect('/project/' + projectID)
+  }
+
   return (
     <Card
       isFooterBlurred
@@ -53,7 +59,7 @@ export default function ProjectCard(props: Props) {
           </p>
         </div>
         <Link
-          href="#"
+          href={'/project/' + project.id.toString()}
           className="text-tiny md:text-base text-blue-600 hover:text-blue-500 transition-colors ease-linear"
         >
           Detail

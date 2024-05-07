@@ -15,6 +15,8 @@ import {
 } from '../../declarations/user_backend/user_backend.did';
 import useLogin from '@/hooks/auth/login/useLogin';
 import useAuthentication from '@/hooks/auth/get/useAuthentication';
+import { project_backend } from '@/declarations/project_backend';
+import { ProjectInputSchema } from '@/declarations/project_backend/project_backend.did';
 
 
 const Header = () => {
@@ -33,6 +35,7 @@ const Header = () => {
   const { loginStatus, login } = useLogin();
   const { auth, setAuth, user } = useAuthentication();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [projects, setProjects] = useState<ProjectInputSchema[]>([]);
 
   let actor = user_backend;
 
@@ -43,7 +46,6 @@ const Header = () => {
       }
     }
   }, [user])
-
 
   const handleLogout = async () => {
     try {
@@ -60,6 +62,10 @@ const Header = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
+  const handleProfile = () => {
+    navigate('/profile');
+  }
+
   useEffect(() => {
     if (loginStatus === 'success') {
       setAuth(true);
@@ -67,6 +73,38 @@ const Header = () => {
       // do something
     }
   }, [loginStatus]);
+
+  useEffect(() => {
+    const seedProjects = async () => {
+      try {
+        const size = await project_backend.getProjectsSize();
+        console.log(await project_backend.getAllProjects());
+
+        if (size < 1) {
+          const seedData: ProjectInputSchema[] = [
+            { name: 'Startup 1', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '1', goal: BigInt(60000) },
+            { name: 'Startup 2', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '2', goal: BigInt(60000) },
+            { name: 'Startup 3', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '3', goal: BigInt(60000) },
+            { name: 'Startup 4', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '4', goal: BigInt(60000) },
+            { name: 'Startup 5', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '5', goal: BigInt(60000) },
+            { name: 'Startup 6', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '6', goal: BigInt(60000) },
+            { name: 'Startup 7', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '7', goal: BigInt(60000) },
+            { name: 'Startup 8', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '8', goal: BigInt(60000) },
+            { name: 'Startup 9', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '9', goal: BigInt(60000) },
+            { name: 'Startup 10', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '10', goal: BigInt(60000) },
+          ];
+          setProjects(seedData);
+
+          projects.map(p => {
+            project_backend.createProject(p);
+          });
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    seedProjects();
+  }, [projects])
 
   return (
     <header className="fixed w-full opacity-85 z-50">
@@ -122,12 +160,12 @@ const Header = () => {
                     aria-labelledby="avatarButton"
                   >
                     <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      <div
+                        onClick={() => { handleProfile() }}
+                        className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Profile
-                      </a>
+                      </div>
                     </li>
                     <li>
                       <a

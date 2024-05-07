@@ -83,4 +83,12 @@ actor Database {
   public shared func deleteProject(id : Text) : async ?Project {
     return projects.remove(id);
   };
+
+  public query func getProject(id : Text) : async ?Project {
+    let project = projects.get(id);
+    if (project == null) {
+      return null;
+    };
+    return project;
+  };
 };
