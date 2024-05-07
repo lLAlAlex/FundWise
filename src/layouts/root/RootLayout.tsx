@@ -9,15 +9,19 @@ const RootLayout = (props: Props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    userGetIdentity();
+    userStore.getIdentity();
   }, []);
 
   useEffect(() => {
+    console.log(userStore.data)
     if (userStore.is_auth) {
-      userGetData();
-      if (userStore.data) {
-        console.log("masuk 2")
+      const flag = userStore.getIdentity();
+      if (!flag) {
+        navigate("/register");
       }
+      // if (userStore.data) {
+      //   console.log("masuk 2")
+      // }
     }
 
     // const printUser = async () => {

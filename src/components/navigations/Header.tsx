@@ -16,7 +16,7 @@ import {
 import useLogin from '@/hooks/auth/login/useLogin';
 import { project_backend } from '@/declarations/project_backend';
 import { ProjectInputSchema } from '@/declarations/project_backend/project_backend.did';
-import { useUserStore, userGetData } from '@/store/user/userStore';
+import { useUserStore } from '@/store/user/userStore';
 
 
 const Header = () => {
