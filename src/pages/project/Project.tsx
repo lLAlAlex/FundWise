@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Project } from '@/declarations/project_backend/project_backend.did';
+import { Project, Reward } from '@/declarations/project_backend/project_backend.did';
 import Search from '@/components/ui/search/Search';
 import { Pagination } from '@nextui-org/react';
 import { project_backend } from '@/declarations/project_backend';
@@ -19,6 +19,12 @@ import ProjectCard from '@/components/cards/projects/ProjectCard';
 //     'company_id' : string,
 //   }
 
+const rewards: Reward[] = [
+  { tier: 'Bronze', price: BigInt(100) },
+  { tier: 'Silver', price: BigInt(200) },
+  { tier: 'Gold', price: BigInt(300) },
+];
+
 const dummy: Project[] = [
   {
     id: 'asd',
@@ -26,10 +32,11 @@ const dummy: Project[] = [
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
     deadline: "05-04-2025",
-    progress: BigInt(1),
+    progress: BigInt(0),
     goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
+    rewards: rewards,
     image: 'https://picsum.photos/200/300',
     timestamp: BigInt(12124124),
   },
@@ -39,10 +46,11 @@ const dummy: Project[] = [
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
     deadline: "05-04-2025",
-    progress: BigInt(1),
+    progress: BigInt(0),
     goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
+    rewards: rewards,
     image: 'https://picsum.photos/200/300',
     timestamp: BigInt(12124124),
   },
@@ -52,10 +60,11 @@ const dummy: Project[] = [
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
     deadline: "05-04-2025",
-    progress: BigInt(1),
+    progress: BigInt(0),
     goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
+    rewards: rewards,
     image: 'https://picsum.photos/300/300',
     timestamp: BigInt(12124124),
   },
@@ -65,10 +74,11 @@ const dummy: Project[] = [
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
     deadline: "05-04-2025",
-    progress: BigInt(1),
+    progress: BigInt(0),
     goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
+    rewards: rewards,
     image: 'https://picsum.photos/400/300',
     timestamp: BigInt(12124124),
   },
@@ -91,10 +101,12 @@ function ProjectPage() {
   useEffect(() => {
     async function fetchProjects() {
       try {
+        setProjects(dummy);
         const result = await project_backend.getAllProjects();
-        console.log(result)
         if ('ok' in result) {
-          setProjects(result.ok);
+          if (result.ok.length != 0) {
+            setProjects(result.ok);
+          }
         } else {
           console.error('Error fetching projects:', result.err);
         }

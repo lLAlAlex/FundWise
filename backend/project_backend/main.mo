@@ -7,6 +7,11 @@ import Utils "canister:utils_backend";
 import Vector "mo:vector/Class";
 
 actor Database {
+  type Reward = {
+    tier : Text;
+    price : Nat;
+  };
+
   type Project = {
     id : Text;
     name : Text;
@@ -18,6 +23,7 @@ actor Database {
     goal : Nat;
     company_id : Text;
     reviews_ids : [Text];
+    rewards : [Reward];
     timestamp : Time.Time;
   };
 
@@ -28,6 +34,7 @@ actor Database {
     image : Text;
     deadline : Text;
     goal : Nat;
+    rewards : [Reward];
     company_id : Text;
   };
 
@@ -49,6 +56,7 @@ actor Database {
       goal = newProject.goal;
       company_id = newProject.company_id;
       reviews_ids = [];
+      rewards = newProject.rewards;
       timestamp = _timestamp;
     };
 
