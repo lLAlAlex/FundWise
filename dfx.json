@@ -28,9 +28,11 @@
     },
     "project_backend": {
       "type": "motoko",
-      "main": "backend/project_backend/main.mo",
+      "main": "backend/project_backend/main.mo"
+      ,
       "dependencies": [
-        "utils_backend"
+        "utils_backend",
+        "company_backend"
       ]
     },
     "frontend": {
@@ -38,7 +40,8 @@
         "user_backend",
         "company_backend",
         "review_backend",
-        "project_backend"
+        "project_backend",
+        "utils_backend"
       ],
       "type": "assets",
       "source": [
