@@ -8,8 +8,6 @@ import HomePage from './pages/home/Home';
 import ProjectDetail from './pages/project/ProjectDetail';
 import Profile from './pages/auth/Profile';
 import MainLayout from './layouts/main/MainLayout';
-import ProjectDetail from './pages/project/ProjectDetail';
-import Profile from './pages/auth/Profile';
 
 function App() {
   return (
