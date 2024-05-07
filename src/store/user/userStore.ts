@@ -35,9 +35,8 @@ export const userGetData = async()=> {
         const identity = await authClient.getIdentity();
         const principal = identity.getPrincipal();
         const user = await user_backend.getUser(principal);
-        if (user && user.length > 1) {
+        if (user && user.length > 0) {
             useUserStore.setState((state) => ({...state, user: user}))
         }
     }
-    useUserStore.setState((state) => ({...state, user: undefined}))
 }
