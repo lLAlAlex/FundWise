@@ -6,7 +6,9 @@ import { Button } from '@nextui-org/button';
 import { user_backend, canisterId, idlFactory } from "@/declarations/user_backend";
 import { _SERVICE } from '@/declarations/user_backend/user_backend.did';
 import useLogin from '@/hooks/auth/login/useLogin';
-import { useUserStore } from '@/store/user/userStore';
+// import { useUserStore } from '@/store/user/userStore';
+
+// GA KEPAKE PAGE LOGIN
 
 function LoginPage() {
 
@@ -22,24 +24,24 @@ function LoginPage() {
       refetchCount();
     },
   });
-  const userStore = useUserStore();
+  // const userStore = useUserStore();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (userStore.data) {
-      return navigate('/');
-    } else {
-      return navigate('/register');
-    }
-  }, [userStore]);
+  // useEffect(() => {
+  //   if (userStore.data) {
+  //     return navigate('/');
+  //   } else {
+  //     return navigate('/register');
+  //   }
+  // }, [userStore]);
 
-  useEffect(() => {
-    if (loginStatus === "success") {
-      userStore.updateAuth(true);
-    } else if (loginStatus === "failed") {
-      // do something
-    }
-  }, [loginStatus])
+  // useEffect(() => {
+  //   if (loginStatus === "success") {
+  //     userStore.updateAuth(true);
+  //   } else if (loginStatus === "failed") {
+  //     // do something
+  //   }
+  // }, [loginStatus])
 
   return (
     <div className="min-h-screen relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">

@@ -17,6 +17,7 @@ import useLogin from '@/hooks/auth/login/useLogin';
 import { project_backend } from '@/declarations/project_backend';
 import { ProjectInputSchema } from '@/declarations/project_backend/project_backend.did';
 import { useUserStore } from '@/store/user/userStore';
+import useAuthentication from '@/hooks/auth/get/useAuthentication';
 
 
 const Header = () => {
@@ -33,8 +34,8 @@ const Header = () => {
 
   const navigate = useNavigate();
   const { loginStatus, login } = useLogin();
-  const userStore = useUserStore()
-  // const { auth, setAuth, user } = useAuthentication();
+  // const userStore = useUserStore()
+  const { auth, setAuth, user } = useAuthentication();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [projects, setProjects] = useState<ProjectInputSchema[]>([]);
 
@@ -59,7 +60,7 @@ const Header = () => {
 
   useEffect(() => {
     if (loginStatus === 'success') {
-      userStore.updateAuth(true);
+      setAuth(true);
     } else if (loginStatus === 'failed') {
       // do something
     }
@@ -122,14 +123,14 @@ const Header = () => {
                 About
               </span>
             </Link>
-            {userStore.is_auth && userStore.data ? (
+            {auth && user ? (
               <div>
                 <img
                   id="avatarButton"
                   data-dropdown-toggle="userDropdown"
                   data-dropdown-placement="bottom-start"
                   className="w-10 h-10 rounded-full cursor-pointer"
-                  src={userStore.data.length > 0 ? userStore.data[0].profile : ''}
+                  src={user.length > 0 ? user[0].profile : ''}
                   alt="User dropdown"
                   onClick={toggleDropdown}
                 />
@@ -140,10 +141,10 @@ const Header = () => {
                 >
                   <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div>
-                      {userStore.data.length > 0 ? userStore.data[0].name : 'Guest'}
+                      {user.length > 0 ? user[0].name : 'Guest'}
                     </div>
                     <div className="font-medium truncate">
-                      {userStore.data.length > 0 ? userStore.data[0].email : 'Guest'}
+                      {user.length > 0 ? user[0].email : 'Guest'}
                     </div>
                   </div>
                   <ul

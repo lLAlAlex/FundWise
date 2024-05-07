@@ -4,10 +4,10 @@ import { AuthClient } from '@dfinity/auth-client';
 import { HttpAgent } from '@dfinity/agent';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/store/user/userStore';
+import useAuthentication from '@/hooks/auth/get/useAuthentication';
 
 function RegisterPage() {
-  // const { auth, user } = useAuthentication();
-  const userStore = useUserStore();
+  const { auth, user } = useAuthentication();
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
@@ -52,13 +52,21 @@ function RegisterPage() {
     }
   };
 
+  // useEffect(() => {
+  //   if (userStore.is_auth) {
+  //     if (userStore.data) {
+  //       return navigate('/');
+  //     }
+  //   }
+  // }, [userStore]);
+
   useEffect(() => {
-    if (userStore.is_auth) {
-      if (userStore.data) {
+    if (auth) {
+      if (user) {
         return navigate('/');
       }
     }
-  }, [userStore]);
+  }, [user]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
