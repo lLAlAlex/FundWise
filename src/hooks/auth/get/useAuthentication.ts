@@ -39,7 +39,7 @@ const useAuthentication = () => {
         fetchUser()
     }, [])
 
-    return {auth, setAuth , user, userStatus}
+    return { auth, setAuth, user, userStatus }
 }
 
 export default useAuthentication

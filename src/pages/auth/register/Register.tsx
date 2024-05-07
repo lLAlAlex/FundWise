@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import useAuthentication from '@/hooks/auth/get/useAuthentication';
 
 function RegisterPage() {
-  const { user } = useAuthentication();
+  const { auth, user } = useAuthentication();
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
 
@@ -51,8 +51,10 @@ function RegisterPage() {
   };
 
   useEffect(() => {
-    if (user) {
-      navigate('/');
+    if (auth) {
+      if (user) {
+        return navigate('/');
+      }
     }
   }, [user]);
 

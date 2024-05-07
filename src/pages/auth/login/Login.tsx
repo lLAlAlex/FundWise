@@ -23,11 +23,11 @@ function LoginPage() {
     },
   });
 
-  const { auth, setAuth } = useAuthentication();
+  const { auth, setAuth, user } = useAuthentication();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (auth) {
+    if (user) {
       return navigate('/');
     } else {
       return navigate('/register');

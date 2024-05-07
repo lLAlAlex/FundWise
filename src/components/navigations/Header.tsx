@@ -37,8 +37,12 @@ const Header = () => {
   let actor = user_backend;
 
   useEffect(() => {
-    // if (auth) return navigate('/');
-  }, [auth])
+    if (auth) {
+      if (!user) {
+        return navigate('/register');
+      }
+    }
+  }, [user])
 
 
   const handleLogout = async () => {
