@@ -116,30 +116,19 @@ actor Database {
             return #err("Not Authorized!");
         };
 
-        switch(reviews.get(id)) {
+        switch (reviews.get(id)) {
             case null {
                 return #err("Not Found!");
             };
-            case(?existingReview) { 
+            case (?existingReview) {
                 if (existingReview.userid == Principal.toText(msg.caller)) {
-                    ignore reviews.remove(id);
-                    ignore await Company.deleteCompanyReviewById(existingReview.companyid, id);
-                    return #ok("Review Deleted Successfully!");
+                ignore reviews.remove(id);
+                ignore await Company.deleteCompanyReviewById(existingReview.companyid, id);
+                return #ok("Review Deleted Successfully!");
                 };
 
-    switch (reviews.get(id)) {
-      case null {
-        return #err("Not Found!");
-      };
-      case (?existingReview) {
-        if (existingReview.userid == Principal.toText(msg.caller)) {
-          ignore reviews.remove(id);
-          ignore await Company.deleteCompanyReviewById(existingReview.companyid, id);
-          return #ok("Review Deleted Successfully!");
+                return #err("Not Authorized!");
+            };
         };
-
-        return #err("Not Authorized!");
-      };
     };
-  };
 };
