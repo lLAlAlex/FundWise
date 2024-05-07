@@ -44,7 +44,7 @@ const Header = () => {
       const authClient = await AuthClient.create();
       await authClient.logout();
       // setAuthenticated(false);
-      return navigate('/login');
+      return navigate('/');
     } catch (error) {
       console.error('Logout error:', error);
     }

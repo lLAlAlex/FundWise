@@ -8,7 +8,7 @@ type Props = {};
 
 const RootLayout = (props: Props) => {
   // const userStore = useUserStore();
-  const { auth, user } = useAuthentication();
+  const { auth, user, userStatus } = useAuthentication();
   const navigate = useNavigate();
 
   useEffect(() => {

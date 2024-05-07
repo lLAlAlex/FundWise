@@ -3,6 +3,7 @@ import { AuthClient } from '@dfinity/auth-client';
 import { user_backend, canisterId, idlFactory } from "@/declarations/user_backend";
 import { Actor, HttpAgent } from '@dfinity/agent';
 import { _SERVICE } from '@/declarations/user_backend/user_backend.did';
+import { canisterId as internetIdentityCanisterID } from '@/declarations/internet_identity';
 
 type LoginStatus = "initial" | "loading" | "success" | "failed";
 
@@ -14,7 +15,8 @@ const useLogin = () => {
         try {
             await new Promise<void>((resolve, reject) => {
                 authClient.login({
-                    identityProvider: "https://identity.ic0.app",
+                    identityProvider: `http://${internetIdentityCanisterID}.localhost:4943/`,
+                    // identityProvider: "https://identity.ic0.app",
                     onSuccess: () => {
                         resolve();
                     },
@@ -28,7 +30,7 @@ const useLogin = () => {
                 canisterId
             });
 
-            if (user_backend.getUser(identity.getPrincipal()) != null) {
+            if ((await user_backend.getUser(identity.getPrincipal())).length != 0) {
                 setLoginStatus("success");
             } else {
                 setLoginStatus("failed")
@@ -38,7 +40,7 @@ const useLogin = () => {
         }
     };
 
-    return {loginStatus, login};
+    return { loginStatus, login };
 }
 
 export default useLogin;
