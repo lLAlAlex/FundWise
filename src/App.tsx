@@ -5,9 +5,9 @@ import RegisterPage from './pages/auth/register/Register';
 import LoginPage from './pages/auth/login/Login';
 import ProjectPage from './pages/project/Project';
 import HomePage from './pages/home/Home';
-import MainLayout from './layouts/main/MainLayout';
 import ProjectDetail from './pages/project/ProjectDetail';
 import Profile from './pages/auth/Profile';
+import MainLayout from './layouts/main/MainLayout';
 
 function App() {
   return (

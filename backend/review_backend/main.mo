@@ -10,25 +10,25 @@ import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 
 actor Database {
-    type Review = {
-        id : Text;
-        userid : Text;
-        companyid : Text;
-        title : Text;
-        review : Text;
-        rating : Nat;
-        timestamp : Time.Time;
-    };
+  type Review = {
+    id : Text;
+    userid : Text;
+    companyid : Text;
+    title : Text;
+    review : Text;
+    rating : Nat;
+    timestamp : Time.Time;
+  };
 
-    type ReviewInputSchema = {
-        userid : Text;
-        companyid : Text;
-        title : Text;
-        review : Text;
-        rating : Nat;
-    };
+  type ReviewInputSchema = {
+    userid : Text;
+    companyid : Text;
+    title : Text;
+    review : Text;
+    rating : Nat;
+  };
 
-    let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
+  let reviews = TrieMap.TrieMap<Text, Review>(Text.equal, Text.hash);
 
     public shared (msg) func createReview(newReview : ReviewInputSchema) : async Result.Result<Review, Text> {
         let timestamp = Time.now();
@@ -116,19 +116,19 @@ actor Database {
             return #err("Not Authorized!");
         };
 
-        switch(reviews.get(id)) {
+        switch (reviews.get(id)) {
             case null {
                 return #err("Not Found!");
             };
-            case(?existingReview) { 
+            case (?existingReview) {
                 if (existingReview.userid == Principal.toText(msg.caller)) {
-                    ignore reviews.remove(id);
-                    ignore await Company.deleteCompanyReviewById(existingReview.companyid, id);
-                    return #ok("Review Deleted Successfully!");
+                ignore reviews.remove(id);
+                ignore await Company.deleteCompanyReviewById(existingReview.companyid, id);
+                return #ok("Review Deleted Successfully!");
                 };
 
                 return #err("Not Authorized!");
             };
         };
     };
-}
+};
