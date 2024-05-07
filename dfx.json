@@ -34,6 +34,13 @@
         "utils_backend"
       ]
     },
+    "transaction_backend": {
+      "type": "motoko",
+      "main": "backend/transaction_backend/main.mo",
+      "dependencies": [
+        "utils_backend"
+      ]
+    },
     "frontend": {
       "dependencies": [
         "user_backend",
