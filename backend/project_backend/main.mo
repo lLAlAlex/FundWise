@@ -14,7 +14,8 @@ actor Database {
     category : Text;
     image : Text;
     progress : Nat;
-    deadline : Nat;
+    deadline : Text;
+    goal : Nat;
     company_id : Text;
     reviews_ids : [Text];
     timestamp : Time.Time;
@@ -25,7 +26,8 @@ actor Database {
     description : Text;
     category : Text;
     image : Text;
-    deadline : Nat;
+    deadline : Text;
+    goal : Nat;
     company_id : Text;
   };
 
@@ -44,6 +46,7 @@ actor Database {
       image = newProject.image;
       progress = 0;
       deadline = newProject.deadline;
+      goal = newProject.goal;
       company_id = newProject.company_id;
       reviews_ids = [];
       timestamp = _timestamp;
