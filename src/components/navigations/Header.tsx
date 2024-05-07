@@ -16,7 +16,7 @@ import {
 import useLogin from '@/hooks/auth/login/useLogin';
 import { project_backend } from '@/declarations/project_backend';
 import { ProjectInputSchema } from '@/declarations/project_backend/project_backend.did';
-import { useUserStore } from '@/store/user/userStore';
+import { useUserStore, userGetData } from '@/store/user/userStore';
 
 
 const Header = () => {
@@ -37,16 +37,6 @@ const Header = () => {
   // const { auth, setAuth, user } = useAuthentication();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [projects, setProjects] = useState<ProjectInputSchema[]>([]);
-
-  let actor = user_backend;
-
-  useEffect(() => {
-    if (userStore.is_auth) {
-      if (!userStore.data) {
-        return navigate('/register');
-      }
-    }
-  }, [userStore])
 
   const handleLogout = async () => {
     try {

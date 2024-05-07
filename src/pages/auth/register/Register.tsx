@@ -47,6 +47,7 @@ function RegisterPage() {
       formData.profile = "https://res.cloudinary.com/dogiichep/image/upload/v1691980787/profile_xy1yuo.png"
       console.log(formData);
       await user_backend.register(principal, formData.name, formData.email, formData.profile, formData.dob, formData.location, formData.contact);
+      // console.log(await user_backend.register(principal, formData.name, formData.email, formData.profile, formData.dob, formData.location, formData.contact))
       return navigate('/');
     }
   };

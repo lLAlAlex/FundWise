@@ -7,22 +7,26 @@ type Props = {};
 const RootLayout = (props: Props) => {
   const userStore = useUserStore();
   const navigate = useNavigate();
+
   useEffect(() => {
     userGetIdentity();
   }, []);
 
   useEffect(() => {
     if (userStore.is_auth) {
-        userGetData();
-    } 
-    console.log(userStore)
-    // else {
-    //   navigate("/login")
-    // }
-  }, [userStore])
-  
+      userGetData();
+      if (userStore.data) {
+        console.log("masuk 2")
+      }
+    }
 
-  return <Outlet/>;
+    // const printUser = async () => {
+    //   console.log(await userGetData())
+    // }
+    // printUser();
+  }, [userStore])
+
+  return <Outlet />;
 };
 
 export default RootLayout;
