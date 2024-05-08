@@ -12,6 +12,7 @@ import Float "mo:base/Float";
 import Int "mo:base/Int";
 import Vector "mo:vector/Class";
 import Utils "canister:utils_backend";
+import Fuzz "mo:fuzz";
 
 actor Database {
   type Reward = {
@@ -48,25 +49,64 @@ actor Database {
   let projects = TrieMap.TrieMap<Text, Project>(Text.equal, Text.hash);
   let items_per_page = 20;
 
+  // public shared func seedProjects() : async Result.Result<Text, Text> {
+  //   var counter = 0;
+  //   while (counter <= 20) {
+  //     counter := counter + 1;
+  //     let _timestamp = Time.now();
+  //     let uuid = await Utils.generateUUID();
+  //     let image = "https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png";
+  //     let a = Nat.toText(counter);
+  //     let project : Project = {
+  //       id = uuid;
+  //       user_id = "asdasd";
+  //       name = "Project Test " # a;
+  //       description = "DESC";
+  //       category = "TEST";
+  //       image = image;
+  //       progress = 0;
+  //       deadline = "DEADLINE";
+  //       goal = 2000;
+  //       company_id = "asasdasd-asdasd-asdasd";
+  //       reviews_ids = [];
+  //       rewards = [
+  //         { tier = "Bronze"; price = 100 },
+  //         { tier = "Silver"; price = 200 },
+  //         { tier = "Gold"; price = 300 },
+  //       ];
+  //       timestamp = _timestamp;
+  //     };
+
+  //     projects.put(project.id, project);
+  //   };
+  //   return #ok("Success");
+  // };
+
   public shared func seedProjects() : async Result.Result<Text, Text> {
+    let fuzz = Fuzz.Fuzz();
     var counter = 0;
+
+    let categoryArray = ["Health", "Sport", "Fashion", "Food", "Technology"];
+    
     while (counter <= 20) {
       counter := counter + 1;
       let _timestamp = Time.now();
       let uuid = await Utils.generateUUID();
       let image = "https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png";
-      let a = Nat.toText(counter);
+      let randomRangeName = fuzz.nat.randomRange(5, 15);
+      let randomRangeDesc = fuzz.nat.randomRange(50, 150);
+      let randomCategoryIndex = fuzz.nat.randomRange(0, categoryArray.size() - 1); 
+      
       let project : Project = {
         id = uuid;
         user_id = "asdasd";
-        name = "Project Test " # a;
-        description = "DESC";
-        category = "TEST";
+        name = fuzz.text.randomText(randomRangeName);
+        description = fuzz.text.randomText(randomRangeDesc);
+        category = categoryArray[randomCategoryIndex];
         image = image;
-        progress = 0;
+        progress = fuzz.nat.randomRange(0, 50);
         deadline = "DEADLINE";
-        goal = 2000;
-        company_id = "asasdasd-asdasd-asdasd";
+        goal = fuzz.nat.randomRange(1000, 2000);
         reviews_ids = [];
         rewards = [
           { tier = "Bronze"; price = 100 },
