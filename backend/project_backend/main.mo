@@ -6,6 +6,8 @@ import Nat "mo:base/Nat";
 import Option "mo:base/Option";
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
+import Principal "mo:base/Principal";
+import Iter "mo:base/Iter";
 import Vector "mo:vector/Class";
 import Utils "canister:utils_backend";
 
@@ -149,6 +151,18 @@ actor Database {
       return #ok([]);
     };
 
+  };
+
+  public query (msg) func getAllProjectByUserId() : async Result.Result<[Project], Text> {
+      let userid = Principal.toText(msg.caller);
+      let projectArray = Iter.toArray<Project>(projects.vals());
+      
+      let filteredProjects = Array.filter<Project>(
+          projectArray, 
+          func (project : Project) : Bool { project.user_id == userid; }
+      );
+
+      return #ok(filteredProjects);
   };
 
   public query func getTotalProjectCount() : async Nat {
