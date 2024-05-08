@@ -9,7 +9,7 @@ const MainLayout = (props: Props) => {
   return (
     <>
       <Header/>
-      <main className='flex-1 bg-[#18191A] w-full text-white py-8 flex flex-col items-center'>
+      <main className="bg-background bg-page-gradient text-white pt-nav-height">
         <Outlet/>
       </main>
     </>
