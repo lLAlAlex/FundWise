@@ -18,13 +18,12 @@ const RootLayout = (props: Props) => {
     
 
   useEffect(() => {
-    console.log(userStore)
     if (userStore.is_auth) {
       if (!userStore.data) {
         return navigate('/register');
       }
     }
-  }, [user])
+  }, [userStore])
 
   return <Outlet />;
 };

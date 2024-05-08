@@ -20,7 +20,7 @@ import { useUserStore } from '@/store/user/userStore';
 import useAuthentication from '@/hooks/auth/get/useAuthentication';
 import { Container } from '../ui/Container';
 import { Hamburger } from '../ui/Hamburger';
-import classNames from 'classnames';
+import classnames from "classnames"
 
 const rewards: Reward[] = [
   { tier: 'Bronze', price: BigInt(100) },
