@@ -102,7 +102,7 @@ function ProjectPage() {
     async function fetchProjects() {
       try {
         setProjects(dummy);
-        const result = await project_backend.getAllProjects();
+        const result = await project_backend.getAllProjects([""], BigInt(1));
         if ('ok' in result) {
           if (result.ok.length != 0) {
             setProjects(result.ok);
