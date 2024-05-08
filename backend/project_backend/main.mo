@@ -8,6 +8,8 @@ import Array "mo:base/Array";
 import Debug "mo:base/Debug";
 import Principal "mo:base/Principal";
 import Iter "mo:base/Iter";
+import Float "mo:base/Float";
+import Int "mo:base/Int";
 import Vector "mo:vector/Class";
 import Utils "canister:utils_backend";
 
@@ -167,6 +169,12 @@ actor Database {
 
   public query func getTotalProjectCount() : async Nat {
     return projects.size();
+  };
+
+  public shared func getTotalPages() : async Int {
+    let totalProjects = await getTotalProjectCount();
+    let totalPages = Float.ceil(Float.fromInt(totalProjects) / Float.fromInt(items_per_page));
+    return Float.toInt(totalPages);
   };
   
   public shared func deleteProject(id : Text) : async ?Project {
