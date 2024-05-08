@@ -44,6 +44,7 @@ actor Database {
   };
 
   let projects = TrieMap.TrieMap<Text, Project>(Text.equal, Text.hash);
+  let items_per_page = 20;
 
   public shared func seedProjects() : async Result.Result<Text, Text> {
     var counter = 0;
@@ -113,8 +114,7 @@ actor Database {
   };
 
   public query func getAllProjects(search : ?Text, page : Nat) : async Result.Result<[Project], Text> {
-    // OFFSET KITA SET 20 dlu aja
-    let offset = 20;
+    let offset = items_per_page;
 
     let searchParam = Option.get(search, "");
 
@@ -168,7 +168,7 @@ actor Database {
   public query func getTotalProjectCount() : async Nat {
     return projects.size();
   };
-
+  
   public shared func deleteProject(id : Text) : async ?Project {
     return projects.remove(id);
   };
