@@ -151,7 +151,7 @@ actor Database {
 
   };
 
-  public query func getProjectsSize() : async Nat {
+  public query func getTotalProjectCount() : async Nat {
     return projects.size();
   };
 
