@@ -65,22 +65,22 @@ const Header = () => {
   }
 
   const walletDialog = () => {
-    (async () => {
-      const nnsCanisterId = 'qoctq-giaaa-aaaaa-aaaea-cai'
+    // (async () => {
+    //   const nnsCanisterId = 'qoctq-giaaa-aaaaa-aaaea-cai'
 
-      const whitelist = [
-        nnsCanisterId,
-      ];
+    //   const whitelist = [
+    //     nnsCanisterId,
+    //   ];
 
-      const isConnected = await window.ic.plug.requestConnect({
-        whitelist,
-      });
+    //   const isConnected = await window.ic.plug.requestConnect({
+    //     whitelist,
+    //   });
 
-      const principalId = await window.ic.plug.agent.getPrincipal();
+    //   const principalId = await window.ic.plug.agent.getPrincipal();
 
-      console.log(`Plug's user principal Id is ${principalId}`);
-      setConnection(isConnected);
-    })();
+    //   console.log(`Plug's user principal Id is ${principalId}`);
+    //   setConnection(isConnected);
+    // })();
   }
 
   // (async () => {
@@ -104,12 +104,12 @@ const Header = () => {
 
     //     if (size < 1) {
     //       const seedData: ProjectInputSchema[] = [
-    //         { name: 'Startup 1', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '1', goal: BigInt(60000), rewards: rewards },
-    //         { name: 'Startup 2', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '2', goal: BigInt(60000), rewards: rewards },
-    //         { name: 'Startup 3', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '3', goal: BigInt(60000), rewards: rewards },
-    //         { name: 'Startup 4', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '4', goal: BigInt(60000), rewards: rewards },
-    //         { name: 'Startup 5', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '5', goal: BigInt(60000), rewards: rewards },
-    //         { name: 'Startup 6', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '6', goal: BigInt(60000), rewards: rewards }
+    //         { name: 'Startup 1', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '1', goal: BigInt(60000), rewards: rewards },
+    //         { name: 'Startup 2', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '2', goal: BigInt(60000), rewards: rewards },
+    //         { name: 'Startup 3', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '3', goal: BigInt(60000), rewards: rewards },
+    //         { name: 'Startup 4', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '4', goal: BigInt(60000), rewards: rewards },
+    //         { name: 'Startup 5', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '5', goal: BigInt(60000), rewards: rewards },
+    //         { name: 'Startup 6', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '6', goal: BigInt(60000), rewards: rewards }
     //       ];
     //       setProjects(seedData);
 
