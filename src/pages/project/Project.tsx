@@ -89,11 +89,11 @@ function ProjectPage() {
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(10);
-  const [projects, setProjects] = useState<Project[]>(dummy);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   async function fetchProjects(search: string, page: number) {
     try {
-      setProjects(dummy);
+      setProjects([]);
       const result = await project_backend.getAllProjects([search], BigInt(page));
       if ('ok' in result) {
         if (result.ok.length != 0) {
@@ -117,6 +117,16 @@ function ProjectPage() {
       fetchProjects("", page);
     }
   }, [page]);
+
+  useEffect(() => {
+    const fetchTotalPages = async () => {
+      const res = await project_backend.getProjectsSize();
+      setTotalPage(Math.ceil(Number(res) / 20))
+    }
+
+    fetchTotalPages()
+  }, [])
+  
 
   return (
     <>

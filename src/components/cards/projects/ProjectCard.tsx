@@ -26,7 +26,7 @@ export default function ProjectCard(props: Props) {
   return (
     <Card
       isFooterBlurred
-      className={`w-full h-[240px] lg:h-[360px] lg:w-[220px] hover:scale-105 overflow-hidden shadow-sm shadow-gray-300 bg-gray-800 ${props.className}`}
+      className={`w-full h-[240px] lg:h-[360px] lg:w-[240px] hover:scale-105 overflow-hidden shadow-sm shadow-gray-300 bg-gray-800 ${props.className}`}
       key={project.id}
     >
       <CardHeader className="absolute z-10 top-0 flex-col items-start bg-gray-600/50 p-1 md:p-3">
