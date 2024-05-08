@@ -15,12 +15,12 @@ function App() {
     <div className='min-h-screen flex flex-col'>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<RootLayout/>}>
+          <Route path='/' element={<RootLayout />}>
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route element={<MainLayout />}>
               <Route path="/project/:id" element={<ProjectDetail />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile/:id" element={<Profile />} />
               <Route path="/projects" element={<ProjectPage />} />
               <Route path="/" element={<HomePage />} />
             </Route>

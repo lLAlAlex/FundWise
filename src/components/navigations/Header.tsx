@@ -70,8 +70,8 @@ const Header = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  const handleProfile = () => {
-    navigate('/profile'); 
+  const handleProfile = (userID: string) => {
+    navigate('/profile' + userID);
   };
 
   const walletDialog = () => {
@@ -178,9 +178,8 @@ const Header = () => {
               />
               <div
                 id="userDropdown"
-                className={`absolute z-10 ${
-                  isDropdownOpen ? '' : 'hidden'
-                } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+                className={`absolute z-10 ${isDropdownOpen ? '' : 'hidden'
+                  } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
               >
                 <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                   <div>{user.length > 0 ? user[0].name : 'Guest'}</div>
@@ -195,7 +194,7 @@ const Header = () => {
                   <li>
                     <div
                       onClick={() => {
-                        handleProfile();
+                        handleProfile(user[0].internet_identity.toString());
                       }}
                       className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
