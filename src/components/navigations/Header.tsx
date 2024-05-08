@@ -43,6 +43,7 @@ const Header = () => {
   const { auth, setAuth, user } = useAuthentication();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [projects, setProjects] = useState<ProjectInputSchema[]>([]);
+  const [connection, setConnection] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -63,6 +64,30 @@ const Header = () => {
     navigate('/profile');
   }
 
+  const walletDialog = () => {
+    (async () => {
+      const nnsCanisterId = 'qoctq-giaaa-aaaaa-aaaea-cai'
+
+      const whitelist = [
+        nnsCanisterId,
+      ];
+
+      const isConnected = await window.ic.plug.requestConnect({
+        whitelist,
+      });
+
+      const principalId = await window.ic.plug.agent.getPrincipal();
+
+      console.log(`Plug's user principal Id is ${principalId}`);
+      setConnection(isConnected);
+    })();
+  }
+
+  // (async () => {
+  //   const result = await window.ic.plug.isConnected();
+  //   console.log(`Plug connection is ${result}`);
+  // })()
+
   useEffect(() => {
     if (loginStatus === 'success') {
       setAuth(true);
@@ -72,30 +97,30 @@ const Header = () => {
   }, [loginStatus]);
 
   useEffect(() => {
-    const seedProjects = async () => {
-      try {
-        const size = await project_backend.getProjectsSize();
-        console.log(await project_backend.getAllProjects());
+    // const seedProjects = async () => {
+    //   try {
+    //     const size = await project_backend.getProjectsSize();
+    //     console.log(await project_backend.getAllProjects());
 
-        if (size < 1) {
-          const seedData: ProjectInputSchema[] = [
-            { name: 'Startup 1', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '1', goal: BigInt(60000), rewards: rewards },
-            { name: 'Startup 2', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '2', goal: BigInt(60000), rewards: rewards },
-            { name: 'Startup 3', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '3', goal: BigInt(60000), rewards: rewards },
-            { name: 'Startup 4', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '4', goal: BigInt(60000), rewards: rewards },
-            { name: 'Startup 5', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '5', goal: BigInt(60000), rewards: rewards },
-            { name: 'Startup 6', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '6', goal: BigInt(60000), rewards: rewards }
-          ];
-          setProjects(seedData);
+    //     if (size < 1) {
+    //       const seedData: ProjectInputSchema[] = [
+    //         { name: 'Startup 1', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '1', goal: BigInt(60000), rewards: rewards },
+    //         { name: 'Startup 2', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '2', goal: BigInt(60000), rewards: rewards },
+    //         { name: 'Startup 3', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '3', goal: BigInt(60000), rewards: rewards },
+    //         { name: 'Startup 4', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '4', goal: BigInt(60000), rewards: rewards },
+    //         { name: 'Startup 5', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '5', goal: BigInt(60000), rewards: rewards },
+    //         { name: 'Startup 6', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", company_id: '6', goal: BigInt(60000), rewards: rewards }
+    //       ];
+    //       setProjects(seedData);
 
-          projects.map(p => {
-            project_backend.createProject(p);
-          });
-        }
-      } catch (e) {
-        console.error(e)
-      }
-    }
+    //       projects.map(p => {
+    //         project_backend.createProject(p);
+    //       });
+    //     }
+    //   } catch (e) {
+    //     console.error(e)
+    //   }
+    // }
     // seedProjects();
   }, [projects])
 
@@ -160,6 +185,16 @@ const Header = () => {
                         Profile
                       </div>
                     </li>
+                    {connection && (
+                      <li>
+                        <div
+                          onClick={() => { walletDialog() }}
+                          className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          Connect to Wallet
+                        </div>
+                      </li>
+                    )}
                     <li>
                       <a
                         href="#"

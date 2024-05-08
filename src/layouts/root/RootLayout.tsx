@@ -13,11 +13,11 @@ const RootLayout = (props: Props) => {
 
   useEffect(() => {
     if (auth) {
-      if (!user) {
+      if (userStatus == 'empty') {
         return navigate('/register');
       }
     }
-  }, [user])
+  }, [userStatus])
 
   return <Outlet />;
 };
