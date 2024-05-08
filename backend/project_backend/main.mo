@@ -53,6 +53,7 @@ actor Database {
       let a = Nat.toText(counter);
       let project : Project = {
         id = uuid;
+        user_id = "asdasd";
         name = "Project Test " # a;
         description = "DESC";
         category = "TEST";
