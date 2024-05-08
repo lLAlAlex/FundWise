@@ -9,7 +9,7 @@ const MainLayout = (props: Props) => {
   return (
     <>
       <Header/>
-      <main className="bg-background bg-page-gradient text-white pt-nav-height">
+      <main className="bg-background bg-page-gradient text-white pt-nav-height flex-1 p-4">
         <Outlet/>
       </main>
     </>

@@ -35,7 +35,7 @@ const dummy: Project[] = [
     progress: BigInt(0),
     goal: BigInt(60000),
     category: 'ASdasd',
-    company_id: 'asdasd',
+    user_id: 'asdasd',
     rewards: rewards,
     image: 'https://picsum.photos/200/300',
     timestamp: BigInt(12124124),
@@ -49,7 +49,7 @@ const dummy: Project[] = [
     progress: BigInt(0),
     goal: BigInt(60000),
     category: 'ASdasd',
-    company_id: 'asdasd',
+    user_id: 'asdasd',
     rewards: rewards,
     image: 'https://picsum.photos/200/300',
     timestamp: BigInt(12124124),
@@ -63,7 +63,7 @@ const dummy: Project[] = [
     progress: BigInt(0),
     goal: BigInt(60000),
     category: 'ASdasd',
-    company_id: 'asdasd',
+    user_id: 'asdasd',
     rewards: rewards,
     image: 'https://picsum.photos/300/300',
     timestamp: BigInt(12124124),
@@ -77,7 +77,7 @@ const dummy: Project[] = [
     progress: BigInt(0),
     goal: BigInt(60000),
     category: 'ASdasd',
-    company_id: 'asdasd',
+    user_id: 'asdasd',
     rewards: rewards,
     image: 'https://picsum.photos/400/300',
     timestamp: BigInt(12124124),
@@ -87,36 +87,36 @@ const dummy: Project[] = [
 function ProjectPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>('');
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(10);
   const [projects, setProjects] = useState<Project[]>(dummy);
 
+  async function fetchProjects(search: string, page: number) {
+    try {
+      setProjects(dummy);
+      const result = await project_backend.getAllProjects([search], BigInt(page));
+      if ('ok' in result) {
+        if (result.ok.length != 0) {
+          setProjects(result.ok);
+        }
+      } else {
+        console.error('Error fetching projects:', result.err);
+      }
+    } catch (error) {
+      console.log(error)
+      // console.error('Error fetching projects:', error);
+    }
+  }
   const handleSearch = () => {
     // do something with search
-
-    if (search) {
-      // ....
-    }
+    fetchProjects(search, page)
   };
 
   useEffect(() => {
-    async function fetchProjects() {
-      try {
-        setProjects(dummy);
-        const result = await project_backend.getAllProjects([""], BigInt(1));
-        if ('ok' in result) {
-          if (result.ok.length != 0) {
-            setProjects(result.ok);
-          }
-        } else {
-          console.error('Error fetching projects:', result.err);
-        }
-      } catch (error) {
-        console.log(error)
-        // console.error('Error fetching projects:', error);
-      }
+    if (page > 0) {
+      fetchProjects("", page);
     }
-    fetchProjects();
-  }, []);
+  }, [page]);
 
   return (
     <>
@@ -129,20 +129,21 @@ function ProjectPage() {
           />
         </div>
       </div>
-
-      <GridLayout>
-        {projects.map((p, idx) => (
-          <ProjectCard project={p} key={idx} />
-        ))}
-      </GridLayout>
-      <div className="py-4">
-        <Pagination
-          total={10}
-          initialPage={1}
-          color="primary"
-          page={page}
-          onChange={setPage}
-        />
+      <div className='flex flex-col items-center w-full'>
+        <GridLayout>
+          {projects.map((p, idx) => (
+            <ProjectCard project={p} key={idx} />
+          ))}
+        </GridLayout>
+        <div className="py-4 w-full flex justify-center">
+          <Pagination
+            total={totalPage}
+            initialPage={1}
+            color="primary"
+            page={page}
+            onChange={(n) => setPage(n)}
+          />
+        </div>
       </div>
     </>
   );

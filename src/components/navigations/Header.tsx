@@ -52,10 +52,6 @@ const Header = () => {
 
   let actor = user_backend;
 
-  useEffect(() => {
-    if (auth) return navigate('/');
-  }, [auth]);
-
   const [projects, setProjects] = useState<ProjectInputSchema[]>([]);
   const [connection, setConnection] = useState(false);
 
@@ -75,7 +71,7 @@ const Header = () => {
   };
 
   const handleProfile = () => {
-    navigate('/profile');
+    navigate('/profile'); 
   };
 
   const walletDialog = () => {
@@ -95,11 +91,6 @@ const Header = () => {
     })();
   };
 
-  // (async () => {
-  //   const result = await window.ic.plug.isConnected();
-  //   console.log(`Plug connection is ${result}`);
-  // })()
-
   useEffect(() => {
     if (loginStatus.status === 'success') {
       setAuth(true);
@@ -115,17 +106,6 @@ const Header = () => {
 
   useEffect(() => {
     const closeHamburgerNavigation = () => setIsHamburgerOpen(false);
-    //     if (size < 1) {
-    //       const seedData: ProjectInputSchema[] = [
-    //         { name: 'Startup 1', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '1', goal: BigInt(60000), rewards: rewards },
-    //         { name: 'Startup 2', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '2', goal: BigInt(60000), rewards: rewards },
-    //         { name: 'Startup 3', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '3', goal: BigInt(60000), rewards: rewards },
-    //         { name: 'Startup 4', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '4', goal: BigInt(60000), rewards: rewards },
-    //         { name: 'Startup 5', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '5', goal: BigInt(60000), rewards: rewards },
-    //         { name: 'Startup 6', description: 'Tech Company', image: 'https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png', category: 'Tech', deadline: "05-04-2025", user_id: '6', goal: BigInt(60000), rewards: rewards }
-    //       ];
-    //       setProjects(seedData);
-
     window.addEventListener('orientationchange', closeHamburgerNavigation);
     window.addEventListener('resize', closeHamburgerNavigation);
   }, [setIsHamburgerOpen]);
