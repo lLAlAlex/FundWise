@@ -21,7 +21,7 @@ actor Database {
     progress : Nat;
     deadline : Text;
     goal : Nat;
-    company_id : Text;
+    user_id : Text;
     reviews_ids : [Text];
     rewards : [Reward];
     timestamp : Time.Time;
@@ -35,7 +35,7 @@ actor Database {
     deadline : Text;
     goal : Nat;
     rewards : [Reward];
-    company_id : Text;
+    user_id : Text;
   };
 
   let projects = TrieMap.TrieMap<Text, Project>(Text.equal, Text.hash);
@@ -54,7 +54,7 @@ actor Database {
       progress = 0;
       deadline = newProject.deadline;
       goal = newProject.goal;
-      company_id = newProject.company_id;
+      user_id = newProject.user_id;
       reviews_ids = [];
       rewards = newProject.rewards;
       timestamp = _timestamp;
