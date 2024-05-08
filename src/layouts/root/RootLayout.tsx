@@ -24,7 +24,7 @@ const RootLayout = (props: Props) => {
         return navigate('/register');
       }
     }
-  }, [userStore])
+  }, [user])
 
   return <Outlet />;
 };
