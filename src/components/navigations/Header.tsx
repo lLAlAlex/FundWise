@@ -38,9 +38,8 @@ const Header = () => {
   });
 
   const navigate = useNavigate();
-  const { loginStatus, login } = useLogin();
-  // const userStore = useUserStore()
-  const { auth, setAuth, user } = useAuthentication();
+  const { login } = useLogin();
+  const userStore = useUserStore()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [projects, setProjects] = useState<ProjectInputSchema[]>([]);
 
@@ -64,18 +63,10 @@ const Header = () => {
   }
 
   useEffect(() => {
-    if (loginStatus === 'success') {
-      setAuth(true);
-    } else if (loginStatus === 'failed') {
-      // do something
-    }
-  }, [loginStatus]);
-
-  useEffect(() => {
     const seedProjects = async () => {
       try {
         const size = await project_backend.getProjectsSize();
-        console.log(await project_backend.getAllProjects());
+        // console.log(await project_backend.getAllProjects());
 
         if (size < 1) {
           const seedData: ProjectInputSchema[] = [
@@ -93,10 +84,11 @@ const Header = () => {
           });
         }
       } catch (e) {
+        // console.log("hihi")
         console.error(e)
       }
     }
-    // seedProjects();
+    seedProjects();
   }, [projects])
 
   return (
@@ -124,14 +116,14 @@ const Header = () => {
                 About
               </span>
             </Link>
-            {auth && user ? (
+            {userStore.is_auth && userStore.data ? (
               <div>
                 <img
                   id="avatarButton"
                   data-dropdown-toggle="userDropdown"
                   data-dropdown-placement="bottom-start"
                   className="w-10 h-10 rounded-full cursor-pointer"
-                  src={user.length > 0 ? user[0].profile : ''}
+                  src={userStore.data.length > 0 ? userStore.data[0].profile : ''}
                   alt="User dropdown"
                   onClick={toggleDropdown}
                 />
@@ -142,10 +134,10 @@ const Header = () => {
                 >
                   <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div>
-                      {user.length > 0 ? user[0].name : 'Guest'}
+                      {userStore.data.length > 0 ? userStore.data[0].name : 'Guest'}
                     </div>
                     <div className="font-medium truncate">
-                      {user.length > 0 ? user[0].email : 'Guest'}
+                      {userStore.data.length > 0 ? userStore.data[0].email : 'Guest'}
                     </div>
                   </div>
                   <ul
@@ -215,28 +207,7 @@ const Header = () => {
                 </motion.button>
               </div>
             )}
-            {/* <button data-collapse-toggle="mobile-menu-2" type="button" className="inline-flex items-center p-2 ml-1 text-sm text-gray-400 rounded-lg lg:hidden hover:bg-gray-700" aria-controls="mobile-menu-2" aria-expanded="false">
-                        <span className="sr-only">Open main menu</span>
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
-                        <svg className="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                    </button> */}
           </div>
-          {/* <div className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1 mt-2" id="mobile-menu-2">
-                    <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 text-lg">
-                        <li>
-                            <a href="#" className="block py-2 pr-4 pl-3 text-gray-400 border-b border-gray-100 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0">Menu A</a>
-                        </li>
-                        <li>
-                            <a href="#" className="block py-2 pr-4 pl-3 text-gray-400 border-b border-gray-100 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0">Menu B</a>
-                        </li>
-                        <li>
-                            <a href="#" className="block py-2 pr-4 pl-3 text-gray-400 border-b border-gray-100 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0">Menu C</a>
-                        </li>
-                        <li>
-                            <a href="#" className="block py-2 pr-4 pl-3 text-gray-400 border-b border-gray-100 hover:bg-gray-700 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0">Contact</a>
-                        </li>
-                    </ul>
-                </div> */}
         </div>
       </nav>
     </header>

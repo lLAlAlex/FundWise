@@ -14,34 +14,14 @@ function LoginPage() {
 
   const { loginStatus, login } = useLogin();
 
-  const { data: count, call: refetchCount } = useQueryCall({
-    functionName: 'get',
-  });
-
-  const { call: increment, loading } = useUpdateCall({
-    functionName: 'inc',
-    onSuccess: () => {
-      refetchCount();
-    },
-  });
   // const userStore = useUserStore();
-  const navigate = useNavigate();
-
+  // const navigate = useNavigate();
   // useEffect(() => {
-  //   if (userStore.data) {
-  //     return navigate('/');
-  //   } else {
-  //     return navigate('/register');
-  //   }
-  // }, [userStore]);
-
-  // useEffect(() => {
-  //   if (loginStatus === "success") {
-  //     userStore.updateAuth(true);
-  //   } else if (loginStatus === "failed") {
-  //     // do something
+  //   if (loginStatus.status === "not registered") {
+  //     navigate("/register");
   //   }
   // }, [loginStatus])
+  
 
   return (
     <div className="min-h-screen relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">

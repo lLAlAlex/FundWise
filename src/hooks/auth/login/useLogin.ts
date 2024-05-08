@@ -4,13 +4,24 @@ import { user_backend, canisterId, idlFactory } from "@/declarations/user_backen
 import { Actor, HttpAgent } from '@dfinity/agent';
 import { _SERVICE } from '@/declarations/user_backend/user_backend.did';
 import { canisterId as internetIdentityCanisterID } from '@/declarations/internet_identity';
+import { useUserStore } from '@/store/user/userStore';
 
-type LoginStatus = "initial" | "loading" | "success" | "failed";
+type LoginState = {
+    status: "initial" | "loading" | "success" | "failed" | "not registered",
+    error: any,
+}
 
 const useLogin = () => {
-    const [loginStatus, setLoginStatus] = useState<LoginStatus>("initial")
+    const userStore = useUserStore();
+    const [loginStatus, setLoginStatus] = useState<LoginState>({
+        status: "initial",
+        error: undefined
+    })
     const login = async () => {
-        setLoginStatus("loading");
+        setLoginStatus({
+            ...loginStatus,
+            status: "loading"
+        });
         const authClient = await AuthClient.create();
         try {
             await new Promise<void>((resolve, reject) => {
@@ -20,7 +31,9 @@ const useLogin = () => {
                     onSuccess: () => {
                         resolve();
                     },
-                    onError: reject,
+                    onError: () => {
+                        reject("error");
+                    },
                 });
             });
             const identity = authClient.getIdentity();
@@ -31,12 +44,23 @@ const useLogin = () => {
             });
 
             if ((await user_backend.getUser(identity.getPrincipal())).length != 0) {
-                setLoginStatus("success");
+                setLoginStatus({
+                    ...loginStatus,
+                    status: "success"
+                });
             } else {
-                setLoginStatus("failed")
+                setLoginStatus({
+                    ...loginStatus,
+                    status: "not registered"
+                });
             }
+           const data = await userStore.getData();
+           console.log(data)
         } catch (error) {
-            setLoginStatus("failed");
+            setLoginStatus({
+                error: error,
+                status: "failed"
+            });
         }
     };
 
