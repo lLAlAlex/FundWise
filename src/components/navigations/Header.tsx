@@ -65,22 +65,22 @@ const Header = () => {
   }
 
   const walletDialog = () => {
-    // (async () => {
-    //   const nnsCanisterId = 'qoctq-giaaa-aaaaa-aaaea-cai'
+    (async () => {
+      const nnsCanisterId = 'qoctq-giaaa-aaaaa-aaaea-cai'
 
-    //   const whitelist = [
-    //     nnsCanisterId,
-    //   ];
+      const whitelist = [
+        nnsCanisterId,
+      ];
 
-    //   const isConnected = await window.ic.plug.requestConnect({
-    //     whitelist,
-    //   });
+      const isConnected = await window.ic.plug.requestConnect({
+        whitelist,
+      });
 
-    //   const principalId = await window.ic.plug.agent.getPrincipal();
+      const principalId = await window.ic.plug.agent.getPrincipal();
 
-    //   console.log(`Plug's user principal Id is ${principalId}`);
-    //   setConnection(isConnected);
-    // })();
+      console.log(`Plug's user principal Id is ${principalId}`);
+      setConnection(isConnected);
+    })();
   }
 
   // (async () => {
