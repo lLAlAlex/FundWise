@@ -7,6 +7,11 @@ import Utils "canister:utils_backend";
 import Vector "mo:vector/Class";
 
 actor Database {
+  type Reward = {
+    tier : Text;
+    price : Nat;
+  };
+
   type Project = {
     id : Text;
     name : Text;
@@ -14,9 +19,11 @@ actor Database {
     category : Text;
     image : Text;
     progress : Nat;
-    deadline : Nat;
+    deadline : Text;
+    goal : Nat;
     company_id : Text;
     reviews_ids : [Text];
+    rewards : [Reward];
     timestamp : Time.Time;
   };
 
@@ -25,7 +32,9 @@ actor Database {
     description : Text;
     category : Text;
     image : Text;
-    deadline : Nat;
+    deadline : Text;
+    goal : Nat;
+    rewards : [Reward];
     company_id : Text;
   };
 
@@ -44,8 +53,10 @@ actor Database {
       image = newProject.image;
       progress = 0;
       deadline = newProject.deadline;
+      goal = newProject.goal;
       company_id = newProject.company_id;
       reviews_ids = [];
+      rewards = newProject.rewards;
       timestamp = _timestamp;
     };
 
@@ -79,5 +90,13 @@ actor Database {
 
   public shared func deleteProject(id : Text) : async ?Project {
     return projects.remove(id);
+  };
+
+  public query func getProject(id : Text) : async ?Project {
+    let project = projects.get(id);
+    if (project == null) {
+      return null;
+    };
+    return project;
   };
 };

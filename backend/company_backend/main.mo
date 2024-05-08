@@ -1,4 +1,5 @@
 import Utils "canister:utils_backend";
+import User "canister:user_backend";
 import Text "mo:base/Text";
 import Principal "mo:base/Principal";
 import Time "mo:base/Time";
@@ -23,6 +24,7 @@ actor Database {
     image : Text;
     company_contact_ids : [Text];
     reviews_ids : [Text];
+    user_principal : Text;
     timestamp : Time.Time;
   };
 
@@ -31,6 +33,7 @@ actor Database {
     profile_description : Text;
     category : Text;
     location : [Text];
+    user_principal : Text;
   };
 
   let companies = TrieMap.TrieMap<Text, Company>(Text.equal, Text.hash);
@@ -51,6 +54,7 @@ actor Database {
       company_contact_ids = [contactId];
       reviews_ids = [];
       timestamp = _timestamp;
+      user_principal = newCompany.user_principal;
     };
 
     companies.put(company.id, company);
@@ -173,6 +177,7 @@ actor Database {
           company_contact_ids = existingCompany.company_contact_ids;
           reviews_ids = existingCompany.reviews_ids;
           timestamp = updatedTimestamp;
+          user_principal = updatedCompany.user_principal;
         };
 
         companies.put(id, updatedCompanyData);
@@ -203,6 +208,7 @@ actor Database {
           company_contact_ids = existingCompany.company_contact_ids;
           reviews_ids = updatedReviewsIds;
           timestamp = existingCompany.timestamp;
+          user_principal = existingCompany.user_principal;
         };
 
         companies.put(id, updatedCompanyData);
@@ -236,6 +242,7 @@ actor Database {
           company_contact_ids = existingCompany.company_contact_ids;
           reviews_ids = updatedCompanyReviews;
           timestamp = existingCompany.timestamp;
+          user_principal = existingCompany.user_principal;
         };
 
         companies.put(id, updatedCompanyData);

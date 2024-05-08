@@ -9,20 +9,25 @@ import {
   Link,
 } from '@nextui-org/react';
 import { Project } from '@/declarations/project_backend/project_backend.did';
+import { redirect } from 'react-router-dom';
 
 interface Props extends React.AllHTMLAttributes<HTMLDivElement> {
   project: Project;
   className?: string;
-  key?: any;
 }
 
 export default function ProjectCard(props: Props) {
   const { project } = props;
+
+  const handleRedirect = (projectID: string) => {
+    return redirect('/project/' + projectID)
+  }
+
   return (
     <Card
       isFooterBlurred
       className={`w-full h-[180px] md:w-[240px] md:h-auto hover:scale-105 overflow-hidden shadow-sm shadow-gray-300 bg-black ${props.className}`}
-      key={props.key}
+      key={project.id}
     >
       <CardHeader className="absolute z-10 top-0 flex-col items-start bg-gray-600/50 p-1 md:p-3">
         <p className="text-tiny text-white/60 uppercase font-bold hidden sm:block">
@@ -53,7 +58,7 @@ export default function ProjectCard(props: Props) {
           </p>
         </div>
         <Link
-          href="#"
+          href={'/project/' + project.id.toString()}
           className="text-tiny md:text-base text-blue-600 hover:text-blue-500 transition-colors ease-linear"
         >
           Detail

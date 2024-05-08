@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Project } from '@/declarations/project_backend/project_backend.did';
+import { Project, Reward } from '@/declarations/project_backend/project_backend.did';
 import Search from '@/components/ui/search/Search';
 import { Pagination } from '@nextui-org/react';
-import useAuthentication from '@/hooks/auth/get/useAuthentication';
 import { project_backend } from '@/declarations/project_backend';
 import GridLayout from '@/components/layout/grid/GridLayout';
 import ProjectCard from '@/components/cards/projects/ProjectCard';
@@ -20,17 +19,38 @@ import ProjectCard from '@/components/cards/projects/ProjectCard';
 //     'company_id' : string,
 //   }
 
+const rewards: Reward[] = [
+  { tier: 'Bronze', price: BigInt(100) },
+  { tier: 'Silver', price: BigInt(200) },
+  { tier: 'Gold', price: BigInt(300) },
+];
+
 const dummy: Project[] = [
   {
     id: 'asd',
     name: 'asd',
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
-    deadline: BigInt(1231233132),
-    progress: BigInt(1),
-    // timestamp: new Date(),
+    deadline: "05-04-2025",
+    progress: BigInt(0),
+    goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
+    rewards: rewards,
+    image: 'https://picsum.photos/200/300',
+    timestamp: BigInt(12124124),
+  },
+  {
+    id: 'asd1',
+    name: 'asd',
+    description: 'lorem ipsum asdasdasdad',
+    reviews_ids: [],
+    deadline: "05-04-2025",
+    progress: BigInt(0),
+    goal: BigInt(60000),
+    category: 'ASdasd',
+    company_id: 'asdasd',
+    rewards: rewards,
     image: 'https://picsum.photos/200/300',
     timestamp: BigInt(12124124),
   },
@@ -39,24 +59,12 @@ const dummy: Project[] = [
     name: 'asd',
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
-    deadline: BigInt(1231233132),
-    progress: BigInt(1),
-    // timestamp: new Date(),
+    deadline: "05-04-2025",
+    progress: BigInt(0),
+    goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
-    image: 'https://picsum.photos/200/300',
-    timestamp: BigInt(12124124),
-  },
-  {
-    id: 'asd2',
-    name: 'asd',
-    description: 'lorem ipsum asdasdasdad',
-    reviews_ids: [],
-    deadline: BigInt(1231233132),
-    progress: BigInt(1),
-    // timestamp: new Date(),
-    category: 'ASdasd',
-    company_id: 'asdasd',
+    rewards: rewards,
     image: 'https://picsum.photos/300/300',
     timestamp: BigInt(12124124),
   },
@@ -65,34 +73,21 @@ const dummy: Project[] = [
     name: 'asd',
     description: 'lorem ipsum asdasdasdad',
     reviews_ids: [],
-    deadline: BigInt(1231233132),
-    progress: BigInt(1),
-    // timestamp: new Date(),
+    deadline: "05-04-2025",
+    progress: BigInt(0),
+    goal: BigInt(60000),
     category: 'ASdasd',
     company_id: 'asdasd',
+    rewards: rewards,
     image: 'https://picsum.photos/400/300',
     timestamp: BigInt(12124124),
   },
-  // {
-  //   id: 'asd4',
-  //   name: 'asd',
-  //   description: 'lorem ipsum asdasdasdad',
-  //   reviews_ids: [],
-  //   deadline: BigInt(1231233132),
-  //   progress: BigInt(1),
-  //   // timestamp: new Date(),
-  //   category: 'ASdasd',
-  //   company_id: 'asdasd',
-  //   image: 'https://picsum.photos/200/300',
-  //   timestamp: BigInt(12124124),
-  // },
 ];
 
 function ProjectPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState(0);
-  const { userStatus } = useAuthentication();
   const [projects, setProjects] = useState<Project[]>(dummy);
 
   const handleSearch = () => {
@@ -106,10 +101,12 @@ function ProjectPage() {
   useEffect(() => {
     async function fetchProjects() {
       try {
+        setProjects(dummy);
         const result = await project_backend.getAllProjects();
-
         if ('ok' in result) {
-          setProjects(result.ok);
+          if (result.ok.length != 0) {
+            setProjects(result.ok);
+          }
         } else {
           console.error('Error fetching projects:', result.err);
         }
@@ -123,7 +120,7 @@ function ProjectPage() {
 
   return (
     <>
-      <div className="w-full mb-5">
+      <div className="w-full mb-5 mt-12">
         <div className="max-w-[1200px] w-9/12 mx-auto">
           <Search
             value={search}
@@ -135,7 +132,7 @@ function ProjectPage() {
 
       <GridLayout>
         {projects.map((p, idx) => (
-          <ProjectCard project={p} key={idx}/>
+          <ProjectCard project={p} key={idx} />
         ))}
       </GridLayout>
       <div className="py-4">
@@ -152,4 +149,3 @@ function ProjectPage() {
 }
 
 export default ProjectPage;
-  

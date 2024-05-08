@@ -3,6 +3,12 @@ import { useEffect, useState } from 'react';
 import { User } from '@/declarations/user_backend/user_backend.did';
 import { user_backend } from '@/declarations/user_backend';
 
+
+/**
+ * GAK KEPAKE
+ * SEKARANG AUTO CHECK UDH LOGIN / BLM DI ROOT LAYOUT
+ */
+
 type UserState = User[] | undefined;
 
 type UserStatus = "fetching" | "found" | "empty"
@@ -21,11 +27,14 @@ const useAuthentication = () => {
                 const identity = await authClient.getIdentity();
                 const principal = identity.getPrincipal();
                 const user = await user_backend.getUser(principal);
-                if (user.length < 1) {
+                if ((await user_backend.getUser(principal)).length == 0) {
+                    // console.log("Masuk")
                     setUserStatus("empty")
+                    setUser(undefined)
+                } else {
+                    setUser(user);
+                    setUserStatus("found")
                 }
-                setUserStatus("found")
-                setUser(user);
             } else {
                 setUserStatus("empty")
                 setUser(undefined)
@@ -39,7 +48,7 @@ const useAuthentication = () => {
         fetchUser()
     }, [])
 
-    return {auth, setAuth , user, userStatus}
+    return { auth, setAuth, user, userStatus }
 }
 
 export default useAuthentication

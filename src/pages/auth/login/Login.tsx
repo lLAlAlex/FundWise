@@ -5,13 +5,15 @@ import { Boxes } from '@/components/background/BackgroundBoxes';
 import { Button } from '@nextui-org/button';
 import { user_backend, canisterId, idlFactory } from "@/declarations/user_backend";
 import { _SERVICE } from '@/declarations/user_backend/user_backend.did';
-import useAuthentication from '@/hooks/auth/get/useAuthentication';
 import useLogin from '@/hooks/auth/login/useLogin';
+// import { useUserStore } from '@/store/user/userStore';
+
+// GA KEPAKE PAGE LOGIN
 
 function LoginPage() {
 
-  const {loginStatus, login} = useLogin();
-  
+  const { loginStatus, login } = useLogin();
+
   const { data: count, call: refetchCount } = useQueryCall({
     functionName: 'get',
   });
@@ -22,26 +24,25 @@ function LoginPage() {
       refetchCount();
     },
   });
-  
-  const { auth, setAuth } = useAuthentication();
+  // const userStore = useUserStore();
   const navigate = useNavigate();
-  let actor = user_backend;
 
-  useEffect(() => {
-    if (auth) {
-      return navigate('/');
-    }
-  }, [auth]);
+  // useEffect(() => {
+  //   if (userStore.data) {
+  //     return navigate('/');
+  //   } else {
+  //     return navigate('/register');
+  //   }
+  // }, [userStore]);
 
-  useEffect(() => {
-    if (loginStatus === "success") {
-      setAuth(true);
-      navigate('/project');
-    } else if (loginStatus === "failed") {
-      // do something
-    }
-  }, [loginStatus])
-  
+  // useEffect(() => {
+  //   if (loginStatus === "success") {
+  //     userStore.updateAuth(true);
+  //   } else if (loginStatus === "failed") {
+  //     // do something
+  //   }
+  // }, [loginStatus])
+
   return (
     <div className="min-h-screen relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
       <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />

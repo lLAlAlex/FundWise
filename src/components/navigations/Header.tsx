@@ -14,11 +14,19 @@ import {
   _SERVICE,
 } from '../../declarations/user_backend/user_backend.did';
 import useLogin from '@/hooks/auth/login/useLogin';
+import { project_backend } from '@/declarations/project_backend';
+import { ProjectInputSchema, Reward } from '@/declarations/project_backend/project_backend.did';
+import { useUserStore } from '@/store/user/userStore';
 import useAuthentication from '@/hooks/auth/get/useAuthentication';
 import { Container } from '../ui/Container';
 import { Hamburger } from '../ui/Hamburger';
 import classNames from 'classnames';
 
+const rewards: Reward[] = [
+  { tier: 'Bronze', price: BigInt(100) },
+  { tier: 'Silver', price: BigInt(200) },
+  { tier: 'Gold', price: BigInt(300) },
+];
 
 const Header = () => {
   const { data: count, call: refetchCount } = useQueryCall({
@@ -34,7 +42,8 @@ const Header = () => {
 
   const navigate = useNavigate();
   const { loginStatus, login } = useLogin();
-  const {auth, setAuth, user} = useAuthentication();
+  // const userStore = useUserStore()
+  const { auth, setAuth, user } = useAuthentication();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
 
@@ -44,13 +53,15 @@ const Header = () => {
     if (auth) return navigate('/');
   }, [auth])
   
+  const [projects, setProjects] = useState<ProjectInputSchema[]>([]);
+  const [connection, setConnection] = useState(false);
 
   const handleLogout = async () => {
     try {
       const authClient = await AuthClient.create();
       await authClient.logout();
       // setAuthenticated(false);
-      return navigate('/login');
+      return navigate('/');
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -60,10 +71,37 @@ const Header = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
+  const handleProfile = () => {
+    navigate('/profile');
+  }
+
+  const walletDialog = () => {
+    (async () => {
+      const nnsCanisterId = 'qoctq-giaaa-aaaaa-aaaea-cai'
+
+      const whitelist = [
+        nnsCanisterId,
+      ];
+
+      const isConnected = await window.ic.plug.requestConnect({
+        whitelist,
+      });
+
+      const principalId = await window.ic.plug.agent.getPrincipal();
+
+      console.log(`Plug's user principal Id is ${principalId}`);
+      setConnection(isConnected);
+    })();
+  }
+
+  // (async () => {
+  //   const result = await window.ic.plug.isConnected();
+  //   console.log(`Plug connection is ${result}`);
+  // })()
+
   useEffect(() => {
     if (loginStatus === 'success') {
       setAuth(true);
-      navigate('/projects');
     } else if (loginStatus === 'failed') {
       // do something
     }
@@ -125,9 +163,8 @@ const Header = () => {
                 />
                 <div
                   id="userDropdown"
-                  className={`absolute z-10 ${
-                    isDropdownOpen ? '' : 'hidden'
-                  } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+                  className={`absolute z-10 ${isDropdownOpen ? '' : 'hidden'
+                    } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
                 >
                   <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div>
@@ -142,13 +179,23 @@ const Header = () => {
                     aria-labelledby="avatarButton"
                   >
                     <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      <div
+                        onClick={() => { handleProfile() }}
+                        className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Profile
-                      </a>
+                      </div>
                     </li>
+                    {connection && (
+                      <li>
+                        <div
+                          onClick={() => { walletDialog() }}
+                          className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          Connect to Wallet
+                        </div>
+                      </li>
+                    )}
                     <li>
                       <a
                         href="#"
