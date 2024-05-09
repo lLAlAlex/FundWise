@@ -24,6 +24,7 @@ import useAuthentication from '@/hooks/auth/get/useAuthentication';
 import { Container } from '../ui/Container';
 import { Hamburger } from '../ui/Hamburger';
 import classNames from 'classnames';
+import { Avatar } from '@nextui-org/react';
 
 const rewards: Reward[] = [
   { tier: 'Bronze', price: BigInt(100) },
@@ -166,29 +167,44 @@ const Header = () => {
 
         <div className="ml-auto h-full flex items-center">
           {auth && user ? (
-            <div>
-              <img
+            <div className='relative'>
+              
+              <Avatar 
                 id="avatarButton"
                 data-dropdown-toggle="userDropdown"
                 data-dropdown-placement="bottom-start"
-                className="w-10 h-10 rounded-full cursor-pointer"
-                src={user.length > 0 ? user[0].profile : ''}
+                isBordered radius="sm" 
+                size='sm'
+                className="text-tiny cursor-pointer mx-2"
+                src={user.length > 0 ? user[0].profile : ''} 
                 alt="User dropdown"
-                onClick={toggleDropdown}
-              />
+                onClick={toggleDropdown}/>
               <div
                 id="userDropdown"
-                className={`absolute z-10 ${isDropdownOpen ? '' : 'hidden'
-                  } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+                className={`absolute z-10 top-[var(--navigation-height)] right-0 ${isDropdownOpen ? '' : 'hidden'
+                  } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-tranparent-black min-w-96 w-fit`}
               >
-                <div className="px-4 py-3 text-sm text-gray-900 dark:text-black">
-                  <div>{user.length > 0 ? user[0].name : 'Guest'}</div>
-                  <div className="font-medium truncate">
-                    {user.length > 0 ? user[0].email : 'Guest'}
+                <div className="px-4 py-3 flex justify-between items-center">
+                  <div className='mr-3'>
+                    <Avatar 
+                      id="avatarButton"
+                      data-dropdown-toggle="userDropdown"
+                      data-dropdown-placement="bottom-start"
+                      isBordered radius="sm" 
+                      size='sm'
+                      className="text-tiny cursor-pointer mx-2"
+                      src={user.length > 0 ? user[0].profile : ''} 
+                      alt="User dropdown"/>
+                  </div>
+                  <div className='text-end'>
+                    <div className='text-md truncate max-w-80'>{user.length > 0 ? user[0].name : 'Guest'}</div>
+                    <div className="text-xs truncate text-gray-500 max-w-80">
+                      {user.length > 0 ? user[0].email : 'Guest'}
+                    </div>  
                   </div>
                 </div>
                 <ul
-                  className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                  className="py-2 text-sm text-gray-700"
                   aria-labelledby="avatarButton"
                 >
                   <li>
@@ -196,7 +212,7 @@ const Header = () => {
                       onClick={() => {
                         handleProfile(user[0].internet_identity.toString());
                       }}
-                      className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black"
+                      className="cursor-pointer block px-4 py-2 hover:bg-gray-100"
                     >
                       Profile
                     </div>
@@ -207,7 +223,7 @@ const Header = () => {
                         onClick={() => {
                           walletDialog();
                         }}
-                        className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black"
+                        className="cursor-pointer block px-4 py-2 hover:bg-gray-100"
                       >
                         Connect to Wallet
                       </div>
@@ -216,7 +232,7 @@ const Header = () => {
                   <li>
                     <a
                       href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black"
+                      className="block px-4 py-2 hover:bg-gray-100"
                     >
                       Transaction History
                     </a>
@@ -225,7 +241,7 @@ const Header = () => {
                 <div className="py-1">
                   <a
                     onClick={handleLogout}
-                    className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-black"
+                    className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Sign out
                   </a>
