@@ -30,7 +30,7 @@ function LoginPage() {
       <form className="animate-in flex flex-col md:w-1/5 gap-4 text-foreground z-10">
         {' '}
         <div className="flex justify-center items-center">
-          <h1 className="text-white text-3xl">Login Form</h1>
+          <h1 className="text-black text-3xl">Login Form</h1>
         </div>
         <Button
           onClick={login}

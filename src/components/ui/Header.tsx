@@ -104,14 +104,14 @@ const Header = () => {
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <Link to="/" className="flex items-center">
                         <img src="/assets/fundwise.png" className="h-6 sm:h-9" alt="FundWise Logo" />
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">FundWise</span>
+                        <span className="self-center text-2xl font-semibold whitespace-nowrap text-black">FundWise</span>
                     </Link>
                     <div className="flex items-center lg:order-2">
                         <Link to="/projects">
-                            <span className="self-center mx-5 text-xl font-light whitespace-nowrap text-white">Projects</span>
+                            <span className="self-center mx-5 text-xl font-light whitespace-nowrap text-black">Projects</span>
                         </Link>
                         <Link to="/">
-                            <span className="self-center mx-5 text-xl font-light whitespace-nowrap text-white">About</span>
+                            <span className="self-center mx-5 text-xl font-light whitespace-nowrap text-black">About</span>
                         </Link>
                         {authenticated ? (
                             <div>
@@ -128,7 +128,7 @@ const Header = () => {
                                     id="userDropdown"
                                     className={`absolute z-10 ${isDropdownOpen ? '' : 'hidden'} bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
                                 >
-                                    <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                                    <div className="px-4 py-3 text-sm text-gray-900 dark:text-black">
                                         <div>{currentUser.length > 0 ? currentUser[0].name : 'Guest'}</div>
                                         <div className="font-medium truncate">{currentUser.length > 0 ? currentUser[0].email : 'Guest'}</div>
                                     </div>
@@ -139,7 +139,7 @@ const Header = () => {
                                         <li>
                                             <a
                                                 href="#"
-                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black"
                                             >
                                                 Profile
                                             </a>
@@ -147,7 +147,7 @@ const Header = () => {
                                         <li>
                                             <a
                                                 href="#"
-                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black"
                                             >
                                                 Transaction History
                                             </a>
@@ -156,7 +156,7 @@ const Header = () => {
                                     <div className="py-1">
                                         <a
                                             onClick={handleLogout}
-                                            className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                                            className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-black"
                                         >
                                             Sign out
                                         </a>
@@ -167,7 +167,7 @@ const Header = () => {
                             <div className="hover:scale-105 duration-500">
                                 <motion.button onClick={handleLogin} className="px-6 py-2 rounded-md relative radial-gradient flex justify-center items-center gap-2 hover:bg-[#3A3B3C]" initial={{ "--x": "100%", scale: 1 } as any} animate={{ "--x": "-100%" } as any} whileTap={{ scale: 0.97 }} transition={{ repeat: Infinity, repeatType: "loop", repeatDelay: 1, type: "spring", stiffness: 20, damping: 15, mass: 2, scale: { type: "spring", stiffness: 10, damping: 5, mass: 0.1 }, }}>
                                     <img src='./assets/icp.png' className="w-full h-full object-contain absolute opacity-50" alt="Login" />
-                                    <span className="text-white tracking-wide font-medium h-full w-full block relative linear-mask text-lg">
+                                    <span className="text-black tracking-wide font-medium h-full w-full block relative linear-mask text-lg">
                                         Log In
                                     </span>
                                     <span className="block absolute inset-0 rounded-md p-px linear-overlay" />

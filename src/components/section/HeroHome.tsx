@@ -6,17 +6,17 @@ import { ChevronIcon } from "../ui/chevron";
 const HeroHome = () => {
   return (
     <div>
-        <div className="w-full h-20"></div>
+        <div className="w-full h-5"></div>
 
         <Features.Cards
               features={[
-                { total: 258301, front: "", back: "", text: "Projects", },
-                { total: 1993700, front: "$", back: "", text: "Fund", },
-                { total: 24, front: "", back: "+", text: "Partner", },
+                { total: 258301, front: "", back: "", text: "Projects", color:"#EAE6FD", colorText: "#5248B5" },
+                { total: 1993700, front: "$", back: "", text: "Fund", color: "#E9FAF9", colorText: "#1F7B8F" },
+                { total: 24, front: "", back: "+", text: "Partner", color:"#FFE8F2", colorText: "#CF3881"},
               ]}
             />
 
-        <hr className="my-[5rem] h-[1px] border-none bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.1)_50%,transparent)]" />
+        <br/><br/>
 
         <Hero>
           <HeroTitle className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">FundWise: To Provide <br/> Financial Solutions</HeroTitle>
@@ -26,6 +26,7 @@ const HeroHome = () => {
           </Button>
         </Hero>
 
+        <hr className="my-[4rem] h-[1px] border-none bg-[linear-gradient(to_right,transparent,rgba(0,0,0,0.1)_50%,transparent)]" />
     </div>
   );
 };

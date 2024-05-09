@@ -30,7 +30,7 @@ export default function ProjectCard(props: Props) {
       key={project.id}
     >
       <CardHeader className="absolute z-10 top-0 flex-col items-start bg-gray-600/50 p-1 md:p-3">
-        <div className="text-sm text-white/60 uppercase font-bold hidden sm:block py-1">
+        <div className="text-sm text-black/60 uppercase font-bold hidden sm:block py-1">
           {project.description}
         </div>
         <div className="text-black font-medium lg:text-lg text-base">
@@ -59,7 +59,7 @@ export default function ProjectCard(props: Props) {
         </div>
         <Link
           href={'/project/' + project.id.toString()}
-          className="text-lg text-white hover:text-blue-500 transition-colors ease-linear"
+          className="text-lg text-black hover:text-blue-500 transition-colors ease-linear"
         >
           Detail
         </Link>

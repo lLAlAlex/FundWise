@@ -21,7 +21,7 @@ export const Features = ({ children, color, colorDark }: FeaturesProps) => {
     <section
       ref={ref}
       className={classNames(
-        "after:bg-[radial-gradient(ellipse_100%_40%_at_50%_60%,rgba(var(--feature-color),0.1),transparent) relative flex flex-col items-center overflow-x-clip before:pointer-events-none before:absolute before:h-[21rem] before:w-full before:bg-[conic-gradient(from_90deg_at_80%_50%,#000212,rgb(var(--feature-color-dark))),conic-gradient(from_270deg_at_20%_50%,rgb(var(--feature-color-dark)),#000212)] before:bg-no-repeat before:transition-[transform,opacity] before:duration-1000 before:ease-in before:[mask:radial-gradient(100%_50%_at_center_center,_black,_transparent)] before:[background-size:50%_100%,50%_100%] before:[background-position:1%_0%,99%_0%] after:pointer-events-none after:absolute after:inset-1",
+        "relative flex flex-col items-center overflow-x-clip before:pointer-events-none before:absolute before:h-[21rem] before:w-full before:bg-purple-50 before:bg-no-repeat before:transition-[transform,opacity] before:duration-1000 before:ease-in before:[mask:radial-gradient(100%_50%_at_center_center,_black,_transparent)] before:[background-size:50%_100%,50%_100%] before:[background-position:1%_0%,99%_0%] after:pointer-events-none after:absolute after:inset-1",
         inView &&
           "is-visible before:opacity-100 before:[transform:rotate(180deg)_scale(3.5)]",
         !inView && "before:rotate-180 before:opacity-40"
@@ -54,13 +54,13 @@ const MainFeature = ({
     <>
       <div className="relative before:absolute before:inset-0">
         <Container>
-          <h2 className="text-gradient mb-11 translate-y-[40%] pt-[12rem] text-center text-6xl [transition:transform_1000ms_cubic-bezier(0.3,_1.17,_0.55,_0.99)_0s] md:pt-0 md:text-8xl [.is-visible_&]:translate-y-0">
+          <h2 className="text-gradient mb-32 translate-y-[40%] pt-[12rem] text-center text-6xl [transition:transform_1000ms_cubic-bezier(0.3,_1.17,_0.55,_0.99)_0s] md:pt-0 md:text-8xl [.is-visible_&]:translate-y-0">
             {title}
           </h2>
-          <div className="text-white">
+          <div className="text-black">
             <div className="h-[48rem] overflow-hidden h-auto md:overflow-auto">
               <div className="flex snap-x snap-mandatory gap-6 flex-wrap px-8 pb-12 md:flex-wrap md:overflow-hidden">
-                <div className="relative flex min-h-[30rem] w-full shrink-0 snap-center flex-col items-center justify-end overflow-hidden rounded-[4.8rem] border border-transparent-white bg-glass-gradient p-8 text-center md:max-w-[calc(66.66%-12px)] md:basis-[calc(66.66%-12px)] md:p-14">
+                <div className="shadow-lg relative flex min-h-[30rem] w-full shrink-0 snap-center flex-col items-center justify-end overflow-hidden rounded-[4.8rem] border border-transparent-white bg-glass-gradient p-8 text-center md:max-w-[calc(66.66%-12px)] md:basis-[calc(66.66%-12px)] md:p-14">
                   <div className="pointer-events-none absolute top-[-8rem] w-[130%]">
                     <ZapIllustration />
                   </div>
@@ -69,7 +69,7 @@ const MainFeature = ({
                     Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                   </p>
                 </div>
-                <div className="relative flex min-h-[30rem] w-full shrink-0 snap-center flex-col items-center justify-end overflow-hidden rounded-[4.8rem] border border-transparent-white bg-glass-gradient p-8 text-center md:basis-[calc(33.33%-12px)] md:p-14">
+                <div className="shadow-lg relative flex min-h-[30rem] w-full shrink-0 snap-center flex-col items-center justify-end overflow-hidden rounded-[4.8rem] border border-transparent-white bg-glass-gradient p-8 text-center md:basis-[calc(33.33%-12px)] md:p-14">
                   <div className="mask-linear-faded absolute top-[-9.2rem]">
                   </div>
                   <div className="pointer-events-none absolute top-[-8rem] w-[130%]">
@@ -95,6 +95,8 @@ type FeatureCardsProps = {
     back: string;
     text: string;
     total: number;
+    color: string;
+    colorText: string;
   }[];
 };
 
@@ -102,13 +104,14 @@ const FeatureCards = ({ features }: FeatureCardsProps) => {
   return (
     <Container>
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-3 ">
-        {features.map(({ front, back, text, total }, index) => (
+        {features.map(({ front, back, text, total, color, colorText }, index) => (
           <div
             key={index}
-            className="relative overflow-hidden rounded-[2.4rem] border border-transparent-white bg-[radial-gradient(ellipse_at_center,rgba(var(--feature-color),0.15),transparent)] py-4 px-8 before:pointer-events-none before:absolute before:inset-0 before:bg-glass-gradient md:rounded-[4.8rem] md:px-9 md:py-5"
+            style={{ backgroundColor: `${color}`, color: `${colorText}` }}
+            className="relative overflow-hidden rounded-[2.4rem] py-4 px-8 md:px-9 md:py-5"
           >
-            <h3 className="mb-2 lg:text-5xl text-white text-end md:text-3xl text-5xl">{front}<CountUp duration={5} start={0} end={total} delay={index * 0.5}/>{back}</h3>
-            <p className="max-w-[31rem] lg:text-lg md:text-sm text-lg text-primary-text text-start">{text}</p>
+            <h3 className="mb-2 lg:text-5xl text-end md:text-3xl text-5xl">{front}<CountUp duration={5} start={0} end={total} delay={index * 0.5}/>{back}</h3>
+            <p className="max-w-[31rem] lg:text-lg md:text-sm text-lg text-[#807F88] text-start">{text}</p>
           </div>
         ))}
       </div>
@@ -133,10 +136,10 @@ const FeatureGrid = ({ features }: FeatureGridProps) => {
             className="flex flex-col hover:scale-105 duration-500 cursor-pointer max-w-[25.6rem] [&_svg]:mb-[4px] [&_svg]:fill-white md:[&_svg]:mr-[6px] md:[&_svg]:mb-[2px] md:[&_svg]:inline"
             key={title}
           >
-            <span className="block text-white md:inline">{title}</span> 
+            <span className="block text-black md:inline">{title}</span> 
             <span>
               <div className="flex items-center">
-                <svg className="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                <svg className="w-4 h-4 me-1" aria-hidden="true" style={{color: 'yellow'}} xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                     <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                 </svg>
                 <p className="ms-2 text-sm font-bold">4.95</p>

@@ -13,10 +13,10 @@ interface ButtonProps extends VariantProps<typeof buttonClasses> {
 const buttonClasses =cva("rounded-full inline-flex items-center", {
     variants: {
         variant: {
-            primary: "bg-primary-gradient hover:text-shadow hover:shadow-primary",
+            primary: "bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 text-white hover:shadow-primary",
             secondary: [
-                "text-off-white bg-white bg-opacity-10 border border-transparent-white backdrop-filter-[12px] hover:bg-opacity-20 transition-colors ease-in",
-                "[&_.highlight]:bg-transparent-white [&_.highlight]:rounded-full [&_.highlight]:px-2 [&_.highlight:last-child]:ml-2 [&_.highlight:last-child]:-mr-2 [&_.highlight:first-child]:-ml-2 [&_.highlight:first-child]:mr-2",
+                "text-off-white bg-white bg-opacity-10 border border-transparent-black backdrop-filter-[12px] hover:bg-opacity-20 transition-colors ease-in",
+                "[&_.highlight]:bg-transparent-black [&_.highlight]:rounded-full [&_.highlight]:px-2 [&_.highlight:last-child]:ml-2 [&_.highlight:last-child]:-mr-2 [&_.highlight:first-child]:-ml-2 [&_.highlight:first-child]:mr-2",
             ],
         }, 
         size: {

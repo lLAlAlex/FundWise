@@ -111,7 +111,7 @@ const Header = () => {
   }, [setIsHamburgerOpen]);
 
   return (
-    <header className="text-white fixed top-0 left-0 w-full border-b border-white-a08 z-10 backdrop-blur-[12px]">
+    <header className="text-black fixed top-0 left-0 w-full border-b border-transparent-black z-10 backdrop-blur-[12px]">
       <Container className="flex h-nav-height">
         <Link
           to="/"
@@ -137,15 +137,15 @@ const Header = () => {
         >
           <ul
             className={classNames(
-              'flex h-full flex-col [&_a]:text-md [&_a]:flex [&_a]:items-center [&_a]:h-nav-height [&_a]:w-full [&_a]:duration-500 [&_a]:translate-transform [&_li]:mx-6 [&_li]:border-b md:[&_li]:border-0 [&_li]:border-gray-dark md:hover:text-gray-500',
+              'flex h-full flex-col [&_a]:text-md [&_a]:flex [&_a]:items-center [&_a]:h-nav-height [&_a]:w-full [&_a]:duration-500 [&_a]:translate-transform [&_li]:mx-6 [&_li]:border-b md:[&_li]:border-0 [&_li]:border-gray-dark md:hover:text-gray-400',
               'md:flex-row md:items-center md:[&_a]:text-sm md:[&_li]:mx-3 md:[&_li]:h-full md:[&_li]:flex md:[&_li]:justify-center md:[&_li]:items-center md:[&_a]:translate-y-0',
               isHamburgerOpen ? '[&_a]:translate-y-0' : '[&_a]:translate-y-16',
             )}
           >
-            <li className="md:hover:text-white md:hover:scale-105">
+            <li className="md:hover:text-black md:hover:scale-105">
               <Link to="/projects">Explore</Link>
             </li>
-            <li className="md:hover:text-white md:hover:scale-105">
+            <li className="md:hover:text-black md:hover:scale-105">
               <Link
                 to="/#about"
                 onClick={() => {
@@ -158,7 +158,7 @@ const Header = () => {
                 About
               </Link>
             </li>
-            <li className="md:hover:text-white md:hover:scale-105">
+            <li className="md:hover:text-black md:hover:scale-105">
               <Link to="#">Support</Link>
             </li>
           </ul>
@@ -181,7 +181,7 @@ const Header = () => {
                 className={`absolute z-10 ${isDropdownOpen ? '' : 'hidden'
                   } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
               >
-                <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                <div className="px-4 py-3 text-sm text-gray-900 dark:text-black">
                   <div>{user.length > 0 ? user[0].name : 'Guest'}</div>
                   <div className="font-medium truncate">
                     {user.length > 0 ? user[0].email : 'Guest'}
@@ -196,7 +196,7 @@ const Header = () => {
                       onClick={() => {
                         handleProfile(user[0].internet_identity.toString());
                       }}
-                      className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black"
                     >
                       Profile
                     </div>
@@ -207,7 +207,7 @@ const Header = () => {
                         onClick={() => {
                           walletDialog();
                         }}
-                        className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black"
                       >
                         Connect to Wallet
                       </div>
@@ -216,7 +216,7 @@ const Header = () => {
                   <li>
                     <a
                       href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black"
                     >
                       Transaction History
                     </a>
@@ -225,7 +225,7 @@ const Header = () => {
                 <div className="py-1">
                   <a
                     onClick={handleLogout}
-                    className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-black"
                   >
                     Sign out
                   </a>
