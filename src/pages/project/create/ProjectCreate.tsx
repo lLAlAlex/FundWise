@@ -248,7 +248,7 @@ const ProjectCreate = (props: Props) => {
               <input
                 type="text"
                 name="tier"
-                id="tier" 
+                id={"tier"+r.id} 
                 className={styles.input}
                 placeholder="Reward Tier"
                 onChange={(e) => inputReward(r.id, e)}
@@ -257,7 +257,7 @@ const ProjectCreate = (props: Props) => {
               <input
                 type="number"
                 name="price"
-                id="price"
+                id={"price"+r.id}
                 className={styles.input}
                 placeholder="Reward Price"
                 onChange={(e) => inputReward(r.id, e)}
