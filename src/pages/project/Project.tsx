@@ -19,11 +19,11 @@ import ProjectCard from '@/components/cards/projects/ProjectCard';
 //     'company_id' : string,
 //   }
 
-const rewards: Reward[] = [
-  { tier: 'Bronze', price: BigInt(100) },
-  { tier: 'Silver', price: BigInt(200) },
-  { tier: 'Gold', price: BigInt(300) },
-];
+// const rewards: Reward[] = [
+//   { tier: 'Bronze', price: BigInt(100) },
+//   { tier: 'Silver', price: BigInt(200) },
+//   { tier: 'Gold', price: BigInt(300) },
+// ];
 
 // const dummy: Project[] = [
 //   {

@@ -77,10 +77,10 @@ function Home() {
   return (
     <BackgroundContainer>
       <Container>
-        <HeroHome/>
+        <HeroHome />
       </Container>
-      <AboutHome/>
-      <CategoriesHome/>
+      <AboutHome />
+      <CategoriesHome />
     </BackgroundContainer>
   );
 };

@@ -18,6 +18,9 @@ actor Database {
   type Reward = {
     tier : Text;
     price : Nat;
+    image : Text;
+    description : Text;
+    quantity : Nat;
   };
 
   type Project = {
@@ -110,9 +113,27 @@ actor Database {
         goal = fuzz.nat.randomRange(1000, 2000);
         reviews_ids = [];
         rewards = [
-          { tier = "Bronze"; price = 100 },
-          { tier = "Silver"; price = 200 },
-          { tier = "Gold"; price = 300 },
+          {
+            tier = "Bronze";
+            price = 100;
+            image = "https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png";
+            description = "This is bronze tier";
+            quantity = 1;
+          },
+          {
+            tier = "Silver";
+            price = 200;
+            image = "https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png";
+            description = "This is silver tier";
+            quantity = 1;
+          },
+          {
+            tier = "Gold";
+            price = 300;
+            image = "https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png";
+            description = "This is gold tier";
+            quantity = 1;
+          },
         ];
         backers_ids = [];
         timestamp = _timestamp;
