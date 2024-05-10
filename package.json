@@ -17,10 +17,10 @@
     "postinstall": "mops install"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.19.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@ic-reactor/react": "1.5.5-beta.0",
     "@mui/material": "^5.15.17",
     "@nextui-org/button": "^2.0.30",

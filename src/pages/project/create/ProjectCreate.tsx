@@ -1,41 +1,43 @@
-import React, { ChangeEvent, useReducer, useState } from 'react';
+import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage, responsive, placeholder } from '@cloudinary/react';
-import { Reward } from '@/declarations/project_backend/project_backend.did';
+import { ProjectInputSchema, Reward } from '@/declarations/project_backend/project_backend.did';
 
 import styles from './ProjectCreate.module.css';
 import { Button } from '@nextui-org/button';
+import { project_backend } from '@/declarations/project_backend';
+import { useUserStore } from '@/store/user/userStore';
 type Props = {};
 
-type ProjectData = {
-  name: string;
-  description: string;
-  category: string;
-  image: File | string;
-  deadline: string | undefined;
-  goal: number;
-  rewards: Array<Reward>;
-  user_id: string;
-};
+// type ProjectData = {
+//   name: string;
+//   description: string;
+//   category: string;
+//   image: File | string;
+//   deadline: string | undefined;
+//   goal: number;
+//   rewards: Array<Reward>;
+//   user_id: string;
+// };
 
 interface FormAction {
   type: string;
   field?: string;
-  payload?: string | File | Reward | Array<Reward> | number | undefined;
+  payload?: string | File | Reward | Array<Reward> | BigInt | undefined;
 }
 
-const defaultData: ProjectData = {
+const defaultData: ProjectInputSchema = {
   name: '',
   description: '',
   category: '',
   image: '',
-  deadline: undefined,
-  goal: 0,
+  deadline: "",
+  goal: BigInt(0),
   rewards: [],
   user_id: '',
 };
 
-const reduce = (state: ProjectData, action: FormAction): ProjectData => {
+const reduce = (state: ProjectInputSchema, action: FormAction): ProjectInputSchema => {
   const { type, field, payload } = action;
 
   switch (type) {
@@ -54,42 +56,38 @@ const reduce = (state: ProjectData, action: FormAction): ProjectData => {
 };
 
 const ProjectCreate = (props: Props) => {
+  const userStore = useUserStore();
+  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState("")
   const [state, dispatch] = useReducer(reduce, defaultData);
+  const [images, setImages] = useState<Array<{ id: string; file: File }>>([]);
   const [count, setCount] = useState(1);
   const [rewardsInput, setRewardsInput] = useState<
-    Array<{ id: number; data: Reward }>
+    Array<{
+      id: number;
+      data: {
+        tier: string;
+        price: number;
+        description: string;
+        quantity: number;
+      };
+    }>
   >([
     {
       id: 0,
       data: {
         tier: '',
-        price: BigInt(0),
+        price: 0,
+        description: '',
+        quantity: 0,
       },
     },
   ]);
-  //   const [publicId, setPublicId] = useState('projces/images');
-  //   const [cloudName] = useState('dogiichep');
-  //   const [uwConfig] = useState({
-  //     cloudName,
-  //   });
-
-  //   const cld = new Cloudinary({
-  //     cloud: {
-  //       cloudName,
-  //     },
-  //   });
-
-  //   const myImage = cld.image(publicId);
 
   const inputData = (e: ChangeEvent) => {
     const t = e.target as HTMLInputElement;
     // const isValidFile = t.type === "file" && t.files && t.files.length > 1;
-    const value = t.type === "file" && t.files && t.files.length > 1 ? t.files[0] : t.value;
-    if (!(t.type === "file" && t.files && t.files.length > 1) && t.name === "image") {
-      return;
-    }
-    // const value = t.type === "checkbox" ? !state.remember : t.value;
-    // console.log(t.value);
+    const value = t.type === "number" ? BigInt(t.value) : t.value;
     dispatch({
       type: 'input',
       field: t.name,
@@ -98,7 +96,16 @@ const ProjectCreate = (props: Props) => {
   };
 
   const addRewardField = () => {
-    const newReward = { id: count + 1, data: { price: BigInt(0), tier: '' } };
+    const newReward = {
+      id: count + 1,
+      data: {
+        tier: '',
+        price: 0,
+        description: '',
+        image: '',
+        quantity: 0,
+      },
+    };
     if (!rewardsInput) {
       setRewardsInput([newReward]);
     } else {
@@ -119,42 +126,142 @@ const ProjectCreate = (props: Props) => {
 
   const inputReward = (id: number, e: React.SyntheticEvent) => {
     const target = e.target as HTMLInputElement;
+    const rewards: Array<Reward> = [];
     const newData = rewardsInput?.map((r) => {
       if (r.id == id) {
-        if (target.name === "price") {
-          r.data.price = BigInt(target.value)
-        } else {
-          r.data.tier = target.value
+        if (target.name === 'price') {
+          r.data.price = +target.value;
+        } else if (target.name === 'tier') {
+          r.data.tier = target.value;
+        } else if (target.name === 'description') {
+          r.data.description = target.value;
+        } else if (target.name === 'quantity') {
+          r.data.quantity = +target.value;
         }
-        return r;
       }
       return r;
     });
-    setRewardsInput(newData);
-  }
-
-  const uploadImage = async () : Promise<any> => {
-    // UPLOAD IMAGE
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const rewards : Reward[] = [];
-    rewardsInput.forEach(element => {
-      rewards.push({
-        ...element.data
-      })
+    dispatch({
+      type: 'input',
+      field: 'rewards',
+      payload: rewards,
     });
+    setRewardsInput(newData);
+  };
 
-    const img = await uploadImage();
-    // UPLAOD KE BE
+  const inputImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const target = e.target;
+    const files = target.files;
+    const f = files?.item(files.length - 1);
+    // console.log(files);
+    // console.log(f);
+    if (f && f !== null) {
+      setImages([...images, { id: target.id, file: f }]);
+    }
+  };
 
-  }
+  const uploadImage = async (
+    images: Array<{ id: string; file: File }>,
+  ): Promise<{ id: string; url: string }[]> => {
+    // UPLOAD MULTIPLE IMAGE
+    // SESUAIN
+    const url = 'https://api.cloudinary.com/v1_1/dogiichep/image/upload';
+    const formData = new FormData();
+    const res: { id: string; url: string }[] = [];
+    for (let i = 0; i < images.length; i++) {
+      let element = images[i];
+      formData.append('file', element.file);
+      formData.append('upload_preset', 'vhbz9vmj');
+
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+      const json = await response.json()
+      if (json.url) {
+        res.push({
+          id: element.id,
+          url: json.url,
+        });
+      }
+    }
+    return res;
+  };
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setLoading(true)
+    if (!userStore.data || userStore.data.length <= 0) {
+      console.log("user not found...")
+      return;
+    } 
+
+    // console.log(images);
+    if (images.length <= 0) {
+      console.log('Image not found...');
+    }
+
+    const urls = await uploadImage(images);
+    /**
+     * UPDATE DATA WITH IMAGE URL
+     */
+    const rewards: Array<Reward> = [];
+    urls.forEach((u) => {
+      if (u.id === 'image') {
+        dispatch({
+          type: 'input',
+          field: 'image',
+          payload: u.url,
+        });
+      } else {
+        const n = +u.id.substring(u.id.length - 1);
+        const ri = rewardsInput.find((v) => v.id === n);
+        if (ri) {
+          rewards.push({
+            tier: ri.data.tier,
+            description: ri.data.description,
+            image: u.url,
+            price: BigInt(ri.data.price),
+            quantity: BigInt(ri.data.quantity),
+          });
+        }
+      }
+    });
+    dispatch({
+      type: 'input',
+      field: 'rewards',
+      payload: rewards,
+    });
+    dispatch({
+      type: 'input',
+      field: 'user_id',
+      payload: userStore.data[0].internet_identity.toString(),
+    });
+    /**
+     * TOLONG VALIDASI DULU
+     */
+    try {
+      const res = await project_backend.createProject(state);
+      if ("ok" in res) {
+        // DO SOMETHING
+        setStatus("Succesful!")
+      }
+    } catch (error) {
+      setStatus("Error!")
+      console.log(error)  
+    }
+    setLoading(false);
+
+  };
+
+  // useEffect(() => {
+  //   console.log(state);
+  // }, [state]);
 
   return (
     <div className="flex flex-col w-full items-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <div className="text-2xl p-2">Create Project</div>
-      <form className="w-full bg-white rounded-lg shadow-md border border-gray-300 p-4" onSubmit={handleSubmit}>
+      <form className="w-full bg-white rounded-lg shadow-md border border-gray-300 p-4">
         <div className="w-full p-1">
           <label htmlFor="name" className={styles.label}>
             Project Name
@@ -203,12 +310,14 @@ const ProjectCreate = (props: Props) => {
           </label>
           <input
             type="file"
+            accept=".png, .jpg, .jpeg, .PNG, .JPG, .JPEG"
             name="image"
             id="image"
             className={styles.input}
             placeholder="Project Image"
-            onChange={inputData}
-            value={state.image.toString()}
+            onChange={inputImage}
+            // onChange={inputData}
+            // value={state.image.toString()}
           />
         </div>
         <div className="w-full p-1">
@@ -236,54 +345,93 @@ const ProjectCreate = (props: Props) => {
             className={styles.input}
             placeholder="Funding goal for your project"
             onChange={inputData}
-            value={state.goal <= 0 ? undefined : state.goal}
+            value={state.goal + ""}
           />
         </div>
         <div className="w-full p-1">
           <label htmlFor="text" className={styles.label}>
             Rewards
           </label>
-          {rewardsInput.map((r, idx) => (
-            <div className='flex flex-col pb-1' key={r.id}>
-              <div className="flex gap-2 pb-1">
-                <input
-                  type="text"
-                  name="tier"
-                  id={"tier"+r.id} 
-                  className={styles.input}
-                  placeholder="Reward Tier"
-                  onChange={(e) => inputReward(r.id, e)}
-                  value={state.goal <= 0 ? undefined : state.goal}
-                />
-                <input
-                  type="number"
-                  name="price"
-                  id={"price"+r.id}
-                  className={styles.input}
-                  placeholder="Reward Price"
-                  onChange={(e) => inputReward(r.id, e)}
-                  value={state.goal <= 0 ? undefined : state.goal}
-                />
-                <Button
-                  className="text-md"
-                  color="primary"
-                  onClick={() => addRewardField()}
-                >
-                  +
-                </Button>
-                <Button
-                  className="text-md"
-                  color={`danger`}
-                  isDisabled={rewardsInput.length <= 1}
-                  onClick={() => removeRewardField(r.id)}
-                  // disabled={rewardsInput.length <= 1}
-                >
-                  -
-                </Button>
-              </div>
+          {rewardsInput.map((r) => (
+            <div className="flex gap-2 pb-1" key={r.id}>
+              <input
+                type="text"
+                name="tier"
+                id={'tier' + r.id}
+                className={styles.input}
+                placeholder="Reward Tier"
+                onChange={(e) => inputReward(r.id, e)}
+                value={r.data.tier}
+              />
+              <input
+                type="number"
+                name="price"
+                id={'price' + r.id}
+                className={styles.input}
+                placeholder="Reward Price"
+                onChange={(e) => inputReward(r.id, e)}
+                value={r.data.price}
+              />
+              <input
+                type="text"
+                name="description"
+                id={'description' + r.id}
+                className={styles.input}
+                placeholder="Rewared Description"
+                onChange={(e) => inputReward(r.id, e)}
+                value={r.data.description}
+              />
+              <input
+                type="number"
+                name="quantity"
+                id={'quantity' + r.id}
+                className={styles.input}
+                placeholder="Reward Quantity"
+                onChange={(e) => inputReward(r.id, e)}
+                value={r.data.quantity}
+              />
+              <input
+                type="file"
+                accept=".png, .jpg, .jpeg, .PNG, .JPG, .JPEG"
+                name="reward_image"
+                id={'reward_image' + r.id}
+                className={styles.input}
+                onChange={inputImage}
+                placeholder="Reward Image"
+              />
+              <Button
+                className="text-md"
+                color="primary"
+                onClick={() => addRewardField()}
+              >
+                +
+              </Button>
+              <Button
+                className="text-md"
+                color={`danger`}
+                type="submit"
+                isDisabled={rewardsInput.length <= 1}
+                onClick={() => removeRewardField(r.id)}
+                // disabled={rewardsInput.length <= 1}
+              >
+                -
+              </Button>
             </div>
           ))}
         </div>
+        {/* 
+          TODO: Kasih dialog kalo udh kelar, loading ny kasih animasi jg
+        */}
+        {loading ? (<div>Is Loading</div>) : (<div>{status}</div>)}
+        <Button
+          variant="solid"
+          color="primary"
+          className="text-lg"
+          onClick={handleSubmit}
+          isDisabled={loading}
+        >
+          Submit
+        </Button>
       </form>
     </div>
   );
