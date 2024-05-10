@@ -4,8 +4,8 @@ import { AuthClient } from '@dfinity/auth-client';
 import { HttpAgent } from '@dfinity/agent';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuthentication from '@/hooks/auth/get/useAuthentication';
-import styles from './Register.module.css';
 import { Button } from '@nextui-org/button';
+import Header from '@/components/navigations/Header';
 
 function RegisterPage() {
   const { auth, user } = useAuthentication();
@@ -68,103 +68,93 @@ function RegisterPage() {
   }, [user]);
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section className="bg-white ">
+      <Header/>
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <Link
-          to="/"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-black"
-        >
-          FundWise
-        </Link>
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-black">
+        <div className="shadow-lg max-h-[80vh] overflow-y-auto max-w-[400px] w-full min-w-[300px] bg-white  rounded-lg shadow border md:mt-0  xl:p-0 border-tranparent-black">
+          <div className="p-6 space-y-4 md:space-y-6">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl w-full text-center">
               Register
             </h1>
             <div className="space-y-4 md:space-y-6">
               <div>
-                <label htmlFor="text" className={styles.label}>
+                <label htmlFor="text" className='block mb-2 text-sm font-medium text-gray-900'>
                   Full Name
                 </label>
                 <input
                   type="text"
                   name="name"
                   id="name"
-                  className={styles.input}
+                  className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5'
                   placeholder="John Doe"
                   onChange={handleChange}
                   value={formData.name}
                 />
               </div>
               <div>
-                <label htmlFor="email" className={styles.label}>
+                <label htmlFor="email" className='block mb-2 text-sm font-medium text-gray-900'>
                   Your email
                 </label>
                 <input
                   type="email"
                   name="email"
                   id="email"
-                  className={styles.input}
+                  className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5'
                   placeholder="name@company.com"
                   onChange={handleChange}
                   value={formData.email}
                 />
               </div>
               <div>
-                <label htmlFor="email" className={styles.label}>
+                <label htmlFor="email" className='block mb-2 text-sm font-medium text-gray-900'>
                   Date of Birth
                 </label>
                 <input
                   type="date"
                   name="dob"
                   id="dob"
-                  className={styles.input}
+                  className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5'
                   onChange={handleChange}
                   value={formData.dob}
                 />
               </div>
               <div>
-                <label htmlFor="text" className={styles.label}>
+                <label htmlFor="text" className='block mb-2 text-sm font-medium text-gray-900'>
                   Location
                 </label>
                 <input
                   type="text"
                   name="location"
                   id="location"
-                  className={styles.input}
+                  className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5'
                   placeholder="Indonesia"
                   onChange={handleChange}
                   value={formData.location}
                 />
               </div>
               <div>
-                <label htmlFor="text" className={styles.label}>
+                <label htmlFor="text" className='block mb-2 text-sm font-medium text-gray-900'>
                   Contact
                 </label>
                 <input
                   type="text"
                   name="contact"
                   id="contact"
-                  className={styles.input}
+                  className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5'
                   placeholder="+62xxxxxxxxxxx"
                   onChange={handleChange}
                   value={formData.contact}
                 />
               </div>
-              <Button type="submit" onClick={handleSubmit}>
-                Create an account
-              </Button>
+              <div className='w-full text-end'>
+                <Button type="submit" onClick={handleSubmit} className='text-end text-xs bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 text-white'>
+                  Create an account
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <button
-        type="submit"
-        className="w-full text-black bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        onClick={handleSubmit}
-      >
-        Create an account
-      </button> */}
     </section>
   );
 }
