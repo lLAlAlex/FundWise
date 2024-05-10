@@ -244,41 +244,43 @@ const ProjectCreate = (props: Props) => {
             Rewards
           </label>
           {rewardsInput.map((r, idx) => (
-            <div className="flex gap-2 pb-1" key={r.id}>
-              <input
-                type="text"
-                name="tier"
-                id={"tier"+r.id} 
-                className={styles.input}
-                placeholder="Reward Tier"
-                onChange={(e) => inputReward(r.id, e)}
-                value={state.goal <= 0 ? undefined : state.goal}
-              />
-              <input
-                type="number"
-                name="price"
-                id={"price"+r.id}
-                className={styles.input}
-                placeholder="Reward Price"
-                onChange={(e) => inputReward(r.id, e)}
-                value={state.goal <= 0 ? undefined : state.goal}
-              />
-              <Button
-                className="text-md"
-                color="primary"
-                onClick={() => addRewardField()}
-              >
-                +
-              </Button>
-              <Button
-                className="text-md"
-                color={`danger`}
-                isDisabled={rewardsInput.length <= 1}
-                onClick={() => removeRewardField(r.id)}
-                // disabled={rewardsInput.length <= 1}
-              >
-                -
-              </Button>
+            <div className='flex flex-col pb-1' key={r.id}>
+              <div className="flex gap-2 pb-1">
+                <input
+                  type="text"
+                  name="tier"
+                  id={"tier"+r.id} 
+                  className={styles.input}
+                  placeholder="Reward Tier"
+                  onChange={(e) => inputReward(r.id, e)}
+                  value={state.goal <= 0 ? undefined : state.goal}
+                />
+                <input
+                  type="number"
+                  name="price"
+                  id={"price"+r.id}
+                  className={styles.input}
+                  placeholder="Reward Price"
+                  onChange={(e) => inputReward(r.id, e)}
+                  value={state.goal <= 0 ? undefined : state.goal}
+                />
+                <Button
+                  className="text-md"
+                  color="primary"
+                  onClick={() => addRewardField()}
+                >
+                  +
+                </Button>
+                <Button
+                  className="text-md"
+                  color={`danger`}
+                  isDisabled={rewardsInput.length <= 1}
+                  onClick={() => removeRewardField(r.id)}
+                  // disabled={rewardsInput.length <= 1}
+                >
+                  -
+                </Button>
+              </div>
             </div>
           ))}
         </div>
