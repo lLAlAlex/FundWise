@@ -28,7 +28,6 @@ const Search = (props: Props) => {
         variant='underlined'
         placeholder={props.placeholder ?? 'Search anything...'}
         value={props.value}
-        // size='lg'
         onValueChange={props.handleChange}
         startContent={<FaMagnifyingGlass className={`w-4 h-4 ${props.value ? 'text-purple-600' : 'text-gray-400'} cursor-default`} />}
         endContent={<Button size='sm' type='submit' variant='solid' className={`px-5 text-xs ${props.value ? 'bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700' : 'bg-gray-400'} text-white`}>Search</Button>}
