@@ -16,8 +16,8 @@ actor Database {
     dob : Text;
     profile : Text;
     description : Text;
-    location: Text;
-    contact: Text;
+    location : Text;
+    contact : Text;
     status : Text;
     timestamp : Time.Time;
   };
@@ -27,6 +27,15 @@ actor Database {
 
   public query func getUser(p : Principal) : async ?User {
     let user = users.get(p);
+    if (user == null) {
+      return null;
+    };
+    return user;
+  };
+
+  public query func getUserByTextID(p : Text) : async ?User {
+    let userId : Principal.Principal = Principal.fromText(p);
+    let user = users.get(userId);
     if (user == null) {
       return null;
     };
