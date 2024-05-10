@@ -83,12 +83,17 @@ const ProjectCreate = (props: Props) => {
 
   const inputData = (e: ChangeEvent) => {
     const t = e.target as HTMLInputElement;
+    // const isValidFile = t.type === "file" && t.files && t.files.length > 1;
+    const value = t.type === "file" && t.files && t.files.length > 1 ? t.files[0] : t.value;
+    if (!(t.type === "file" && t.files && t.files.length > 1) && t.name === "image") {
+      return;
+    }
     // const value = t.type === "checkbox" ? !state.remember : t.value;
-    console.log(t.value);
+    // console.log(t.value);
     dispatch({
       type: 'input',
       field: t.name,
-      payload: t.value,
+      payload: value,
     });
   };
 
@@ -128,12 +133,30 @@ const ProjectCreate = (props: Props) => {
     setRewardsInput(newData);
   }
 
+  const uploadImage = async () : Promise<any> => {
+    // UPLOAD IMAGE
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const rewards : Reward[] = [];
+    rewardsInput.forEach(element => {
+      rewards.push({
+        ...element.data
+      })
+    });
+
+    const img = await uploadImage();
+    // UPLAOD KE BE
+
+  }
+
   return (
     <div className="flex flex-col w-full items-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <div className="text-2xl p-2">Create Project</div>
-      <form className="w-full bg-white rounded-lg shadow-md border border-gray-300 p-4">
+      <form className="w-full bg-white rounded-lg shadow-md border border-gray-300 p-4" onSubmit={handleSubmit}>
         <div className="w-full p-1">
-          <label htmlFor="text" className={styles.label}>
+          <label htmlFor="name" className={styles.label}>
             Project Name
           </label>
           <input
@@ -147,7 +170,7 @@ const ProjectCreate = (props: Props) => {
           />
         </div>
         <div className="w-full p-1">
-          <label htmlFor="text" className={styles.label}>
+          <label htmlFor="description" className={styles.label}>
             Description
           </label>
           <input
@@ -161,7 +184,7 @@ const ProjectCreate = (props: Props) => {
           />
         </div>
         <div className="w-full p-1">
-          <label htmlFor="text" className={styles.label}>
+          <label htmlFor="category" className={styles.label}>
             Category
           </label>
           <input
@@ -175,7 +198,21 @@ const ProjectCreate = (props: Props) => {
           />
         </div>
         <div className="w-full p-1">
-          <label htmlFor="text" className={styles.label}>
+          <label htmlFor="category" className={styles.label}>
+            Image
+          </label>
+          <input
+            type="file"
+            name="image"
+            id="image"
+            className={styles.input}
+            placeholder="Project Image"
+            onChange={inputData}
+            value={state.image.toString()}
+          />
+        </div>
+        <div className="w-full p-1">
+          <label htmlFor="deadline" className={styles.label}>
             Deadline
           </label>
           <input
@@ -189,7 +226,7 @@ const ProjectCreate = (props: Props) => {
           />
         </div>
         <div className="w-full p-1">
-          <label htmlFor="text" className={styles.label}>
+          <label htmlFor="goal" className={styles.label}>
             Fund Goal
           </label>
           <input
