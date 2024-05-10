@@ -149,7 +149,7 @@ function ProjectPage() {
           <Pagination
             total={totalPage}
             initialPage={1}
-            color="primary"
+            color="secondary"
             page={page}
             onChange={(n) => setPage(n)}
           />
