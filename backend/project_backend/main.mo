@@ -50,39 +50,6 @@ actor Database {
   let projects = TrieMap.TrieMap<Text, Project>(Text.equal, Text.hash);
   let items_per_page = 20;
 
-  // public shared func seedProjects() : async Result.Result<Text, Text> {
-  //   var counter = 0;
-  //   while (counter <= 20) {
-  //     counter := counter + 1;
-  //     let _timestamp = Time.now();
-  //     let uuid = await Utils.generateUUID();
-  //     let image = "https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png";
-  //     let a = Nat.toText(counter);
-  //     let project : Project = {
-  //       id = uuid;
-  //       user_id = "asdasd";
-  //       name = "Project Test " # a;
-  //       description = "DESC";
-  //       category = "TEST";
-  //       image = image;
-  //       progress = 0;
-  //       deadline = "DEADLINE";
-  //       goal = 2000;
-  //       company_id = "asasdasd-asdasd-asdasd";
-  //       reviews_ids = [];
-  //       rewards = [
-  //         { tier = "Bronze"; price = 100 },
-  //         { tier = "Silver"; price = 200 },
-  //         { tier = "Gold"; price = 300 },
-  //       ];
-  //       timestamp = _timestamp;
-  //     };
-
-  //     projects.put(project.id, project);
-  //   };
-  //   return #ok("Success");
-  // };
-
   public shared func seedProjects() : async Result.Result<Text, Text> {
     let fuzz = Fuzz.Fuzz();
     var counter = 0;

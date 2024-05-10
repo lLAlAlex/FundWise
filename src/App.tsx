@@ -9,6 +9,7 @@ import ProjectDetail from './pages/project/ProjectDetail';
 import Profile from './pages/auth/Profile';
 import MainLayout from './layouts/main/MainLayout';
 import RootLayout from './layouts/root/RootLayout';
+import ProjectCreate from './pages/project/create/ProjectCreate';
 
 function App() {
   return (
@@ -19,9 +20,10 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route element={<MainLayout />}>
-              <Route path="/project/:id" element={<ProjectDetail />} />
               <Route path="/profile/:id" element={<Profile />} />
               <Route path="/projects" element={<ProjectPage />} />
+              <Route path="/project/:id" element={<ProjectDetail />} />
+              <Route path="/project/create" element={<ProjectCreate />} />
               <Route path="/" element={<HomePage />} />
             </Route>
           </Route>
