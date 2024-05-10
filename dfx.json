@@ -31,7 +31,9 @@
       "type": "motoko",
       "main": "backend/project_backend/main.mo",
       "dependencies": [
-        "utils_backend"
+        "utils_backend",
+        "comment_backend",
+        "user_backend"
       ]
     },
     "transaction_backend": {
@@ -41,12 +43,21 @@
         "utils_backend"
       ]
     },
+    "comment_backend": {
+      "type": "motoko",
+      "main": "backend/comment_backend/main.mo",
+      "dependencies": [
+        "utils_backend"
+      ]
+    },
     "frontend": {
       "dependencies": [
         "user_backend",
         "company_backend",
         "review_backend",
-        "project_backend"
+        "project_backend",
+        "comment_backend",
+        "transaction_backend"
       ],
       "type": "assets",
       "source": [

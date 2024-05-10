@@ -1,16 +1,24 @@
 import { Features } from "@/components/ui/Features";
+import { comment_backend } from "@/declarations/comment_backend";
+import { Comment, Time } from "@/declarations/comment_backend/comment_backend.did";
 import { project_backend } from "@/declarations/project_backend";
 import { Project } from "@/declarations/project_backend/project_backend.did";
+import { user_backend } from "@/declarations/user_backend";
+import { Principal } from "@ic-reactor/react/dist/types";
 import { Button, Card, CardBody, CardHeader, Divider, Image } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import StickyBox from "react-sticky-box";
 
 type ProjectState = Project[] | undefined;
+type CommentState = Comment[] | undefined;
 
 function ProjectDetail() {
     const actor = project_backend;
+    const comment_actor = comment_backend;
+    const user_actor = user_backend;
     const [project, setProject] = useState<ProjectState>();
+    const [comments, setComments] = useState<CommentState>();
     const [deadline, setDeadline] = useState(0);
     const [viewReward, setViewReward] = useState(true);
     const params = useParams();
@@ -22,6 +30,15 @@ function ProjectDetail() {
             setProject(fetchedProject);
         };
         fetchProject();
+
+        const fetchComments = async () => {
+            const fetchedComments = await comment_actor.getAllCommentByProjectId(id);
+            if ('ok' in fetchedComments) {
+                setComments(fetchedComments.ok);
+                console.log(comments);
+            }
+        }
+        fetchComments();
     }, [id]);
 
     useEffect(() => {
@@ -40,7 +57,7 @@ function ProjectDetail() {
         setViewReward(true);
     }
 
-    const handleViewReview = () => {
+    const handleViewComment = () => {
         setViewReward(false);
     }
 
@@ -54,6 +71,53 @@ function ProjectDetail() {
                 behavior: 'smooth'
             });
             console.log(window.scrollY + top - offset);
+        }
+    };
+
+
+    const getUser = async (userId: string) => {
+        const user = await user_actor.getUserByTextID(userId);
+        // console.log(user);
+        return user[0];
+    }
+
+    useEffect(() => {
+        const fetchCommentUsers = async () => {
+            if (comments) {
+                const updatedComments = await Promise.all(
+                    comments.map(async (comment) => {
+                        const user = await getUser(comment.userId);
+                        return { ...comment, user };
+                    })
+                );
+                setComments(updatedComments);
+            }
+        };
+        fetchCommentUsers();
+    }, [comments]);
+
+    const timeAgo = (timestamp: Time) => {
+        const now = Date.now();
+        const diff = now - parseInt(timestamp.toString());
+        const seconds = Math.floor(parseInt(diff.toString()) / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const months = Math.floor(days / 30);
+        const years = Math.floor(months / 12);
+
+        if (years > 0) {
+            return `${years} year${years > 1 ? 's' : ''} ago`;
+        } else if (months > 0) {
+            return `${months} month${months > 1 ? 's' : ''} ago`;
+        } else if (days > 0) {
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        } else if (hours > 0) {
+            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        } else if (minutes > 0) {
+            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        } else {
+            return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
         }
     };
 
@@ -91,12 +155,12 @@ function ProjectDetail() {
                             {viewReward ? (
                                 <>
                                     <div className="text-lg cursor-pointer mx-10 text-purple-700">Reward</div>
-                                    <div onClick={handleViewReview} className="text-lg cursor-pointer mx-10 hover:text-purple-700">Reviews</div>
+                                    <div onClick={handleViewComment} className="text-lg cursor-pointer mx-10 hover:text-purple-700">Comments</div>
                                 </>
                             ) : (
                                 <>
                                     <div onClick={handleViewReward} className="text-lg cursor-pointer mx-10 hover:text-purple-700">Reward</div>
-                                    <div className="text-lg cursor-pointer mx-10 text-purple-700">Reviews</div>
+                                    <div className="text-lg cursor-pointer mx-10 text-purple-700">Comments</div>
                                 </>
                             )}
                         </div>
@@ -156,8 +220,31 @@ function ProjectDetail() {
                                 </div>
                             </div>
                         ) : (
-                            <div>
-
+                            <div className="flex justify-center mb-12">
+                                <div className="bg-gray-100 border-2">
+                                    {comments?.map((c, idx) => (
+                                        <Card className="min-w-[800px] m-5">
+                                            <CardHeader className="flex gap-3">
+                                                <Image
+                                                    height={40}
+                                                    radius="sm"
+                                                    src={c?.user.profile}
+                                                    width={40}
+                                                    className="object-cover"
+                                                />
+                                                <div className="flex flex-col">
+                                                    <p className="text-md">{c?.user.name}</p>
+                                                    <p className="text-small text-default-500">{timeAgo(c?.timestamp)}</p>
+                                                </div>
+                                            </CardHeader>
+                                            <Divider />
+                                            <CardBody>
+                                                <p className="text-md">{c.content}</p>
+                                            </CardBody>
+                                            <Divider />
+                                        </Card>
+                                    ))}
+                                </div>
                             </div>
                         )}
 
