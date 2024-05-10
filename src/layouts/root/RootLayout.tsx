@@ -1,3 +1,4 @@
+import { project_backend } from '@/declarations/project_backend';
 import { user_backend } from '@/declarations/user_backend';
 import useAuthentication from '@/hooks/auth/get/useAuthentication';
 import { useUserStore } from '@/store/user/userStore';
@@ -11,14 +12,24 @@ const RootLayout = (props: Props) => {
   // const { auth, user, userStatus } = useAuthentication();
   const userStore = useUserStore();
   const navigate = useNavigate();
+  const actor = project_backend
 
   useEffect(() => {
     userStore.getData();
   }, [])
-    
 
   useEffect(() => {
-    console.log(userStore)
+    const seedProject = async () => {
+      // console.log(await actor.getTotalProjectCount())
+      if (await actor.getTotalProjectCount() == BigInt(0)) {
+        actor.seedProjects();
+      }
+    }
+    seedProject();
+  }, [actor])
+
+  useEffect(() => {
+    // console.log(userStore)
     if (userStore.is_auth) {
       if (!userStore.data || userStore.data.length === 0) {
         return navigate('/register');

@@ -25,64 +25,64 @@ const rewards: Reward[] = [
   { tier: 'Gold', price: BigInt(300) },
 ];
 
-const dummy: Project[] = [
-  {
-    id: 'asd',
-    name: 'asd',
-    description: 'lorem ipsum asdasdasdad',
-    reviews_ids: [],
-    deadline: "05-04-2025",
-    progress: BigInt(0),
-    goal: BigInt(60000),
-    category: 'ASdasd',
-    user_id: 'asdasd',
-    rewards: rewards,
-    image: 'https://picsum.photos/200/300',
-    timestamp: BigInt(12124124),
-  },
-  {
-    id: 'asd1',
-    name: 'asd',
-    description: 'lorem ipsum asdasdasdad',
-    reviews_ids: [],
-    deadline: "05-04-2025",
-    progress: BigInt(0),
-    goal: BigInt(60000),
-    category: 'ASdasd',
-    user_id: 'asdasd',
-    rewards: rewards,
-    image: 'https://picsum.photos/200/300',
-    timestamp: BigInt(12124124),
-  },
-  {
-    id: 'asd2',
-    name: 'asd',
-    description: 'lorem ipsum asdasdasdad',
-    reviews_ids: [],
-    deadline: "05-04-2025",
-    progress: BigInt(0),
-    goal: BigInt(60000),
-    category: 'ASdasd',
-    user_id: 'asdasd',
-    rewards: rewards,
-    image: 'https://picsum.photos/300/300',
-    timestamp: BigInt(12124124),
-  },
-  {
-    id: 'asd3',
-    name: 'asd',
-    description: 'lorem ipsum asdasdasdad',
-    reviews_ids: [],
-    deadline: "05-04-2025",
-    progress: BigInt(0),
-    goal: BigInt(60000),
-    category: 'ASdasd',
-    user_id: 'asdasd',
-    rewards: rewards,
-    image: 'https://picsum.photos/400/300',
-    timestamp: BigInt(12124124),
-  },
-];
+// const dummy: Project[] = [
+//   {
+//     id: 'asd',
+//     name: 'asd',
+//     description: 'lorem ipsum asdasdasdad',
+//     reviews_ids: [],
+//     deadline: "05-04-2025",
+//     progress: BigInt(0),
+//     goal: BigInt(60000),
+//     category: 'ASdasd',
+//     user_id: 'asdasd',
+//     rewards: rewards,
+//     image: 'https://picsum.photos/200/300',
+//     timestamp: BigInt(12124124),
+//   },
+//   {
+//     id: 'asd1',
+//     name: 'asd',
+//     description: 'lorem ipsum asdasdasdad',
+//     reviews_ids: [],
+//     deadline: "05-04-2025",
+//     progress: BigInt(0),
+//     goal: BigInt(60000),
+//     category: 'ASdasd',
+//     user_id: 'asdasd',
+//     rewards: rewards,
+//     image: 'https://picsum.photos/200/300',
+//     timestamp: BigInt(12124124),
+//   },
+//   {
+//     id: 'asd2',
+//     name: 'asd',
+//     description: 'lorem ipsum asdasdasdad',
+//     reviews_ids: [],
+//     deadline: "05-04-2025",
+//     progress: BigInt(0),
+//     goal: BigInt(60000),
+//     category: 'ASdasd',
+//     user_id: 'asdasd',
+//     rewards: rewards,
+//     image: 'https://picsum.photos/300/300',
+//     timestamp: BigInt(12124124),
+//   },
+//   {
+//     id: 'asd3',
+//     name: 'asd',
+//     description: 'lorem ipsum asdasdasdad',
+//     reviews_ids: [],
+//     deadline: "05-04-2025",
+//     progress: BigInt(0),
+//     goal: BigInt(60000),
+//     category: 'ASdasd',
+//     user_id: 'asdasd',
+//     rewards: rewards,
+//     image: 'https://picsum.photos/400/300',
+//     timestamp: BigInt(12124124),
+//   },
+// ];
 
 function ProjectPage() {
   const navigate = useNavigate();
@@ -120,13 +120,13 @@ function ProjectPage() {
 
   useEffect(() => {
     const fetchTotalPages = async () => {
-      const res = await project_backend.getProjectsSize();
+      const res = await project_backend.getTotalProjectCount();
       setTotalPage(Math.ceil(Number(res) / 20))
     }
 
     fetchTotalPages()
   }, [])
-  
+
 
   return (
     <>

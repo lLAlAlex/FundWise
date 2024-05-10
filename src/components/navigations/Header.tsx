@@ -76,20 +76,20 @@ const Header = () => {
   };
 
   const walletDialog = () => {
-    (async () => {
-      const nnsCanisterId = 'qoctq-giaaa-aaaaa-aaaea-cai';
+    // (async () => {
+    //   const nnsCanisterId = 'qoctq-giaaa-aaaaa-aaaea-cai';
 
-      const whitelist = [nnsCanisterId];
+    //   const whitelist = [nnsCanisterId];
 
-      const isConnected = await window.ic.plug.requestConnect({
-        whitelist,
-      });
+    //   const isConnected = await window.ic.plug.requestConnect({
+    //     whitelist,
+    //   });
 
-      const principalId = await window.ic.plug.agent.getPrincipal();
+    //   const principalId = await window.ic.plug.agent.getPrincipal();
 
-      console.log(`Plug's user principal Id is ${principalId}`);
-      setConnection(isConnected);
-    })();
+    //   console.log(`Plug's user principal Id is ${principalId}`);
+    //   setConnection(isConnected);
+    // })();
   };
 
   useEffect(() => {
@@ -168,17 +168,17 @@ const Header = () => {
         <div className="ml-auto h-full flex items-center">
           {auth && user ? (
             <div className='relative'>
-              
-              <Avatar 
+
+              <Avatar
                 id="avatarButton"
                 data-dropdown-toggle="userDropdown"
                 data-dropdown-placement="bottom-start"
-                isBordered radius="sm" 
+                isBordered radius="sm"
                 size='sm'
                 className="text-tiny cursor-pointer mx-2"
-                src={user.length > 0 ? user[0].profile : ''} 
+                src={user.length > 0 ? user[0].profile : ''}
                 alt="User dropdown"
-                onClick={toggleDropdown}/>
+                onClick={toggleDropdown} />
               <div
                 id="userDropdown"
                 className={`absolute z-10 top-[var(--navigation-height)] right-0 ${isDropdownOpen ? '' : 'hidden'
@@ -186,21 +186,21 @@ const Header = () => {
               >
                 <div className="px-4 py-3 flex justify-between items-center">
                   <div className='mr-3'>
-                    <Avatar 
+                    <Avatar
                       id="avatarButton"
                       data-dropdown-toggle="userDropdown"
                       data-dropdown-placement="bottom-start"
-                      isBordered radius="sm" 
+                      isBordered radius="sm"
                       size='sm'
                       className="text-tiny cursor-pointer mx-2"
-                      src={user.length > 0 ? user[0].profile : ''} 
-                      alt="User dropdown"/>
+                      src={user.length > 0 ? user[0].profile : ''}
+                      alt="User dropdown" />
                   </div>
                   <div className='text-end'>
                     <div className='text-md truncate max-w-80'>{user.length > 0 ? user[0].name : 'Guest'}</div>
                     <div className="text-xs truncate text-gray-500 max-w-80">
                       {user.length > 0 ? user[0].email : 'Guest'}
-                    </div>  
+                    </div>
                   </div>
                 </div>
                 <ul
@@ -273,7 +273,7 @@ const Header = () => {
                 }}
               >
                 <img
-                  src="./assets/icp.png"
+                  src="../../assets/icp.png"
                   className="w-full h-full object-contain absolute opacity-50"
                   alt="Login"
                 />

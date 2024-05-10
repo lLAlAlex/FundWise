@@ -32,6 +32,7 @@ actor Database {
     user_id : Text;
     reviews_ids : [Text];
     rewards : [Reward];
+    backers_ids : [Text];
     timestamp : Time.Time;
   };
 
@@ -87,7 +88,7 @@ actor Database {
     var counter = 0;
 
     let categoryArray = ["Health", "Sport", "Fashion", "Food", "Technology"];
-    
+
     while (counter <= 20) {
       counter := counter + 1;
       let _timestamp = Time.now();
@@ -95,17 +96,17 @@ actor Database {
       let image = "https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png";
       let randomRangeName = fuzz.nat.randomRange(5, 15);
       let randomRangeDesc = fuzz.nat.randomRange(50, 150);
-      let randomCategoryIndex = fuzz.nat.randomRange(0, categoryArray.size() - 1); 
-      
+      let randomCategoryIndex = fuzz.nat.randomRange(0, categoryArray.size() - 1);
+
       let project : Project = {
         id = uuid;
-        user_id = "asdasd";
+        user_id = "1";
         name = fuzz.text.randomText(randomRangeName);
         description = fuzz.text.randomText(randomRangeDesc);
         category = categoryArray[randomCategoryIndex];
         image = image;
         progress = fuzz.nat.randomRange(0, 50);
-        deadline = "DEADLINE";
+        deadline = "10-05-2025";
         goal = fuzz.nat.randomRange(1000, 2000);
         reviews_ids = [];
         rewards = [
@@ -113,6 +114,7 @@ actor Database {
           { tier = "Silver"; price = 200 },
           { tier = "Gold"; price = 300 },
         ];
+        backers_ids = [];
         timestamp = _timestamp;
       };
 
@@ -138,6 +140,7 @@ actor Database {
       user_id = newProject.user_id;
       reviews_ids = [];
       rewards = newProject.rewards;
+      backers_ids = [];
       timestamp = _timestamp;
     };
 
@@ -170,7 +173,7 @@ actor Database {
 
     let size = arr.size();
     Debug.print(Nat.toText(size));
-    let init : Nat = (page - 1) * offset; 
+    let init : Nat = (page - 1) * offset;
     if (init < size) {
 
       let diff : Nat = size - init;
@@ -196,15 +199,15 @@ actor Database {
   };
 
   public query (msg) func getAllProjectByUserId() : async Result.Result<[Project], Text> {
-      let userid = Principal.toText(msg.caller);
-      let projectArray = Iter.toArray<Project>(projects.vals());
-      
-      let filteredProjects = Array.filter<Project>(
-          projectArray, 
-          func (project : Project) : Bool { project.user_id == userid; }
-      );
+    let userid = Principal.toText(msg.caller);
+    let projectArray = Iter.toArray<Project>(projects.vals());
 
-      return #ok(filteredProjects);
+    let filteredProjects = Array.filter<Project>(
+      projectArray,
+      func(project : Project) : Bool { project.user_id == userid },
+    );
+
+    return #ok(filteredProjects);
   };
 
   public query func getTotalProjectCount() : async Nat {
@@ -216,7 +219,7 @@ actor Database {
     let totalPages = Float.ceil(Float.fromInt(totalProjects) / Float.fromInt(items_per_page));
     return Float.toInt(totalPages);
   };
-  
+
   public shared func deleteProject(id : Text) : async ?Project {
     return projects.remove(id);
   };
@@ -227,5 +230,15 @@ actor Database {
       return null;
     };
     return project;
+  };
+
+  public query func getAllFunds() : async Result.Result<Nat, Text> {
+    var totalFunds : Nat = 0;
+
+    for (p in projects.vals()) {
+      totalFunds += p.progress;
+    };
+
+    return #ok(totalFunds);
   };
 };
