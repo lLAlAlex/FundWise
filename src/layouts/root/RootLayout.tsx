@@ -20,7 +20,7 @@ const RootLayout = (props: Props) => {
 
   useEffect(() => {
     const seedProject = async () => {
-      // console.log(await actor.getTotalProjectCount())
+      console.log(await actor.getTotalProjectCount())
       if (await actor.getTotalProjectCount() == BigInt(0)) {
         actor.seedProjects();
       }
