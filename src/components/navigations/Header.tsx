@@ -26,11 +26,11 @@ import { Hamburger } from '../ui/Hamburger';
 import classNames from 'classnames';
 import { Avatar } from '@nextui-org/react';
 
-const rewards: Reward[] = [
-  { tier: 'Bronze', price: BigInt(100) },
-  { tier: 'Silver', price: BigInt(200) },
-  { tier: 'Gold', price: BigInt(300) },
-];
+// const rewards: Reward[] = [
+//   { tier: 'Bronze', price: BigInt(100) },
+//   { tier: 'Silver', price: BigInt(200) },
+//   { tier: 'Gold', price: BigInt(300) },
+// ];
 
 const Header = () => {
   const { data: count, call: refetchCount } = useQueryCall({

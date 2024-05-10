@@ -14,8 +14,7 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
-  // darkMode: "class",
-  lightMode: "class",
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {

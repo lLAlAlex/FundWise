@@ -17,9 +17,12 @@
     "postinstall": "mops install"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.19.0",
     "@ic-reactor/react": "1.5.5-beta.0",
+    "@mui/material": "^5.15.17",
     "@nextui-org/button": "^2.0.30",
     "@nextui-org/react": "^2.3.5",
     "class-variance-authority": "^0.7.0",
@@ -34,7 +37,9 @@
     "react-icons": "^5.2.0",
     "react-intersection-observer": "^9.10.2",
     "react-router-dom": "^6.22.3",
+    "react-scroll": "^1.9.0",
     "react-scroll-trigger": "^0.6.14",
+    "react-sticky-box": "^2.0.5",
     "tailwind-merge": "^2.3.0",
     "zustand": "^4.5.2"
   },
