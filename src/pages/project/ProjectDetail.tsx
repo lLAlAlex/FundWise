@@ -6,16 +6,16 @@ import { Project } from "@/declarations/project_backend/project_backend.did";
 import { user_backend } from "@/declarations/user_backend";
 import useLogin from "@/hooks/auth/login/useLogin";
 import { useUserStore } from "@/store/user/userStore";
-import { Principal } from "@ic-reactor/react/dist/types";
-import { Button, Card, CardBody, CardHeader, Divider, Image, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Divider, Image, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Avatar } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, redirect } from "react-router-dom";
 import StickyBox from "react-sticky-box";
 import { AuthClient } from '@dfinity/auth-client';
 import { User } from "@/declarations/user_backend/user_backend.did";
 import { IoMdSend } from "react-icons/io";
 import { IoCopy, IoCopyOutline } from "react-icons/io5";
 import { ReactNotifications, Store } from 'react-notifications-component'
+import { FaLocationDot } from "react-icons/fa6";
 
 type ProjectState = Project[] | undefined;
 type CommentState = Comment[] | undefined;
@@ -41,6 +41,8 @@ function ProjectDetail() {
     const { loginStatus, login } = useLogin();
     const [authenticated, setAuthenticated] = useState(false);
     const [currentUser, setCurrentUser] = useState<UserState>([]);
+    const [creator, setCreator] = useState<UserState>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         userStore.getData();
@@ -83,6 +85,14 @@ function ProjectDetail() {
             const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
             setDeadline(differenceInDays);
         }
+
+        const getCreator = async () => {
+            if (project) {
+                setCreator(await user_actor.getUserByTextID(project[0].user_id))
+                console.log("Masuk");
+            }
+        }
+        getCreator();
     }, [project]);
 
     const handleViewReward = () => {
@@ -237,6 +247,10 @@ function ProjectDetail() {
         }
     }
 
+    const handleProfile = async (userID: string) => {
+        return navigate('/profile/' + userID);
+    }
+
     return (
         <div>
             {/* <ReactNotifications /> */}
@@ -255,6 +269,25 @@ function ProjectDetail() {
                                 src={`${project[0].image}`}
                             />
                         </div>
+                        {creator && (
+                            <>
+                                <div className="flex justify-center mt-10 items-center">
+                                    <Avatar
+                                        isBordered
+                                        radius="md"
+                                        size="md"
+                                        className="text-tiny cursor-pointer mx-2"
+                                        src={creator[0].profile}
+                                        onClick={() => handleProfile(creator[0].internet_identity.toString())}
+                                    />
+                                    <div className="text-md ml-2">Creator: {creator[0].name}</div>
+                                </div>
+                                <div className="flex justify-center mt-7 items-center">
+                                    <FaLocationDot size={25} />
+                                    <div className="ml-2 text-md">{creator[0].location}</div>
+                                </div>
+                            </>
+                        )}
                         <div className="mt-10">
                             <Features.Cards
                                 features={[
@@ -264,12 +297,12 @@ function ProjectDetail() {
                                 ]}
                             />
                         </div>
-                        {userStore.is_auth ? (
-                            <div className="flex mt-10 justify-center">
-                                <Button color="secondary" id="fundBtn" className="w-full text-lg mx-64" onClick={handleOpen}>Fund this Project</Button>
-                            </div>
-                        ) : (
-                            <></>
+                        {userStore.is_auth && userStore.data && (
+                            project[0].user_id !== userStore.data[0].internet_identity.toString() && (
+                                <div className="flex mt-10 justify-center">
+                                    <Button color="secondary" id="fundBtn" className="w-full text-lg mx-64" onClick={handleOpen}>Fund this Project</Button>
+                                </div>
+                            )
                         )}
                         <Divider className="mt-10" />
                         <div className="flex m-3 justify-center">
@@ -441,7 +474,7 @@ function ProjectDetail() {
                     )}
                 </ModalContent>
             </Modal>
-        </div>
+        </div >
     );
 }
 

@@ -147,9 +147,8 @@ const Header = () => {
                 />
                 <div
                   id="userDropdown"
-                  className={`absolute z-10 ${
-                    isDropdownOpen ? '' : 'hidden'
-                  } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+                  className={`absolute z-10 ${isDropdownOpen ? '' : 'hidden'
+                    } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
                 >
                   <div className="px-4 py-3 text-sm text-gray-900 dark:text-black">
                     <div>
@@ -164,12 +163,12 @@ const Header = () => {
                     aria-labelledby="avatarButton"
                   >
                     <li>
-                      <a
-                        href="#"
+                      <Link
+                        to={"/profile/" + currentUser[0].internet_identity.toString()}
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black"
                       >
                         Profile
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <div

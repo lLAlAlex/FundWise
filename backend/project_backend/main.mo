@@ -85,7 +85,7 @@ actor Database {
 
       let project : Project = {
         id = uuid;
-        user_id = "1";
+        user_id = "avqkn-guaaa-aaaaa-qaaea-cai";
         name = fuzz.text.randomText(randomRangeName);
         description = fuzz.text.randomText(randomRangeDesc);
         category = categoryArray[randomCategoryIndex];
@@ -213,8 +213,8 @@ actor Database {
 
   };
 
-  public query (msg) func getAllProjectByUserId() : async Result.Result<[Project], Text> {
-    let userid = Principal.toText(msg.caller);
+  public query func getAllProjectByUserId(userID : Principal) : async Result.Result<[Project], Text> {
+    let userid = Principal.toText(userID);
     let projectArray = Iter.toArray<Project>(projects.vals());
 
     let filteredProjects = Array.filter<Project>(

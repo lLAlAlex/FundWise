@@ -183,9 +183,8 @@ const Header = () => {
               />
               <div
                 id="userDropdown"
-                className={`absolute z-10 top-[var(--navigation-height)] right-0 ${
-                  isDropdownOpen ? '' : 'hidden'
-                } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-tranparent-black min-w-96`}
+                className={`absolute z-10 top-[var(--navigation-height)] right-0 ${isDropdownOpen ? '' : 'hidden'
+                  } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-tranparent-black min-w-96`}
               >
                 <div className="px-4 py-3 flex justify-between items-center">
                   <div className="mr-3">
@@ -225,10 +224,11 @@ const Header = () => {
                   <li>
                     <div
                       onClick={() => {
-                        if (userStore.data && userStore.data.length > 1)
+                        if (userStore.data && userStore.data.length > 0) {
                           handleProfile(
                             userStore.data[0].internet_identity.toString(),
                           );
+                        }
                       }}
                       className="cursor-pointer block px-4 py-2 hover:bg-gray-100"
                     >
@@ -242,11 +242,6 @@ const Header = () => {
                     >
                       My Wallet
                     </Link>
-                  </li>
-                  <li>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-                      Transaction History
-                    </a>
                   </li>
                 </ul>
                 <div className="py-1">
