@@ -98,6 +98,10 @@ const Header = () => {
         setIsDropdownOpen(prev => !prev);
     };
 
+    const handleWallet = () => {
+        return navigate('https://nns.ic0.app/');
+    }
+
     return (
         <header className="fixed w-full opacity-75 z-50">
             <nav className="bg-[#18191A] px-4 lg:px-6 py-2.5 pt-5">
@@ -143,6 +147,11 @@ const Header = () => {
                                             >
                                                 Profile
                                             </a>
+                                        </li>
+                                        <li>
+                                            <div onClick={handleWallet} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-black">
+                                                My Wallet
+                                            </div>
                                         </li>
                                         <li>
                                             <a

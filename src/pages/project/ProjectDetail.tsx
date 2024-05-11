@@ -4,14 +4,28 @@ import { Comment, Time } from "@/declarations/comment_backend/comment_backend.di
 import { project_backend } from "@/declarations/project_backend";
 import { Project } from "@/declarations/project_backend/project_backend.did";
 import { user_backend } from "@/declarations/user_backend";
+import useLogin from "@/hooks/auth/login/useLogin";
+import { useUserStore } from "@/store/user/userStore";
 import { Principal } from "@ic-reactor/react/dist/types";
-import { Button, Card, CardBody, CardHeader, Divider, Image } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Divider, Image, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import StickyBox from "react-sticky-box";
+import { AuthClient } from '@dfinity/auth-client';
+import { User } from "@/declarations/user_backend/user_backend.did";
+import { IoMdSend } from "react-icons/io";
+import { IoCopy, IoCopyOutline } from "react-icons/io5";
+import { ReactNotifications, Store } from 'react-notifications-component'
 
 type ProjectState = Project[] | undefined;
 type CommentState = Comment[] | undefined;
+type UserState = User[] | [];
+
+type CommentInputSchema = {
+    userId: string;
+    projectId: string;
+    content: string;
+};
 
 function ProjectDetail() {
     const actor = project_backend;
@@ -23,6 +37,33 @@ function ProjectDetail() {
     const [viewReward, setViewReward] = useState(true);
     const params = useParams();
     const id = JSON.stringify(params.id).replace(/"/g, '');
+    const userStore = useUserStore();
+    const { loginStatus, login } = useLogin();
+    const [authenticated, setAuthenticated] = useState(false);
+    const [currentUser, setCurrentUser] = useState<UserState>([]);
+
+    useEffect(() => {
+        userStore.getData();
+
+        const initializeAuthClient = async () => {
+            try {
+                const authClient = await AuthClient.create();
+                const isAuthenticated = await authClient.isAuthenticated();
+                setAuthenticated(isAuthenticated);
+
+                if (isAuthenticated) {
+                    const identity = await authClient.getIdentity();
+                    const principal = identity.getPrincipal();
+                    const user = await user_backend.getUser(principal);
+
+                    setCurrentUser(user);
+                }
+            } catch (error) {
+                console.error('Error initializing auth client:', error);
+            }
+        };
+        initializeAuthClient();
+    }, [])
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -30,15 +71,6 @@ function ProjectDetail() {
             setProject(fetchedProject);
         };
         fetchProject();
-
-        const fetchComments = async () => {
-            const fetchedComments = await comment_actor.getAllCommentByProjectId(id);
-            if ('ok' in fetchedComments) {
-                setComments(fetchedComments.ok);
-                console.log(comments);
-            }
-        }
-        fetchComments();
     }, [id]);
 
     useEffect(() => {
@@ -70,10 +102,21 @@ function ProjectDetail() {
                 top: window.scrollY + top - offset,
                 behavior: 'smooth'
             });
-            console.log(window.scrollY + top - offset);
         }
     };
 
+    const scrollFund = () => {
+        const e = document.getElementById('fundBtn');
+        if (e) {
+            const offset = 350;
+            const { top } = e.getBoundingClientRect();
+            window.scrollTo({
+                top: window.scrollY + top - offset,
+                behavior: 'smooth'
+            });
+            console.log(window.scrollY + top - offset);
+        }
+    }
 
     const getUser = async (userId: string) => {
         const user = await user_actor.getUserByTextID(userId);
@@ -81,25 +124,37 @@ function ProjectDetail() {
         return user[0];
     }
 
+    const [commentUsers, setCommentUsers] = useState<Record<string, User | undefined>>({});
+
     useEffect(() => {
+        const fetchComments = async () => {
+            const fetchedComments = await comment_actor.getAllCommentByProjectId(id);
+            if ('ok' in fetchedComments) {
+                setComments(fetchedComments.ok);
+                // console.log(comments);
+            }
+        }
+        fetchComments();
+
         const fetchCommentUsers = async () => {
             if (comments) {
-                const updatedComments = await Promise.all(
+                const users: Record<string, User | undefined> = {};
+                await Promise.all(
                     comments.map(async (comment) => {
                         const user = await getUser(comment.userId);
-                        return { ...comment, user };
+                        users[comment.id] = user;
                     })
                 );
-                setComments(updatedComments);
+                setCommentUsers(users);
             }
         };
         fetchCommentUsers();
     }, [comments]);
 
     const timeAgo = (timestamp: Time) => {
-        const now = Date.now();
-        const diff = now - parseInt(timestamp.toString());
-        const seconds = Math.floor(parseInt(diff.toString()) / 1000);
+        const now = Date.now() / 1000;
+        const diff = now - (parseInt(timestamp.toString()) / 1000000000);
+        const seconds = Math.floor(parseInt(diff.toString()));
         const minutes = Math.floor(seconds / 60);
         const hours = Math.floor(minutes / 60);
         const days = Math.floor(hours / 24);
@@ -121,8 +176,63 @@ function ProjectDetail() {
         }
     };
 
+    const [commentInput, setCommentInput] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCommentInput(event.target.value);
+    };
+
+    const postComment = async (comment: string) => {
+        if (comment != '') {
+            setLoading(true);
+            let newComment: CommentInputSchema = {
+                userId: currentUser[0].internet_identity.toString(),
+                projectId: id,
+                content: comment
+            };
+
+            try {
+                await comment_actor.createComment(newComment);
+                setCommentInput('');
+                setLoading(false);
+            } catch (error) {
+                console.error('Error posting comment:', error);
+                setLoading(false);
+            }
+        }
+    }
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const handleOpen = () => {
+        onOpen();
+    }
+
+    const copyToClipboard = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            // Store.addNotification({
+            //     title: "Wonderful!",
+            //     message: "teodosii@react-notifications-component",
+            //     type: "success",
+            //     insert: "top",
+            //     container: "top-right",
+            //     animationIn: ["animate__animated", "animate__fadeIn"],
+            //     animationOut: ["animate__animated", "animate__fadeOut"],
+            //     dismiss: {
+            //         duration: 5000,
+            //         onScreen: true
+            //     }
+            // });
+        } catch (error) {
+            console.error('Error copying to clipboard:', error);
+        }
+    };
+
     return (
         <div>
+            {/* <ReactNotifications /> */}
             <div className="mt-10">
                 {project && project.length > 0 &&
                     <div className="flex-col justify-center">
@@ -148,7 +258,7 @@ function ProjectDetail() {
                             />
                         </div>
                         <div className="flex mt-10 justify-center">
-                            <Button color="secondary" className="w-full text-lg mx-64">Fund this Project</Button>
+                            <Button color="secondary" id="fundBtn" className="w-full text-lg mx-64" onClick={handleOpen}>Fund this Project</Button>
                         </div>
                         <Divider className="mt-10" />
                         <div className="flex m-3 justify-center">
@@ -207,7 +317,7 @@ function ProjectDetail() {
                                                         ) : (
                                                             <small className="text-default-500">{r.quantity.toString()} item included</small>
                                                         )}
-                                                        <Button color="secondary" className="w-auto text-base mt-6">Fund ${r.price.toString()}</Button>
+                                                        <Button color="secondary" className="w-auto text-base mt-6" onClick={scrollFund}>Fund Now</Button>
                                                     </CardBody>
                                                 </Card>
                                                 <div className="text-lg px-12">{r.description}</div>
@@ -220,38 +330,103 @@ function ProjectDetail() {
                                 </div>
                             </div>
                         ) : (
-                            <div className="flex justify-center mb-12">
-                                <div className="bg-gray-100 border-2">
-                                    {comments?.map((c, idx) => (
-                                        <Card className="min-w-[800px] m-5">
-                                            <CardHeader className="flex gap-3">
-                                                <Image
-                                                    height={40}
-                                                    radius="sm"
-                                                    src={c?.user.profile}
-                                                    width={40}
-                                                    className="object-cover"
-                                                />
-                                                <div className="flex flex-col">
-                                                    <p className="text-md">{c?.user.name}</p>
-                                                    <p className="text-small text-default-500">{timeAgo(c?.timestamp)}</p>
-                                                </div>
-                                            </CardHeader>
-                                            <Divider />
-                                            <CardBody>
-                                                <p className="text-md">{c.content}</p>
-                                            </CardBody>
-                                            <Divider />
-                                        </Card>
-                                    ))}
+                            <>
+                                <div className="flex justify-center mb-12">
+                                    <div className="bg-gray-100 border-2 p-4">
+                                        {userStore.is_auth && userStore.data && userStore.data.length !== 0 ? (
+                                            <Card className="min-w-[800px] m-5">
+                                                <CardHeader className="flex gap-3">
+                                                    <Image
+                                                        height={40}
+                                                        radius="sm"
+                                                        src={currentUser[0].profile}
+                                                        width={40}
+                                                        className="object-cover"
+                                                    />
+                                                    <div className="flex flex-col">
+                                                        <Input type="text" className="text-md min-w-[800px]" onChange={handleChange} value={commentInput} />
+                                                    </div>
+                                                    <IoMdSend size={20} className="cursor-pointer" onClick={() => !loading && postComment(commentInput)} />
+                                                </CardHeader>
+                                            </Card>
+                                        ) : (
+                                            <div className="min-w-[800px] text-md text-center">You must be logged in to comment. <Link className="font-bold" to="" onClick={login}>Log In</Link></div>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
+                                <div className="flex justify-center mb-12">
+                                    <div className="bg-gray-100 border-2">
+                                        {comments?.sort((a, b) => parseInt(b.timestamp.toString()) - parseInt(a.timestamp.toString())).map((c, idx) => (
+                                            <Card className="min-w-[800px] m-5">
+                                                <CardHeader className="flex gap-3">
+                                                    <Image
+                                                        height={40}
+                                                        radius="sm"
+                                                        src={commentUsers[c.id]?.profile}
+                                                        width={40}
+                                                        className="object-cover"
+                                                    />
+                                                    <div className="flex flex-col">
+                                                        <p className="text-md">{commentUsers[c.id]?.name}</p>
+                                                        <p className="text-small text-default-500">{timeAgo(c.timestamp)}</p>
+                                                    </div>
+                                                </CardHeader>
+                                                <Divider />
+                                                <CardBody>
+                                                    <p className="text-md">{c.content}</p>
+                                                </CardBody>
+                                                <Divider />
+                                            </Card>
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
                         )}
 
                     </div>
                 }
             </div>
-        </div >
+
+            <Modal
+                size="5xl"
+                isOpen={isOpen}
+                onClose={onClose}
+            >
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1 text-lg">ICP Address</ModalHeader>
+                            <ModalBody>
+                                {project && project.length > 0 && (
+                                    <>
+                                        <div className="flex justify-center">
+                                            <Image
+                                                radius="sm"
+                                                src={project[0].wallet.qr}
+                                                className="object-cover "
+                                                width={300}
+                                                height={300}
+                                            />
+                                        </div>
+                                        <div className="text-[1.3rem] flex">Address: {project[0].wallet.address} <IoCopyOutline size={18} className="cursor-pointer ml-3" onClick={() => copyToClipboard(project[0].wallet.address)} /></div>
+                                        <Divider></Divider>
+                                        <div className="font-bold">Make sure to save the QR Code or ICP address</div>
+                                    </>
+                                )}
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="danger" variant="light" onPress={onClose}>
+                                    Close
+                                </Button>
+                                <Button color="primary" onPress={() => { window.location.href = 'https://nns.ic0.app/'; onClose(); }}>
+                                    Fund
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+        </div>
     );
 }
 
