@@ -7,13 +7,15 @@ import { user_backend } from "@/declarations/user_backend";
 import useLogin from "@/hooks/auth/login/useLogin";
 import { useUserStore } from "@/store/user/userStore";
 import { Principal } from "@ic-reactor/react/dist/types";
-import { Button, Card, CardBody, CardHeader, Divider, Image, Input, user } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Divider, Image, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import StickyBox from "react-sticky-box";
 import { AuthClient } from '@dfinity/auth-client';
 import { User } from "@/declarations/user_backend/user_backend.did";
 import { IoMdSend } from "react-icons/io";
+import { IoCopy, IoCopyOutline } from "react-icons/io5";
+import { ReactNotifications, Store } from 'react-notifications-component'
 
 type ProjectState = Project[] | undefined;
 type CommentState = Comment[] | undefined;
@@ -100,9 +102,21 @@ function ProjectDetail() {
                 top: window.scrollY + top - offset,
                 behavior: 'smooth'
             });
-            console.log(window.scrollY + top - offset);
         }
     };
+
+    const scrollFund = () => {
+        const e = document.getElementById('fundBtn');
+        if (e) {
+            const offset = 350;
+            const { top } = e.getBoundingClientRect();
+            window.scrollTo({
+                top: window.scrollY + top - offset,
+                behavior: 'smooth'
+            });
+            console.log(window.scrollY + top - offset);
+        }
+    }
 
     const getUser = async (userId: string) => {
         const user = await user_actor.getUserByTextID(userId);
@@ -189,8 +203,36 @@ function ProjectDetail() {
         }
     }
 
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const handleOpen = () => {
+        onOpen();
+    }
+
+    const copyToClipboard = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            // Store.addNotification({
+            //     title: "Wonderful!",
+            //     message: "teodosii@react-notifications-component",
+            //     type: "success",
+            //     insert: "top",
+            //     container: "top-right",
+            //     animationIn: ["animate__animated", "animate__fadeIn"],
+            //     animationOut: ["animate__animated", "animate__fadeOut"],
+            //     dismiss: {
+            //         duration: 5000,
+            //         onScreen: true
+            //     }
+            // });
+        } catch (error) {
+            console.error('Error copying to clipboard:', error);
+        }
+    };
+
     return (
         <div>
+            {/* <ReactNotifications /> */}
             <div className="mt-10">
                 {project && project.length > 0 &&
                     <div className="flex-col justify-center">
@@ -216,7 +258,7 @@ function ProjectDetail() {
                             />
                         </div>
                         <div className="flex mt-10 justify-center">
-                            <Button color="secondary" className="w-full text-lg mx-64">Fund this Project</Button>
+                            <Button color="secondary" id="fundBtn" className="w-full text-lg mx-64" onClick={handleOpen}>Fund this Project</Button>
                         </div>
                         <Divider className="mt-10" />
                         <div className="flex m-3 justify-center">
@@ -275,7 +317,7 @@ function ProjectDetail() {
                                                         ) : (
                                                             <small className="text-default-500">{r.quantity.toString()} item included</small>
                                                         )}
-                                                        <Button color="secondary" className="w-auto text-base mt-6">Fund ${r.price.toString()}</Button>
+                                                        <Button color="secondary" className="w-auto text-base mt-6" onClick={scrollFund}>Fund Now</Button>
                                                     </CardBody>
                                                 </Card>
                                                 <div className="text-lg px-12">{r.description}</div>
@@ -344,7 +386,47 @@ function ProjectDetail() {
                     </div>
                 }
             </div>
-        </div >
+
+            <Modal
+                size="5xl"
+                isOpen={isOpen}
+                onClose={onClose}
+            >
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1 text-lg">ICP Address</ModalHeader>
+                            <ModalBody>
+                                {project && project.length > 0 && (
+                                    <>
+                                        <div className="flex justify-center">
+                                            <Image
+                                                radius="sm"
+                                                src={project[0].wallet.qr}
+                                                className="object-cover "
+                                                width={300}
+                                                height={300}
+                                            />
+                                        </div>
+                                        <div className="text-[1.3rem] flex">Address: {project[0].wallet.address} <IoCopyOutline size={18} className="cursor-pointer ml-3" onClick={() => copyToClipboard(project[0].wallet.address)} /></div>
+                                        <Divider></Divider>
+                                        <div className="font-bold">Make sure to save the QR Code or ICP address</div>
+                                    </>
+                                )}
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="danger" variant="light" onPress={onClose}>
+                                    Close
+                                </Button>
+                                <Button color="primary" onPress={() => { window.location.href = 'https://nns.ic0.app/'; onClose(); }}>
+                                    Fund
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+        </div>
     );
 }
 

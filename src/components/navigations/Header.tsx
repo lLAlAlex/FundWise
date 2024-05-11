@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useAuth, useQueryCall, useUpdateCall } from '@ic-reactor/react';
 import { AuthClient } from '@dfinity/auth-client';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, redirect, useNavigate } from 'react-router-dom';
 import {
   user_backend,
   canisterId,
@@ -54,7 +54,6 @@ const Header = () => {
   let actor = user_backend;
 
   const [projects, setProjects] = useState<ProjectInputSchema[]>([]);
-  const [connection, setConnection] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -73,23 +72,6 @@ const Header = () => {
 
   const handleProfile = (userID: string) => {
     navigate('/profile' + userID);
-  };
-
-  const walletDialog = () => {
-    // (async () => {
-    //   const nnsCanisterId = 'qoctq-giaaa-aaaaa-aaaea-cai';
-
-    //   const whitelist = [nnsCanisterId];
-
-    //   const isConnected = await window.ic.plug.requestConnect({
-    //     whitelist,
-    //   });
-
-    //   const principalId = await window.ic.plug.agent.getPrincipal();
-
-    //   console.log(`Plug's user principal Id is ${principalId}`);
-    //   setConnection(isConnected);
-    // })();
   };
 
   useEffect(() => {
@@ -217,18 +199,14 @@ const Header = () => {
                       Profile
                     </div>
                   </li>
-                  {connection && (
-                    <li>
-                      <div
-                        onClick={() => {
-                          walletDialog();
-                        }}
-                        className="cursor-pointer block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Connect to Wallet
-                      </div>
-                    </li>
-                  )}
+                  <li>
+                    <Link
+                      to="https://nns.ic0.app/"
+                      className="cursor-pointer block px-4 py-2 hover:bg-gray-100"
+                    >
+                      My Wallet
+                    </Link>
+                  </li>
                   <li>
                     <a
                       href="#"

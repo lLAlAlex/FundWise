@@ -25,6 +25,11 @@ actor Database {
     quantity : Nat;
   };
 
+  type Wallet = {
+    qr : Text;
+    address : Text;
+  };
+
   type Project = {
     id : Text;
     name : Text;
@@ -38,6 +43,7 @@ actor Database {
     reviews_ids : [Text];
     rewards : [Reward];
     backers_ids : [Text];
+    wallet : Wallet;
     timestamp : Time.Time;
   };
 
@@ -56,6 +62,7 @@ actor Database {
     goal : Nat;
     rewards : [Reward];
     user_id : Text;
+    wallet : Wallet;
   };
 
   let projects = TrieMap.TrieMap<Text, Project>(Text.equal, Text.hash);
@@ -144,6 +151,10 @@ actor Database {
           },
         ];
         backers_ids = [];
+        wallet = {
+          address = "7658b998f8691f26961c631cbe8388e3f5dce7ff9d6d093a9d1a89b89b3c2095";
+          qr = "https://res.cloudinary.com/dogiichep/image/upload/v1715397694/download_5_bo3drk.png";
+        };
         timestamp = _timestamp;
       };
       let comment : CommentInputSchema = {
@@ -177,6 +188,7 @@ actor Database {
       reviews_ids = [];
       rewards = newProject.rewards;
       backers_ids = [];
+      wallet = newProject.wallet;
       timestamp = _timestamp;
     };
 
