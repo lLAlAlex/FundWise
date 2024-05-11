@@ -46,7 +46,7 @@ const Header = () => {
 
   const navigate = useNavigate();
   const { loginStatus, login } = useLogin();
-  const userStore = useUserStore()
+  const userStore = useUserStore();
   // const { auth, setAuth, user } = useAuthentication();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
@@ -56,7 +56,7 @@ const Header = () => {
   const [projects, setProjects] = useState<ProjectInputSchema[]>([]);
 
   const handleLogout = async () => {
-    userStore.logout()
+    userStore.logout();
     // try {
     //   const authClient = await AuthClient.create();
     //   await authClient.logout();
@@ -78,15 +78,11 @@ const Header = () => {
   const walletDialog = () => {
     // (async () => {
     //   const nnsCanisterId = 'qoctq-giaaa-aaaaa-aaaea-cai';
-
     //   const whitelist = [nnsCanisterId];
-
     //   const isConnected = await window.ic.plug.requestConnect({
     //     whitelist,
     //   });
-
     //   const principalId = await window.ic.plug.agent.getPrincipal();
-
     //   console.log(`Plug's user principal Id is ${principalId}`);
     //   setConnection(isConnected);
     // })();
@@ -146,6 +142,11 @@ const Header = () => {
             <li className="md:hover:text-black md:hover:scale-105">
               <Link to="/projects">Explore</Link>
             </li>
+            {userStore.is_auth && userStore.data && (
+              <li className="md:hover:text-black md:hover:scale-105">
+                <Link to="/project/create">Create Project</Link>
+              </li>
+            )}
             <li className="md:hover:text-black md:hover:scale-105">
               <Link
                 to="/#about"
@@ -167,39 +168,53 @@ const Header = () => {
 
         <div className="ml-auto h-full flex items-center">
           {userStore.is_auth && userStore.data ? (
-            <div className='relative'>
-
+            <div className="relative">
               <Avatar
                 id="avatarButton"
                 data-dropdown-toggle="userDropdown"
                 data-dropdown-placement="bottom-start"
-                isBordered radius="sm"
-                size='sm'
+                isBordered
+                radius="sm"
+                size="sm"
                 className="text-tiny cursor-pointer mx-2"
                 src={userStore.data.length > 0 ? userStore.data[0].profile : ''}
                 alt="User dropdown"
-                onClick={toggleDropdown} />
+                onClick={toggleDropdown}
+              />
               <div
                 id="userDropdown"
-                className={`absolute z-10 top-[var(--navigation-height)] right-0 ${isDropdownOpen ? '' : 'hidden'
-                  } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-tranparent-black min-w-96 w-fit`}
+                className={`absolute z-10 top-[var(--navigation-height)] right-0 ${
+                  isDropdownOpen ? '' : 'hidden'
+                } bg-white divide-y divide-gray-100 rounded-lg shadow w-44 border border-tranparent-black min-w-96`}
               >
                 <div className="px-4 py-3 flex justify-between items-center">
-                  <div className='mr-3'>
+                  <div className="mr-3">
                     <Avatar
                       id="avatarButton"
                       data-dropdown-toggle="userDropdown"
                       data-dropdown-placement="bottom-start"
-                      isBordered radius="sm"
-                      size='sm'
+                      isBordered
+                      radius="sm"
+                      size="sm"
                       className="text-tiny cursor-pointer mx-2"
-                      src={userStore.data.length > 0 ? userStore.data[0].profile : ''}
-                      alt="User dropdown" />
+                      src={
+                        userStore.data.length > 0
+                          ? userStore.data[0].profile
+                          : ''
+                      }
+                      alt="User dropdown"
+                    />
                   </div>
-                  <div className='text-end'>
-                    <div className='text-md truncate max-w-80'>{userStore.data.length > 0 ? userStore.data[0].name : 'Guest'}</div>
+                  <div className="text-end">
+                    <div className="text-md truncate max-w-80">
+                      {userStore.data.length > 0
+                        ? userStore.data[0].name
+                        : 'Guest'}
+                    </div>
                     <div className="text-xs truncate text-gray-500 max-w-80">
-                      {userStore.data.length > 0 ? userStore.data[0].email : 'Guest'}
+                      {userStore.data.length > 0
+                        ? userStore.data[0].email
+                        : 'Guest'}
                     </div>
                   </div>
                 </div>
@@ -211,7 +226,9 @@ const Header = () => {
                     <div
                       onClick={() => {
                         if (userStore.data && userStore.data.length > 1)
-                          handleProfile(userStore.data[0].internet_identity.toString());
+                          handleProfile(
+                            userStore.data[0].internet_identity.toString(),
+                          );
                       }}
                       className="cursor-pointer block px-4 py-2 hover:bg-gray-100"
                     >
@@ -227,10 +244,7 @@ const Header = () => {
                     </Link>
                   </li>
                   <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100"
-                    >
+                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">
                       Transaction History
                     </a>
                   </li>
