@@ -27,8 +27,9 @@ const useAuthentication = () => {
                 const identity = await authClient.getIdentity();
                 const principal = identity.getPrincipal();
                 const user = await user_backend.getUser(principal);
+                console.log(await user_backend.getAllUserPrincipals());
                 if ((await user_backend.getUser(principal)).length == 0) {
-                    // console.log("Masuk")
+                    console.log("Masuk")
                     setUserStatus("empty")
                     setUser(undefined)
                 } else {
