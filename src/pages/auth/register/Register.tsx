@@ -54,7 +54,7 @@ function RegisterPage() {
         formData.location,
         formData.contact,
       );
-      // console.log(await user_backend.register(principal, formData.name, formData.email, formData.profile, formData.dob, formData.location, formData.contact))
+      console.log(await user_backend.register(principal, formData.name, formData.email, formData.profile, formData.dob, formData.location, formData.contact))
       return navigate('/');
     }
   };

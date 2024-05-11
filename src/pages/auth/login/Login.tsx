@@ -21,7 +21,7 @@ function LoginPage() {
   //     navigate("/register");
   //   }
   // }, [loginStatus])
-  
+
 
   return (
     <div className="min-h-screen relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
