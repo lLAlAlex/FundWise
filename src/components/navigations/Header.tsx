@@ -112,7 +112,7 @@ const Header = () => {
   }, [setIsHamburgerOpen]);
 
   return (
-    <header className="text-black fixed top-0 left-0 w-full border-b border-transparent-black z-10 backdrop-blur-[12px]">
+    <header className="text-black fixed top-0 left-0 w-full border-b border-transparent-black z-50 backdrop-blur-[12px]">
       <Container className="flex h-nav-height">
         <Link
           to="/"

@@ -12,6 +12,8 @@ import Float "mo:base/Float";
 import Int "mo:base/Int";
 import Vector "mo:vector/Class";
 import Utils "canister:utils_backend";
+import Comment "canister:comment_backend";
+import User "canister:user_backend";
 import Fuzz "mo:fuzz";
 
 actor Database {
@@ -37,6 +39,12 @@ actor Database {
     rewards : [Reward];
     backers_ids : [Text];
     timestamp : Time.Time;
+  };
+
+  type CommentInputSchema = {
+    userId : Text;
+    projectId : Text;
+    content : Text;
   };
 
   type ProjectInputSchema = {
@@ -84,28 +92,35 @@ actor Database {
             tier = "Bronze";
             price = 100;
             image = "https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png";
-            description = "This is bronze tier";
+            description = "This is bronze tier reward";
             quantity = 1;
           },
           {
             tier = "Silver";
             price = 200;
             image = "https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png";
-            description = "This is silver tier";
+            description = "This is silver tier reward";
             quantity = 1;
           },
           {
             tier = "Gold";
             price = 300;
             image = "https://res.cloudinary.com/dogiichep/image/upload/v1714791015/fundwise_xfvrh5.png";
-            description = "This is gold tier";
+            description = "This is gold tier reward";
             quantity = 1;
           },
         ];
         backers_ids = [];
         timestamp = _timestamp;
       };
-
+      let comment : CommentInputSchema = {
+        content = "Hello World";
+        userId = "avqkn-guaaa-aaaaa-qaaea-cai";
+        projectId = uuid;
+      };
+      let createComment = await Comment.createComment(comment);
+      let userId : Principal.Principal = Principal.fromText("avqkn-guaaa-aaaaa-qaaea-cai");
+      let createUser = await User.register(userId, "Nicholas", "nc@email.com", "https://res.cloudinary.com/dogiichep/image/upload/v1691980787/profile_xy1yuo.png", "04-12-2003", "Indonesia", "081212341234");
       projects.put(project.id, project);
     };
     return #ok("Success");

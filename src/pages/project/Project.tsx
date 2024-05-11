@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Project, Reward } from '@/declarations/project_backend/project_backend.did';
 import Search from '@/components/ui/search/Search';
-import { Pagination } from '@nextui-org/react';
+import { CheckboxGroup, Pagination } from '@nextui-org/react';
 import { project_backend } from '@/declarations/project_backend';
 import GridLayout from '@/components/layout/grid/GridLayout';
 import ProjectCard from '@/components/cards/projects/ProjectCard';
+import { CustomCheckbox } from '@/components/ui/CustomCheckbox';
 // export interface Project {
 //     'id' : string,
 //     'name' : string,
@@ -90,7 +91,7 @@ function ProjectPage() {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(10);
   const [projects, setProjects] = useState<Project[]>([]);
-
+  const [groupSelected, setGroupSelected] = useState<string[]>([]);
   async function fetchProjects(search: string, page: number) {
     try {
       setProjects([]);
@@ -137,6 +138,21 @@ function ProjectPage() {
             handleChange={(v) => setSearch(v)}
             onSubmit={handleSearch}
           />
+          <div className="flex flex-col my-3 w-full">
+            <CheckboxGroup
+              className="gap-1"
+              orientation="horizontal"
+              value={groupSelected}
+              onChange={(value: string[]) => setGroupSelected(value)}
+            >
+              <CustomCheckbox value="Development & IT">Development & IT</CustomCheckbox>
+              <CustomCheckbox value="AI Service">AI Service</CustomCheckbox>
+              <CustomCheckbox value="Design & Creative">Design & Creative</CustomCheckbox>
+              <CustomCheckbox value="Sales & Marketing">Sales & Marketing</CustomCheckbox>
+              <CustomCheckbox value="Finance & Accounting">Finance & Accounting</CustomCheckbox>
+              <CustomCheckbox value="Food & Beverages">Food & Beverages</CustomCheckbox>
+            </CheckboxGroup>
+          </div>
         </div>
       </div>
       <div className='flex flex-col items-center w-full'>
