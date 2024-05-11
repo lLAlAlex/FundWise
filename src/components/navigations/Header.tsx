@@ -46,8 +46,8 @@ const Header = () => {
 
   const navigate = useNavigate();
   const { loginStatus, login } = useLogin();
-  // const userStore = useUserStore()
-  const { auth, setAuth, user } = useAuthentication();
+  const userStore = useUserStore()
+  // const { auth, setAuth, user } = useAuthentication();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
 
@@ -57,14 +57,15 @@ const Header = () => {
   const [connection, setConnection] = useState(false);
 
   const handleLogout = async () => {
-    try {
-      const authClient = await AuthClient.create();
-      await authClient.logout();
-      // setAuthenticated(false);
-      return navigate('/');
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
+    userStore.logout()
+    // try {
+    //   const authClient = await AuthClient.create();
+    //   await authClient.logout();
+    //   // setAuthenticated(false);
+    //   return navigate('/');
+    // } catch (error) {
+    //   console.error('Logout error:', error);
+    // }
   };
 
   const toggleDropdown = () => {
@@ -92,13 +93,13 @@ const Header = () => {
     // })();
   };
 
-  useEffect(() => {
-    if (loginStatus.status === 'success') {
-      setAuth(true);
-    } else if (loginStatus.status === 'failed') {
-      // do something
-    }
-  }, [loginStatus]);
+  // useEffect(() => {
+  //   if (loginStatus.status === 'success') {
+  //     setAuth(true);
+  //   } else if (loginStatus.status === 'failed') {
+  //     // do something
+  //   }
+  // }, [loginStatus]);
 
   useEffect(() => {
     const html = document.querySelector('html');
@@ -166,7 +167,7 @@ const Header = () => {
         </nav>
 
         <div className="ml-auto h-full flex items-center">
-          {auth && user ? (
+          {userStore.is_auth && userStore.data ? (
             <div className='relative'>
 
               <Avatar
@@ -176,7 +177,7 @@ const Header = () => {
                 isBordered radius="sm"
                 size='sm'
                 className="text-tiny cursor-pointer mx-2"
-                src={user.length > 0 ? user[0].profile : ''}
+                src={userStore.data.length > 0 ? userStore.data[0].profile : ''}
                 alt="User dropdown"
                 onClick={toggleDropdown} />
               <div
@@ -193,13 +194,13 @@ const Header = () => {
                       isBordered radius="sm"
                       size='sm'
                       className="text-tiny cursor-pointer mx-2"
-                      src={user.length > 0 ? user[0].profile : ''}
+                      src={userStore.data.length > 0 ? userStore.data[0].profile : ''}
                       alt="User dropdown" />
                   </div>
                   <div className='text-end'>
-                    <div className='text-md truncate max-w-80'>{user.length > 0 ? user[0].name : 'Guest'}</div>
+                    <div className='text-md truncate max-w-80'>{userStore.data.length > 0 ? userStore.data[0].name : 'Guest'}</div>
                     <div className="text-xs truncate text-gray-500 max-w-80">
-                      {user.length > 0 ? user[0].email : 'Guest'}
+                      {userStore.data.length > 0 ? userStore.data[0].email : 'Guest'}
                     </div>
                   </div>
                 </div>
@@ -210,7 +211,8 @@ const Header = () => {
                   <li>
                     <div
                       onClick={() => {
-                        handleProfile(user[0].internet_identity.toString());
+                        if (userStore.data && userStore.data.length > 1)
+                          handleProfile(userStore.data[0].internet_identity.toString());
                       }}
                       className="cursor-pointer block px-4 py-2 hover:bg-gray-100"
                     >

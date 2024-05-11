@@ -6,10 +6,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuthentication from '@/hooks/auth/get/useAuthentication';
 import { Button } from '@nextui-org/button';
 import Header from '@/components/navigations/Header';
+import { useUserStore } from '@/store/user/userStore';
 
 function RegisterPage() {
   const { auth, user } = useAuthentication();
   const [errorMsg, setErrorMsg] = useState('');
+  const userStore = useUserStore();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -45,7 +47,7 @@ function RegisterPage() {
       formData.profile =
         'https://res.cloudinary.com/dogiichep/image/upload/v1691980787/profile_xy1yuo.png';
       console.log(formData);
-      await user_backend.register(
+      const res = await user_backend.register(
         principal,
         formData.name,
         formData.email,
@@ -54,8 +56,13 @@ function RegisterPage() {
         formData.location,
         formData.contact,
       );
+      if ("ok" in res) {
+        // console.log('OK')
+        const data = await userStore.getData();
+        return navigate('/');
+      }
+    
       // console.log(await user_backend.register(principal, formData.name, formData.email, formData.profile, formData.dob, formData.location, formData.contact))
-      return navigate('/');
     }
   };
 
