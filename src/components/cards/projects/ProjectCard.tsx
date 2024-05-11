@@ -23,11 +23,21 @@ export default function ProjectCard(props: Props) {
     return redirect('/project/' + projectID)
   }
 
+  const projectDeadline = project.deadline;
+  const parts = projectDeadline.split("-").map(Number);
+  const dateObj = new Date(parts[2], parts[1] - 1, parts[0]);
+  const currentDate = new Date();
+  const differenceInMilliseconds = dateObj.getTime() - currentDate.getTime();
+  const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+  const deadline = differenceInDays;
+
+  const progressPercentage: number = (parseInt(project.progress.toString()) / parseInt(project.goal.toString())) * 100;
+
   return (
-    <Link 
+    <Link
       href={'/project/' + project.id.toString()}
       className="group"
-      >
+    >
       <Card
         isFooterBlurred
         className={`w-full h-[240px] lg:h-[360px] lg:w-[240px] hover:scale-105 cursor-pointer overflow-hidden shadow-lg bg-tranparent-black border border-tranparent-black ${props.className}`}
@@ -51,13 +61,13 @@ export default function ProjectCard(props: Props) {
           </div>
           <div className="text-end w-full h-full flex flex-col justify-end">
             <p className="text-gray-50 xl:text-sm md:text-xs">
-              {project.progress.toString()}% Funded
+              {progressPercentage.toFixed(1)}% Funded
             </p>
             <p className="text-gray-50 xl:text-sm md:text-xs">
-              {project.deadline.toString()} days left
+              {deadline} days left
             </p>
           </div>
-            
+
         </CardFooter>
       </Card>
     </Link>

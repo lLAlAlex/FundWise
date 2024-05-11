@@ -230,6 +230,13 @@ function ProjectDetail() {
         }
     };
 
+    const addBacker = async () => {
+        if (project) {
+            project[0].backers_ids = [...project[0].backers_ids, currentUser[0].internet_identity.toString()]
+            console.log(await actor.addBacker(project[0].id, project[0]));
+        }
+    }
+
     return (
         <div>
             {/* <ReactNotifications /> */}
@@ -257,9 +264,13 @@ function ProjectDetail() {
                                 ]}
                             />
                         </div>
-                        <div className="flex mt-10 justify-center">
-                            <Button color="secondary" id="fundBtn" className="w-full text-lg mx-64" onClick={handleOpen}>Fund this Project</Button>
-                        </div>
+                        {userStore.is_auth ? (
+                            <div className="flex mt-10 justify-center">
+                                <Button color="secondary" id="fundBtn" className="w-full text-lg mx-64" onClick={handleOpen}>Fund this Project</Button>
+                            </div>
+                        ) : (
+                            <></>
+                        )}
                         <Divider className="mt-10" />
                         <div className="flex m-3 justify-center">
                             {viewReward ? (
@@ -317,7 +328,11 @@ function ProjectDetail() {
                                                         ) : (
                                                             <small className="text-default-500">{r.quantity.toString()} item included</small>
                                                         )}
-                                                        <Button color="secondary" className="w-auto text-base mt-6" onClick={scrollFund}>Fund Now</Button>
+                                                        {userStore.is_auth ? (
+                                                            <Button color="secondary" className="w-auto text-base mt-6" onClick={scrollFund}>Fund Now</Button>
+                                                        ) : (
+                                                            <div></div>
+                                                        )}
                                                     </CardBody>
                                                 </Card>
                                                 <div className="text-lg px-12">{r.description}</div>
@@ -418,7 +433,7 @@ function ProjectDetail() {
                                 <Button color="danger" variant="light" onPress={onClose}>
                                     Close
                                 </Button>
-                                <Button color="primary" onPress={() => { window.location.href = 'https://nns.ic0.app/'; onClose(); }}>
+                                <Button color="primary" onPress={() => { window.open('https://nns.ic0.app/', '_blank'); onClose(); addBacker() }}>
                                     Fund
                                 </Button>
                             </ModalFooter>

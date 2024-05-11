@@ -256,4 +256,9 @@ actor Database {
 
     return #ok(totalFunds);
   };
+
+  public query func addBacker(projectId : Text, project : Project) : async Result.Result<Text, Text> {
+    projects.put(projectId, project);
+    return #ok("Success");
+  };
 };

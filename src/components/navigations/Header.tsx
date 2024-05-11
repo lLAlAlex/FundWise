@@ -72,7 +72,7 @@ const Header = () => {
   };
 
   const handleProfile = (userID: string) => {
-    navigate('/profile' + userID);
+    navigate('/profile/' + userID);
   };
 
   const walletDialog = () => {
