@@ -58,7 +58,7 @@ function RegisterPage() {
       );
       if ("ok" in res) {
         // console.log('OK')
-        const data = await userStore.getData();
+        await userStore.getData();
         return navigate('/');
       }
     

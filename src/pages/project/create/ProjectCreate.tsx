@@ -4,6 +4,7 @@ import { AdvancedImage, responsive, placeholder } from '@cloudinary/react';
 import {
   ProjectInputSchema,
   Reward,
+  Wallet,
 } from '@/declarations/project_backend/project_backend.did';
 import {
   Modal,
@@ -18,13 +19,21 @@ import styles from './ProjectCreate.module.css';
 import { project_backend } from '@/declarations/project_backend';
 import { useUserStore } from '@/store/user/userStore';
 import RewardInput from './rewards/RewardInput';
+import { Link } from 'react-router-dom';
 
 type Props = {};
 
 interface FormAction {
   type: string;
   field?: string;
-  payload?: string | File | Reward | Array<Reward> | BigInt | undefined;
+  payload?:
+    | string
+    | File
+    | Reward
+    | Array<Reward>
+    | BigInt
+    | Wallet
+    | undefined;
 }
 
 type RewardData = {
@@ -43,6 +52,7 @@ const defaultData: ProjectInputSchema = {
   goal: BigInt(0),
   rewards: [],
   user_id: '',
+  wallet: { qr: '', address: '' },
 };
 
 const reduce = (
@@ -198,16 +208,16 @@ const ProjectCreate = (props: Props) => {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
-    setStatus("Uploading Data, please wait a moment....")
+    setStatus('Uploading Data, please wait a moment....');
     if (!userStore.data || userStore.data.length <= 0) {
-      setStatus("User not found, please log in...")
+      setStatus('User not found, please log in...');
       setLoading(false);
       return;
     }
 
     // console.log(images);
     if (images.length <= 0) {
-      setStatus('Image not found...')
+      setStatus('Image not found...');
       setLoading(false);
     }
 
@@ -222,6 +232,15 @@ const ProjectCreate = (props: Props) => {
           type: 'input',
           field: 'image',
           payload: u.url,
+        });
+      } else if (u.id === 'qr') {
+        dispatch({
+          type: 'input',
+          field: 'wallet',
+          payload: {
+            qr: u.url,
+            address: state.wallet.address,
+          },
         });
       } else {
         const n = +u.id.substring(u.id.length - 1);
@@ -359,24 +378,57 @@ const ProjectCreate = (props: Props) => {
             value={state.goal + ''}
           />
         </div>
+        <div className="flex flex-row gap-1 items-center">
+          <div className={styles.inputContainer}>
+            <label htmlFor="qr" className={styles.label}>
+              Wallet QR Code
+            </label>
+            <input
+              accept=".png, .jpg, .jpeg, .PNG, .JPG, .JPEG"
+              type="file"
+              name="qr"
+              id="qr"
+              className={styles.input}
+              onChange={inputImage}
+              // value={state.goal + ''}
+            />
+          </div>
+          <div className={styles.inputContainer}>
+            <label htmlFor="address" className={styles.label}>
+              Wallet Address
+            </label>
+            <input
+              type="string"
+              name="address"
+              id="address"
+              className={styles.input}
+              placeholder="Your Address"
+              onChange={inputData}
+              value={state.wallet.address + ''}
+            />
+          </div>
+        </div>
+
+        <Link to={'https://nns.ic0.app/'} className='underline text-blue-400 hover:text-blue-600 transition-colors ease-linear text-sm'>Create your wallet here.</Link>
 
         <div className={styles.inputContainer}>
           <label htmlFor="text" className={styles.label}>
             Rewards
           </label>
-          {rewardsInput.map((r) =>
-            r.data.tier !== '' && (
-              <div className="flex flex-row text-sm text-gray-400 gap-2">
-                <div>Tier : {r.data.tier}</div>
-                <div>Price : {r.data.price}</div>
-              </div>
-            )
+          {rewardsInput.map(
+            (r) =>
+              r.data.tier !== '' && (
+                <div className="flex flex-row text-sm text-gray-400 gap-2">
+                  <div>Tier : {r.data.tier}</div>
+                  <div>Price : {r.data.price}</div>
+                </div>
+              ),
           )}
           <Button onPress={onOpen} className="text-sm" color="primary">
             Add Rewards
           </Button>
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange} >
-            <ModalContent className='min-w-[80rem] max-h-[40rem] overflow-auto'>
+          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <ModalContent className="min-w-[80rem] max-h-[40rem] overflow-auto">
               {(onClose) => (
                 <>
                   <ModalHeader className="flex flex-col gap-1 text-lg">
@@ -392,7 +444,12 @@ const ProjectCreate = (props: Props) => {
                     />
                   </ModalBody>
                   <ModalFooter>
-                    <Button color="danger" variant="light" onPress={onClose} className='text-sm'>
+                    <Button
+                      color="danger"
+                      variant="light"
+                      onPress={onClose}
+                      className="text-sm"
+                    >
                       Close
                     </Button>
                   </ModalFooter>
@@ -401,9 +458,7 @@ const ProjectCreate = (props: Props) => {
             </ModalContent>
           </Modal>
         </div>
-        <div className='text-gray-600 text-sm py-1'>
-          {status}
-        </div>
+        <div className="text-gray-600 text-sm py-1">{status}</div>
         <div className="w-full text-center">
           <Button
             className="text-end text-xs bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 text-white"
