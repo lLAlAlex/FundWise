@@ -49,7 +49,7 @@ dfx deploy
 ### 1. Home Page
   This page shows an overview of our website, Here, you'll discover detailed statistics for **Projects**, **Fund**, and **Partner**, showcasing the effectiveness and impact of our platform. And also you can find some things about us.
 ### 2. Explore Project Page
-  This page shows all project. You'll find an extensive array of projects awaiting your support, each brimming with potential and purpose. There is also a project search feature and filtering project feature to make it easier. Dive deep into the details of each project with just a click, unraveling their stories and aspirations.
+  This page shows all project. You'll find an extensive array of projects awaiting your support, each brimming with potential and purpose. There is also a project search feature and filtering project feature to make it easier. Dive deep into the details of each project with just a click, unraveling their stories and aspirations. All Users can also create new projects that can be funded by other users by filling in all the form data provided on the website.
 ### 3. About Us Page
   This page shows the community provided on this website, it also shows the team's mission. Apart from that, you will see the project categories on this website that are ready to be funded.
 ### 4. Profile Page
