@@ -1,40 +1,63 @@
-# Vite + React + Motoko
+# FundWise
 
-### Get started directly in your browser:
+Welcome to FundWise, an innovative platform at the forefront of the Web3 sector, leveraging the power of the Internet Computer Protocol (ICP) environment. FundWise revolutionizes crowdfunding by empowering users to both create and support projects seamlessly. 
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/rvanasa/vite-react-motoko)
+With FundWise, users can easily establish their profiles, initiate new projects, and harness the collective support of fellow users to bring their visions to life. Join us as we redefine the future of decentralized funding and collaboration in the digital age
 
-This template gives you everything you need to build a full-stack Web3 application on the [Internet Computer](https://internetcomputer.org/).
+## 📦 Getting Started
 
-For an example of a real-world dapp built using this starter project, check out the [source code](https://github.com/dfinity/feedback) for DFINITY's [Developer Experience Feedback Board](https://dx.internetcomputer.org/).
-
-## 📦 Create a New Project
-
-Make sure that [Node.js](https://nodejs.org/en/) `>= 16` and [`dfx`](https://internetcomputer.org/docs/current/developer-docs/build/install-upgrade-remove) `>= 0.14` are installed on your system.
+Make sure that [Node.js](https://nodejs.org/en/) `>= 18` and [`dfx`](https://internetcomputer.org/docs/current/developer-docs/build/install-upgrade-remove) `>= 0.14` are installed on your system.
 
 Run the following commands in a new, empty project directory:
 
+1. Setup the Repository:
 ```sh
-npx degit rvanasa/vite-react-motoko # Download this starter project
-dfx start --clean --background # Run dfx in the background
-npm run setup # Install packages, deploy canisters, and generate type bindings
+git clone https://github.com/lLAlAlex/FundWise.git
 
-npm start # Start the development server
+cd FundWise
 ```
 
-When ready, run `dfx deploy --network ic` to deploy your application to the Internet Computer.
+2. Install all dependencies needed in the project :
+```sh
+npm install
+```
+
+3. Start the dfx environment (using WSL) : 
+```sh
+dfx start
+```
+
+4. Deploy and run all the canister : 
+```sh
+dfx deploy
+```
 
 ## 🛠️ Technology Stack
 
 - [Vite](https://vitejs.dev/): high-performance tooling for front-end web development
 - [React](https://reactjs.org/): a component-based UI library
 - [TypeScript](https://www.typescriptlang.org/): JavaScript extended with syntax for types
-- [Sass](https://sass-lang.com/): an extended syntax for CSS stylesheets
+- [Tailwind](https://tailwindcss.com/): a utility-first CSS framework for building custom designs
 - [Prettier](https://prettier.io/): code formatting for a wide range of supported languages
 - [Motoko](https://github.com/dfinity/motoko#readme): a safe and simple programming language for the Internet Computer
 - [Mops](https://mops.one): an on-chain community package manager for Motoko
 - [mo-dev](https://github.com/dfinity/motoko-dev-server#readme): a live reload development server for Motoko
 - [@ic-reactor](https://github.com/B3Pay/ic-reactor): A suite of JavaScript libraries for seamless frontend development on the Internet Computer
+
+## Features
+
+### 1. Home Page
+  This page shows an overview of our website, Here, you'll discover detailed statistics for **Projects**, **Fund**, and **Partner**, showcasing the effectiveness and impact of our platform. And also you can find some things about us.
+### 2. Explore Project Page
+  This page shows all project. You'll find an extensive array of projects awaiting your support, each brimming with potential and purpose. There is also a project search feature and filtering project feature to make it easier. Dive deep into the details of each project with just a click, unraveling their stories and aspirations.
+### 3. About Us Page
+  This page shows the community provided on this website, it also shows the team's mission. Apart from that, you will see the project categories on this website that are ready to be funded.
+### 4. Profile Page
+  This page shows a brief description of yourself such as **Name**, **Email**, **Profile Image**, etc. There are also several projects from these users to raise funds.
+### 5. Transaction Page
+
+### 6. Login And Registration
+
 
 ## 📚 Documentation
 
