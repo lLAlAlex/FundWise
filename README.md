@@ -53,7 +53,7 @@ dfx deploy
 ### 3. About Us Page
   This page shows the community provided on this website, it also shows the team's mission. Apart from that, you will see the project categories on this website that are ready to be funded.
 ### 4. Profile Page
-  This page shows a brief description of yourself such as **Name**, **Email**, **Profile Image**, etc. There are also several projects from these users to raise funds.
+  This page shows a brief description of yourself such as **Name**, **Email**, **Profile Image**, etc. There are also several projects from these users to raise funds. And also some projects whose funds are provided by users.
 ### 5. Transaction Page
 
 ### 6. Login And Registration
