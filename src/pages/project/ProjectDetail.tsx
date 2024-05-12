@@ -269,7 +269,7 @@ function ProjectDetail() {
                                 src={`${project[0].image}`}
                             />
                         </div>
-                        {creator && (
+                        {creator && creator.length > 0 && (
                             <>
                                 <div className="flex justify-center mt-10 items-center">
                                     <Avatar

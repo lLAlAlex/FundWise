@@ -160,9 +160,9 @@ const Header = () => {
                 About
               </Link>
             </li>
-            <li className="md:hover:text-black md:hover:scale-105">
+            {/* <li className="md:hover:text-black md:hover:scale-105">
               <Link to="#">Support</Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
 
