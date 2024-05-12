@@ -54,7 +54,7 @@ dfx deploy
   This page shows the community provided on this website, it also shows the team's mission. Apart from that, you will see the project categories on this website that are ready to be funded.
 ### 4. Profile Page
   This page shows a brief description of yourself such as **Name**, **Email**, **Profile Image**, etc. There are also several projects from these users to raise funds. And also some projects whose funds are provided by users.
-### 5. Transaction Page
+### 5. My Wallet Page
   This feature shows all funds sent and allows the creation of QR codes for those who will provide funds to the project. This feature can also function for users who want to create a new project, because there is a column that asks for input of a QR code and wallet address obtained from the NNS website.
 ### 6. Login And Registration
   This feature allows users to log in so that there are many features that users can do when logged in, such as creating projects. Login can be done by creating a new internet identity for those who don't have one by following several instructions on the website. 
