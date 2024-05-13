@@ -261,11 +261,11 @@ function ProjectDetail() {
                             <div className="text-xl font-bold text-center">{project[0].name}</div>
                             <div className="text-lg text-center">{project[0].description}</div>
                         </div>
-                        <div className="flex justify-center mt-10">
+                        <div className="flex justify-center mt-10 ">
                             <Image
                                 removeWrapper
                                 alt="Project Image"
-                                className="z-0 w-auto h-auto object-cover"
+                                className="z-0 w-[15rem] lg:w-[30rem] h-[15rem] lg:h-[20rem] object-fill"
                                 src={`${project[0].image}`}
                             />
                         </div>

@@ -154,6 +154,9 @@ function RegisterPage() {
                   value={formData.contact}
                 />
               </div>
+              <div className='text-red-500 text-xs font-bold'>
+                {errorMsg}
+              </div>
               <div className='w-full text-end'>
                 <Button type="submit" onClick={handleSubmit} className='text-end text-xs bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 text-white'>
                   Create an account

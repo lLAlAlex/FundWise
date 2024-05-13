@@ -18,6 +18,7 @@ type UserState = User[] | [];
 
 function Profile() {
     const userStore = useUserStore();
+    const [tabSelected, setTabSelected] = useState(1);
     const [user, setUser] = useState<UserState>();
     const navigate = useNavigate();
     const [projects, setProjects] = useState<ProjectState>();
@@ -144,7 +145,7 @@ function Profile() {
             {user ? (
                 <Container>
                     <div className="w-full flex flex-col justify-center items-center gap-10 lg:flex-row lg:items-start">
-                        <div className="lg:1/4 pt-10 h-fit">
+                        <div className="lg:w-1/4 pt-10 h-fit">
                             <div className="bg-white border border-transparent-black rounded-xl shadow-lg relative flex flex-col h-[300px]">
                                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/3 border border-transparent-black rounded-full p-1 bg-white">
                                     <img src={user[0].profile} className="w-48 h-48 rounded-full" />
@@ -175,20 +176,42 @@ function Profile() {
                                 </div>
                             </div>
                         </div>
-                        <div className="lg:3/4 h-[80vh]">
+                        <div className="lg:w-3/4 h-[80vh]">
                             <div className="flex flex-wrap gap-4 justify-end">
                                 <Tabs variant="underlined" aria-label="Tabs variants" size="lg">
-                                    <Tab key="My Project" title="Projects" />
-                                    <Tab key="Funded Project" title="Funded Project" />
+                                    <Tab key="My Project" title="Projects" onClick={() => setTabSelected(1)} />
+                                    <Tab key="Funded Project" title="Funded Project" onClick={() => setTabSelected(2)} />
                                 </Tabs>
                             </div>
-                            <div className="grid grid-cols-2 gap-4 p-4 md:grid-cols-3 md:gap-x-10 lg:grid-cols-3 h-[75vh] overflow-y-auto">
-                                {projects && projects.map((p, idx) => (
-                                    user && (
-                                        <ProjectCard project={p} key={idx} />
-                                    )
-                                ))}
-                            </div>
+                            {tabSelected !== 2 ? (
+                                projects && projects.length > 0 ? (
+                                    <div className="grid grid-cols-2 gap-4 p-4 md:grid-cols-3 md:gap-x-10 lg:grid-cols-3 h-[75vh] overflow-y-auto">
+                                        {projects.map((p, idx) => (
+                                            userStore.data && user[0].internet_identity.toString() === p.user_id && (
+                                                <ProjectCard project={p} key={idx} />
+                                            )
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-gray-600 text-xl font-bold w-full text-center mt-8">
+                                        You Currently Have No Project!
+                                    </div>
+                                )
+                            ) : (
+                                projects && projects.length > 0 ? (
+                                    <div className="grid grid-cols-2 gap-4 p-4 md:grid-cols-3 md:gap-x-10 lg:grid-cols-3 h-[75vh] overflow-y-auto">
+                                        {projects.map((p, idx) => (
+                                            userStore.data && user[0].internet_identity.toString() === p.user_id && (
+                                                <ProjectCard project={p} key={idx} />
+                                            )
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-gray-600 text-xl font-bold w-full text-center mt-8">
+                                        You Currently Have No Project!
+                                    </div>
+                                )
+                            )}
                         </div>
                     </div>
                     {/* <div>Name: {user[0].name}</div> */}
