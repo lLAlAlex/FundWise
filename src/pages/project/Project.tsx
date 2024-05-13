@@ -162,13 +162,15 @@ function ProjectPage() {
           ))}
         </GridLayout>
         <div className="py-4 w-full flex justify-center">
-          <Pagination
-            total={totalPage}
-            initialPage={1}
-            color="secondary"
-            page={page}
-            onChange={(n) => setPage(n)}
-          />
+          {!search && ( 
+            <Pagination
+              total={totalPage}
+              initialPage={1}
+              color="secondary"
+              page={page}
+              onChange={(n) => setPage(n)}
+            />
+          )}
         </div>
       </div>
     </>
