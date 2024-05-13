@@ -11,6 +11,8 @@ import { StarsIllustration } from "@/components/Stars";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { Reward } from "@/declarations/project_backend/project_backend.did";
+import Footer from "@/components/ui/Footer";
+import TopProjects from "@/components/section/TopProjects";
 
 type ProjectInputSchema = {
   name: string;
@@ -80,6 +82,7 @@ function Home() {
         <HeroHome />
       </Container>
       <AboutHome />
+      <TopProjects />
       <CategoriesHome />
     </BackgroundContainer>
   );

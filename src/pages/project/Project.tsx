@@ -94,7 +94,7 @@ function ProjectPage() {
           ))}
         </GridLayout>
         <div className="py-4 w-full flex justify-center">
-          {!search && ( 
+          {!search && (
             <Pagination
               total={totalPage}
               initialPage={1}

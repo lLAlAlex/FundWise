@@ -275,9 +275,17 @@ actor Database {
     return #ok(totalFunds);
   };
 
-  public query func addBacker(projectId : Text, project : Project) : async Result.Result<Text, Text> {
+  public query func addBacker(projectId : Text, project : Project) : async() {
     projects.put(projectId, project);
+  };
 
-    return #ok("Success");
+  public query func getAllProjectsNoFilter() : async Result.Result<[Project], Text> {
+    var allProjects = Vector.Vector<Project>();
+
+    for (p in projects.vals()) {
+      allProjects.add(p);
+    };
+
+    return #ok(Vector.toArray(allProjects));
   };
 };

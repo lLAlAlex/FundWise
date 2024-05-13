@@ -242,11 +242,8 @@ function ProjectDetail() {
 
     const addBacker = async () => {
         if (project) {
-            const user = currentUser[0];
-            project[0].backers_ids = [...project[0].backers_ids, user.internet_identity.toString()]
-            // user.funded_projects = [....user.funded_projects, project[0].id];
-            // const res = await user_actor.updateUser(user.internet_identity, user);
-            console.log(await actor.addBacker(project[0].id, project[0]));
+            project[0].backers_ids = [...project[0].backers_ids, currentUser[0].internet_identity.toString()]
+            await actor.addBacker(project[0].id, project[0]);
         }
     }
 
@@ -264,11 +261,11 @@ function ProjectDetail() {
                             <div className="text-xl font-bold text-center">{project[0].name}</div>
                             <div className="text-lg text-center">{project[0].description}</div>
                         </div>
-                        <div className="flex justify-center mt-10">
+                        <div className="flex justify-center mt-10 ">
                             <Image
                                 removeWrapper
                                 alt="Project Image"
-                                className="z-0 w-auto h-auto object-cover"
+                                className="z-0 w-[15rem] lg:w-[30rem] aspect-square object-contain"
                                 src={`${project[0].image}`}
                             />
                         </div>
