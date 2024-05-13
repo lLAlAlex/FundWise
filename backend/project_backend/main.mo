@@ -213,13 +213,13 @@ actor Database {
 
   };
 
-  public query func getAllProjectByUserId(userID : Principal) : async Result.Result<[Project], Text> {
-    let userid = Principal.toText(userID);
+  public query func getAllProjectByUserId(userID : Text) : async Result.Result<[Project], Text> {
+    // let userid = Principal.toText(userID);
     let projectArray = Iter.toArray<Project>(projects.vals());
 
     let filteredProjects = Array.filter<Project>(
       projectArray,
-      func(project : Project) : Bool { project.user_id == userid },
+      func(project : Project) : Bool { project.user_id == userID },
     );
 
     return #ok(filteredProjects);

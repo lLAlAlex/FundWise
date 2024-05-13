@@ -25,13 +25,12 @@ function Profile() {
     const id = JSON.stringify(params.id).replace(/"/g, '');
     const actor = user_backend;
 
-    async function fetchProjects(search: string, page: number) {
+    async function fetchProjects(userid: string) {
         try {
             setProjects([]);
-            const result = await project_backend.getAllProjects([search], BigInt(page));
+            const result = await project_backend.getAllProjectByUserId(userid);
             if ('ok' in result) {
                 if (result.ok.length != 0) {
-                    console.log(result);
                     setProjects(result.ok);
                 }
             } else {
@@ -49,7 +48,9 @@ function Profile() {
         }
         fetchUser();
 
-        fetchProjects("", 1);
+        if (userStore.data?.[0]?.internet_identity) {
+            fetchProjects(userStore.data[0].internet_identity.toString());
+        }
     }, []);
 
     return (
