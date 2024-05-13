@@ -11,6 +11,7 @@ import { Button, Tab, Tabs } from "@nextui-org/react";
 import { FaPencilAlt } from "react-icons/fa";
 import { User } from "@/declarations/user_backend/user_backend.did";
 import { user_backend } from "@/declarations/user_backend";
+import { Principal } from "@ic-reactor/react/dist/types";
 
 type ProjectState = Project[] | undefined;
 type UserState = User[] | [];
@@ -26,32 +27,29 @@ function Profile() {
     const id = JSON.stringify(params.id).replace(/"/g, '');
     const actor = user_backend;
 
-    async function fetchProjects(userid: string) {
-        try {
-            setProjects([]);
-            const result = await project_backend.getAllProjectByUserId(userid);
-            if ('ok' in result) {
-                if (result.ok.length != 0) {
-                    setProjects(result.ok);
-                }
-            } else {
-                console.error('Error fetching projects:', result.err);
-            }
-        } catch (error) {
-            console.log(error)
-            // console.error('Error fetching projects:', error);
-        }
-    }
-
     useEffect(() => {
         const fetchUser = async () => {
             setUser(await actor.getUserByTextID(id));
         }
         fetchUser();
 
-        if (userStore.data?.[0]?.internet_identity) {
-            fetchProjects(userStore.data[0].internet_identity.toString());
+        const fetchProjects = async () => {
+            try {
+                setProjects([]);
+                const result = await project_backend.getAllProjectByUserId(id);
+                if ('ok' in result) {
+                    if (result.ok.length != 0) {
+                        setProjects(result.ok);
+                    }
+                } else {
+                    console.error('Error fetching projects:', result.err);
+                }
+            } catch (error) {
+                console.log(error)
+                // console.error('Error fetching projects:', error);
+            }
         }
+        fetchProjects();
     }, []);
 
     return (

@@ -60,8 +60,9 @@ function RegisterPage() {
         // console.log('OK')
         await userStore.getData();
         return navigate('/');
+      } else {
+        setErrorMsg(res.err);
       }
-    
       // console.log(await user_backend.register(principal, formData.name, formData.email, formData.profile, formData.dob, formData.location, formData.contact))
     }
   };
@@ -76,7 +77,7 @@ function RegisterPage() {
 
   return (
     <section className="bg-white ">
-      <Header/>
+      <Header />
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="shadow-lg max-h-[80vh] overflow-y-auto max-w-[400px] w-full min-w-[300px] bg-white  rounded-lg shadow border md:mt-0  xl:p-0 border-tranparent-black">
           <div className="p-6 space-y-4 md:space-y-6">
