@@ -153,7 +153,13 @@ const Header = () => {
                 onClick={() => {
                   const aboutElement = document.getElementById('about');
                   if (aboutElement) {
-                    aboutElement.scrollIntoView({ behavior: 'smooth' });
+                    const aboutElementTop = aboutElement.getBoundingClientRect().top;
+                    const targetPosition = window.pageYOffset + aboutElementTop - 50;
+                    // Scroll to the target position
+                    window.scrollTo({
+                      top: targetPosition,
+                      behavior: 'smooth'
+                    });
                   }
                 }}
               >
