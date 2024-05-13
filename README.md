@@ -50,13 +50,15 @@ dfx deploy
   This page shows an overview of our website, Here, you'll discover detailed statistics for **Projects**, **Fund**, and **Partner**, showcasing the effectiveness and impact of our platform. And also you can find some things about us.
 ### 2. Explore Project Page
   This page shows all project. You'll find an extensive array of projects awaiting your support, each brimming with potential and purpose. There is also a project search feature and filtering project feature to make it easier. Dive deep into the details of each project with just a click, unraveling their stories and aspirations. All Users can also create new projects that can be funded by other users by filling in all the form data provided on the website.
-### 3. About Us Page
+### 3. Project Detail Page
+  This page shows project details like project name, description, etc. You can also view project statistics such as backers i.e. the total of all users who have funded the project, project deadlines, and total funding. You can also see the rewards and comments tab. the rewards tab shows all reward tiers for users who have funded and met the criteria to earn those rewards, and the comments tab for all user comments on this project. You can also see the other user's profile from this page. 
+### 4. About Us Page
   This page shows the community provided on this website, it also shows the team's mission. Apart from that, you will see the project categories on this website that are ready to be funded.
-### 4. Profile Page
-  This page shows a brief description of yourself such as **Name**, **Email**, **Profile Image**, etc. There are also several projects from these users to raise funds. And also some projects whose funds are provided by users.
-### 5. My Wallet Page
+### 5. Profile Page
+  This page shows a brief description of yourself such as **Name**, **Email**, **Profile Image**, etc. There are also several projects from these users to raise funds. And also some projects whose funds are provided by users. You can also update your personal profile page.
+### 6. My Wallet Page
   This feature shows all funds sent and allows the creation of QR codes for those who will provide funds to the project. This feature can also function for users who want to create a new project, because there is a column that asks for input of a QR code and wallet address obtained from the NNS website.
-### 6. Login And Registration
+### 7. Login And Registration
   This feature allows users to log in so that there are many features that users can do when logged in, such as creating projects. Login can be done by creating a new internet identity for those who don't have one by following several instructions on the website. 
   
   And users can register to create a new account and start logging into the website. Registration can be done by filling in some of the required data on the website registration form.
