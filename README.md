@@ -57,7 +57,7 @@ dfx deploy
 ### 5. Profile Page
   This page shows a brief description of yourself such as **Name**, **Email**, **Profile Image**, etc. There are also several projects from these users to raise funds. And also some projects whose funds are provided by users. You can also update your personal profile page.
 ### 6. My Wallet Page
-  This feature shows all funds sent and allows the creation of QR codes for those who will provide funds to the project. This feature can also useful for users who want to create a new project, because there is a column that asks for input of a QR code and wallet address obtained from the NNS website. Funding payments to projects can use a QR code or wallet address provided by the NNS website which can be transferred directly into ICP tokens.
+  This feature shows all funds sent and allows the creation of QR codes for those who will provide funds to the project (you will be redirected to NNS website that stores all fund transaction using ICP tokens). This feature can also useful for users who want to create a new project, because there is a column that asks for input of a QR code and wallet address obtained from the NNS website. Funding payments to projects can use a QR code or wallet address provided by the NNS website which can be transferred directly into ICP tokens.
 ### 7. Login And Registration
   This feature allows users to log in so that there are many features that users can do when logged in, such as creating projects. Login can be done by creating a new internet identity for those who don't have one by following several instructions on the website. 
   
