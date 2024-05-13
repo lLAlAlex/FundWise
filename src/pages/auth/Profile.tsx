@@ -179,39 +179,41 @@ function Profile() {
                         <div className="lg:w-3/4 h-[80vh]">
                             <div className="flex flex-wrap gap-4 justify-end">
                                 <Tabs variant="underlined" aria-label="Tabs variants" size="lg">
-                                    <Tab key="My Project" title="Projects" onClick={() => setTabSelected(1)} />
-                                    <Tab key="Funded Project" title="Funded Project" onClick={() => setTabSelected(2)} />
+                                    {/* <Tab key="My Project" title="Projects" onClick={() => setTabSelected(1)} />
+                                    <Tab key="Funded Project" title="Funded Project" onClick={() => setTabSelected(2)} /> */}
+                                    <Tab key="My Project" title="Projects">
+                                        {projects && projects.length > 0 ? (
+                                            <div className="grid grid-cols-2 gap-4 p-4 md:grid-cols-3 md:gap-x-10 lg:grid-cols-3 h-[75vh] overflow-y-auto">
+                                                {projects.map((p, idx) => (
+                                                    user[0].internet_identity.toString() === p.user_id && (
+                                                        <ProjectCard project={p} key={idx} />
+                                                    )
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="text-gray-600 text-xl font-bold w-full text-center mt-8">
+                                                You Currently Have No Project!
+                                            </div>
+                                        )}
+                                    </Tab>
+                                    <Tab key="Funded Project" title="Funded Project">
+                                        {projects && projects.length > 0 ? (
+                                            <div className="grid grid-cols-2 gap-4 p-4 md:grid-cols-3 md:gap-x-10 lg:grid-cols-3 h-[75vh] overflow-y-auto">
+                                                {projects.map((p, idx) => (
+                                                    user[0].internet_identity.toString() === p.user_id && (
+                                                        user[0].internet_identity.toString() in p.backers_ids &&
+                                                        <ProjectCard project={p} key={idx} />
+                                                    )
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="text-gray-600 text-xl font-bold w-full text-center mt-8">
+                                                You Currently Have No Project!
+                                            </div>
+                                        )}
+                                    </Tab>
                                 </Tabs>
                             </div>
-                            {tabSelected !== 2 ? (
-                                projects && projects.length > 0 ? (
-                                    <div className="grid grid-cols-2 gap-4 p-4 md:grid-cols-3 md:gap-x-10 lg:grid-cols-3 h-[75vh] overflow-y-auto">
-                                        {projects.map((p, idx) => (
-                                            userStore.data && user[0].internet_identity.toString() === p.user_id && (
-                                                <ProjectCard project={p} key={idx} />
-                                            )
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="text-gray-600 text-xl font-bold w-full text-center mt-8">
-                                        You Currently Have No Project!
-                                    </div>
-                                )
-                            ) : (
-                                projects && projects.length > 0 ? (
-                                    <div className="grid grid-cols-2 gap-4 p-4 md:grid-cols-3 md:gap-x-10 lg:grid-cols-3 h-[75vh] overflow-y-auto">
-                                        {projects.map((p, idx) => (
-                                            userStore.data && user[0].internet_identity.toString() === p.user_id && (
-                                                <ProjectCard project={p} key={idx} />
-                                            )
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="text-gray-600 text-xl font-bold w-full text-center mt-8">
-                                        You Currently Have No Project!
-                                    </div>
-                                )
-                            )}
                         </div>
                     </div>
                     {/* <div>Name: {user[0].name}</div> */}
