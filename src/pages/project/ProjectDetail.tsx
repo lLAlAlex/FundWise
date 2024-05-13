@@ -242,7 +242,10 @@ function ProjectDetail() {
 
     const addBacker = async () => {
         if (project) {
-            project[0].backers_ids = [...project[0].backers_ids, currentUser[0].internet_identity.toString()]
+            const user = currentUser[0];
+            project[0].backers_ids = [...project[0].backers_ids, user.internet_identity.toString()]
+            // user.funded_projects = [....user.funded_projects, project[0].id];
+            // const res = await user_actor.updateUser(user.internet_identity, user);
             console.log(await actor.addBacker(project[0].id, project[0]));
         }
     }

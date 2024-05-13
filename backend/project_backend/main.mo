@@ -47,6 +47,10 @@ actor Database {
     timestamp : Time.Time;
   };
 
+  type PaginatedProjects = {
+    projects : [Project];
+    totalPage : Nat;
+  };
   type CommentInputSchema = {
     userId : Text;
     projectId : Text;
@@ -173,11 +177,11 @@ actor Database {
     return #ok(Vector.toArray(ids));
   };
 
-  public query func getAllProjects(search : ?Text, page : Nat) : async Result.Result<[Project], Text> {
+  public query func getAllProjects(search : ?Text, filter : ?[Text], page : Nat) : async Result.Result<PaginatedProjects, Text> {
     let offset = items_per_page;
 
     let searchParam = Option.get(search, "");
-
+    let filterParam = Option.get(filter, []);
     var allProjects = Vector.Vector<Project>();
     for (project in projects.vals()) {
       allProjects.add(project);
@@ -185,9 +189,17 @@ actor Database {
     var arr = Vector.toArray(allProjects);
 
     if (searchParam != "") arr := Array.filter<Project>(arr, func p = Text.contains(p.name, #text searchParam));
+    if (filterParam.size() > 0) arr := Array.filter<Project>(
+      arr,
+      func p = Array.find<Text>(filterParam, func f = f == p.category) != null,
+    );
 
     let size = arr.size();
-    Debug.print(Nat.toText(size));
+    var pages = size / items_per_page;
+    if (items_per_page * pages < size) {
+      pages := pages + 1;
+    };
+    // Debug.print(Int.toText(pages));
     let init : Nat = (page - 1) * offset;
     if (init < size) {
 
@@ -206,9 +218,15 @@ actor Database {
         paginate.add(arr[i + init]);
         i := i + 1;
       };
-      return #ok(Vector.toArray(paginate));
+      var fin : [Project] = Vector.toArray(paginate);
+      let val : PaginatedProjects = {
+        projects = fin;
+        totalPage = pages;
+      };
+      return #ok(val);
     } else {
-      return #ok([]);
+      let empty : [Project] = [];
+      return #ok({ projects = empty; totalPage = pages });
     };
 
   };
@@ -259,6 +277,7 @@ actor Database {
 
   public query func addBacker(projectId : Text, project : Project) : async Result.Result<Text, Text> {
     projects.put(projectId, project);
+
     return #ok("Success");
   };
 };
