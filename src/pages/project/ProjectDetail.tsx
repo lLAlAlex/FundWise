@@ -265,7 +265,7 @@ function ProjectDetail() {
                             <Image
                                 removeWrapper
                                 alt="Project Image"
-                                className="z-0 w-[15rem] lg:w-[30rem] aspect-square object-cover"
+                                className="z-0 w-[15rem] lg:w-[30rem] aspect-square object-contain"
                                 src={`${project[0].image}`}
                             />
                         </div>
