@@ -243,7 +243,7 @@ function ProjectDetail() {
     const addBacker = async () => {
         if (project) {
             project[0].backers_ids = [...project[0].backers_ids, currentUser[0].internet_identity.toString()]
-            console.log(await actor.addBacker(project[0].id, project[0]));
+            await actor.addBacker(project[0].id, project[0]);
         }
     }
 
@@ -265,7 +265,7 @@ function ProjectDetail() {
                             <Image
                                 removeWrapper
                                 alt="Project Image"
-                                className="z-0 w-[15rem] lg:w-[30rem] h-[15rem] lg:h-[20rem] object-fill"
+                                className="z-0 w-[15rem] lg:w-[30rem] aspect-square object-cover"
                                 src={`${project[0].image}`}
                             />
                         </div>

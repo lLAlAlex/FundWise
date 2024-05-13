@@ -92,6 +92,7 @@ function ProjectPage() {
   const [totalPage, setTotalPage] = useState(10);
   const [projects, setProjects] = useState<Project[]>([]);
   const [groupSelected, setGroupSelected] = useState<string[]>([]);
+
   async function fetchProjects(search: string, page: number) {
     try {
       setProjects([]);
@@ -162,7 +163,7 @@ function ProjectPage() {
           ))}
         </GridLayout>
         <div className="py-4 w-full flex justify-center">
-          {!search && ( 
+          {!search && (
             <Pagination
               total={totalPage}
               initialPage={1}
