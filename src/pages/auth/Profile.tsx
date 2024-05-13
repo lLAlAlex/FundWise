@@ -31,6 +31,7 @@ function Profile() {
             const result = await project_backend.getAllProjects([search], BigInt(page));
             if ('ok' in result) {
                 if (result.ok.length != 0) {
+                    console.log(result);
                     setProjects(result.ok);
                 }
             } else {

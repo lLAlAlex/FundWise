@@ -266,11 +266,17 @@ const ProjectCreate = (props: Props) => {
         }
       }
     });
+
+    const deadlineParts = state.deadline.split('-');
+    const formattedDeadline = `${deadlineParts[2]}-${deadlineParts[1]}-${deadlineParts[0]}`;
+
     const toUpload: ProjectInputSchema = { 
       ...data, 
+      deadline: formattedDeadline,
       rewards: rewards, 
       user_id: userStore.data[0].internet_identity.toString() 
-    }
+    };
+
     try {
       const res = await project_backend.createProject(toUpload);
       console.log(res);
@@ -285,6 +291,8 @@ const ProjectCreate = (props: Props) => {
     }
     setLoading(false);
   };
+
+  console.log(state.deadline);
 
   return (
     <div className="flex flex-col w-full items-center px-6 py-8 mx-auto ">
