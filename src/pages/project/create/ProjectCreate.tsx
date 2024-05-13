@@ -27,13 +27,13 @@ interface FormAction {
   type: string;
   field?: string;
   payload?:
-    | string
-    | File
-    | Reward
-    | Array<Reward>
-    | BigInt
-    | Wallet
-    | undefined;
+  | string
+  | File
+  | Reward
+  | Array<Reward>
+  | BigInt
+  | Wallet
+  | undefined;
 }
 
 type RewardData = {
@@ -69,6 +69,15 @@ const reduce = (
           [field]: payload,
         };
       } else return { ...state };
+    case 'wallet_address': 
+      if (typeof payload === "string")
+        return {
+          ...state,
+          wallet: {
+            ...state.wallet,
+            address: payload
+          }
+        }
     case 'reset':
       return { ...defaultData };
     default:
@@ -109,6 +118,14 @@ const ProjectCreate = (props: Props) => {
       type: 'input',
       field: t.name,
       payload: value,
+    });
+  };
+
+  const inputWallet = (e: ChangeEvent) => {
+    const t = e.target as HTMLInputElement;
+    dispatch({
+      type: 'wallet_address',
+      payload: t.value,
     });
   };
 
@@ -225,23 +242,16 @@ const ProjectCreate = (props: Props) => {
     /**
      * UPDATE DATA WITH IMAGE URL
      */
+    const data: ProjectInputSchema = { ...state }
     const rewards: Array<Reward> = [];
     urls.forEach((u) => {
       if (u.id === 'image') {
-        dispatch({
-          type: 'input',
-          field: 'image',
-          payload: u.url,
-        });
+        data.image = u.url;
       } else if (u.id === 'qr') {
-        dispatch({
-          type: 'input',
-          field: 'wallet',
-          payload: {
-            qr: u.url,
-            address: state.wallet.address,
-          },
-        });
+        data.wallet = {
+          qr: u.url,
+          address: state.wallet.address
+        }
       } else {
         const n = +u.id.substring(u.id.length - 1);
         const ri = rewardsInput.find((v) => v.id === n);
@@ -256,21 +266,15 @@ const ProjectCreate = (props: Props) => {
         }
       }
     });
-    dispatch({
-      type: 'input',
-      field: 'rewards',
-      payload: rewards,
-    });
-    dispatch({
-      type: 'input',
-      field: 'user_id',
-      payload: userStore.data[0].internet_identity.toString(),
-    });
-    /**
-     * TOLONG VALIDASI DULU
-     */
+    const toUpload: ProjectInputSchema = { 
+      ...data, 
+      rewards: rewards, 
+      user_id: userStore.data[0].internet_identity.toString() 
+    }
     try {
-      const res = await project_backend.createProject(state);
+      const res = await project_backend.createProject(toUpload);
+      console.log(res);
+      console.log(toUpload);
       if ('ok' in res) {
         // DO SOMETHING
         setStatus('Succesful!');
@@ -281,10 +285,6 @@ const ProjectCreate = (props: Props) => {
     }
     setLoading(false);
   };
-
-  // useEffect(() => {
-  //   console.log(state);
-  // }, [state]);
 
   return (
     <div className="flex flex-col w-full items-center px-6 py-8 mx-auto ">
@@ -346,8 +346,8 @@ const ProjectCreate = (props: Props) => {
             className={styles.input}
             placeholder="Project Image"
             onChange={inputImage}
-            // onChange={inputData}
-            // value={state.image.toString()}
+          // onChange={inputData}
+          // value={state.image.toString()}
           />
         </div>
         <div className={styles.inputContainer}>
@@ -390,7 +390,7 @@ const ProjectCreate = (props: Props) => {
               id="qr"
               className={styles.input}
               onChange={inputImage}
-              // value={state.goal + ''}
+            // value={state.goal + ''}
             />
           </div>
           <div className={styles.inputContainer}>
@@ -398,12 +398,12 @@ const ProjectCreate = (props: Props) => {
               Wallet Address
             </label>
             <input
-              type="string"
+              type="text"
               name="address"
               id="address"
               className={styles.input}
-              placeholder="Your Address"
-              onChange={inputData}
+              placeholder="Your Wallet Address"
+              onChange={inputWallet}
               value={state.wallet.address + ''}
             />
           </div>
