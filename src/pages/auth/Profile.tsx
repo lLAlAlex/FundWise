@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/Container";
+import { AuthClient } from '@dfinity/auth-client';
 import useAuthentication from "@/hooks/auth/get/useAuthentication";
 import { useUserStore } from "@/store/user/userStore";
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ type UserState = User[] | [];
 function Profile() {
     const userStore = useUserStore();
     const [tabSelected, setTabSelected] = useState(1);
+    const [errorMsg, setErrorMsg] = useState('');
     const [user, setUser] = useState<UserState>();
     const navigate = useNavigate();
     const [projects, setProjects] = useState<ProjectState>();
@@ -26,6 +28,26 @@ function Profile() {
     const params = useParams();
     const id = JSON.stringify(params.id).replace(/"/g, '');
     const actor = user_backend;
+
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        dob: '',
+        profile: '',
+        description: '',
+        location: '',
+        contact: '',
+        status: '',
+        timestamp: ''
+    });
+    
+    const handleChange = (e: { target: { name: any; value: any } }) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [name]: value,
+        }));
+    };
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -52,6 +74,38 @@ function Profile() {
         fetchProjects();
     }, []);
 
+    const handleSubmit = async () => {
+        const authClient = await AuthClient.create();
+        const identity = await authClient.getIdentity();
+        const principal = identity.getPrincipal();
+    
+        if (!formData.name || !formData.email) {
+          setErrorMsg('All fields must be filled');
+        } else if (principal.toString() === '2vxsx-fae') {
+          return;
+        } else {
+            formData.profile =
+            'https://res.cloudinary.com/dogiichep/image/upload/v1691980787/profile_xy1yuo.png';
+          const res = await user_backend.updateUser(
+            principal,
+            formData.name,
+            formData.email,
+            formData.profile,
+            formData.dob,
+            formData.location,
+            formData.contact,
+          );
+          if ("ok" in res) {
+            // console.log('OK')
+            await userStore.getData();
+            return navigate('/');
+          } else {
+            setErrorMsg(res.err);
+          }
+          // console.log(await user_backend.register(principal, formData.name, formData.email, formData.profile, formData.dob, formData.location, formData.contact))
+        }
+    };
+
     return (
         <div className="mt-10">
             {updateProfileOpen && (
@@ -72,8 +126,8 @@ function Profile() {
                                         id="name"
                                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5'
                                         placeholder="John Doe"
-                                    // onChange={handleChange}
-                                    // value={formData.name}
+                                    onChange={handleChange}
+                                    value={formData.name}
                                     />
                                 </div>
                                 <div>
@@ -86,8 +140,8 @@ function Profile() {
                                         id="email"
                                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5'
                                         placeholder="name@company.com"
-                                    // onChange={handleChange}
-                                    // value={formData.email}
+                                    onChange={handleChange}
+                                    value={formData.email}
                                     />
                                 </div>
                                 <div>
@@ -99,8 +153,8 @@ function Profile() {
                                         name="dob"
                                         id="dob"
                                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5'
-                                    // onChange={handleChange}
-                                    // value={formData.dob}
+                                    onChange={handleChange}
+                                    value={formData.dob}
                                     />
                                 </div>
                                 <div>
@@ -113,8 +167,8 @@ function Profile() {
                                         id="location"
                                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5'
                                         placeholder="Indonesia"
-                                    // onChange={handleChange}
-                                    // value={formData.location}
+                                    onChange={handleChange}
+                                    value={formData.location}
                                     />
                                 </div>
                                 <div>
@@ -127,12 +181,12 @@ function Profile() {
                                         id="contact"
                                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5'
                                         placeholder="+62xxxxxxxxxxx"
-                                    // onChange={handleChange}
-                                    // value={formData.contact}
+                                    onChange={handleChange}
+                                    value={formData.contact}
                                     />
                                 </div>
                                 <div className='w-full text-end'>
-                                    <Button type="submit" className='text-end text-xs bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 text-white'>
+                                    <Button type="submit" onClick={handleSubmit} className='text-end text-xs bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 text-white'>
                                         Update
                                     </Button>
                                 </div>

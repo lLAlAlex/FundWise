@@ -22,6 +22,18 @@ actor Database {
     timestamp : Time.Time;
   };
 
+  type UserInputSchema = {
+    name : Text;
+    email : Text;
+    dob : Text;
+    profile : Text;
+    description : Text;
+    location : Text;
+    contact : Text;
+    status : Text;
+    timestamp : Time.Time;
+  };
+
   // User will be saved using TrieMap
   let users = TrieMap.TrieMap<Principal, User>(Principal.equal, Principal.hash);
 
@@ -67,8 +79,22 @@ actor Database {
     return msg.caller;
   };
 
-  public shared func updateUser(p : Principal, u : User) : async () {
-    users.put(p, u);
+  public shared func updateUser(id : Principal, name : Text, email : Text, profile : Text, dob : Text, location : Text, contact : Text) : async Result.Result<User, Text> {
+    let user = {
+        internet_identity = id;
+        name = name;
+        email = email;
+        dob = dob;
+        profile = profile;
+        location = location;
+        contact = contact;
+        description = "";
+        status = "Private";
+        timestamp = Time.now();
+      };
+      users.put(id, user);
+      
+      return #ok(user);
   };
 
   public shared func deleteUser(p : Principal) : async ?User {
