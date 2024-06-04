@@ -52,6 +52,7 @@ function Profile() {
         fetchProjects();
     }, []);
 
+    
     return (
         <div className="mt-10">
             {updateProfileOpen && (
